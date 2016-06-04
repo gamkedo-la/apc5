@@ -16,8 +16,9 @@ var cannon = (function () {
 	};
 	
 	var draw = function(){
+		console.log("Test");
 		var rot = calculateRotation();
-		colorRect(x,y, width,height, color, rot, -width/2);
+		colorRect(x,y, width,height, color, rot, 0, -height/2);
 	};
 	return {
 		x: x,

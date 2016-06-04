@@ -44,7 +44,17 @@ function getMouseRow(){
 }
 */
 
+var background = (function(){
+	var color = "white";
+	clear = function(){
+		colorRect(0,0, canvas.width,canvas.height, 'white');
+	}
+	return{
+		clear: clear
+	}
+})();
+
 function drawAll() {
-	colorRect(0,0, canvas.width,canvas.height, 'white');
+	background.clear();
 	cannon.draw();
 }
