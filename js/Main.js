@@ -1,4 +1,8 @@
+//Global variables
 var canvas, canvasContext, grid, deltaTime, prevTime;
+
+//Global debug variables
+var debugCanvas, debugContext, hexDebug = true, debug = true;
 
 //Prevents player from drag selecting
 document.onselectstart = function()
@@ -25,9 +29,20 @@ window.onload = function() {
 	setInterval(updateAll, 1000/framesPerSecond);
 }
 
+//Code to run every time the main game is started (past the main menu)
 function gameStart(){
 	grid = new Grid(150, 50);
-//	grid.debugScreen(); //VERY intensive debug code. Turn off background refresh to use
+	
+	//Debug code that creates and caches a 4 color map of all hexes
+	if(hexDebug){
+		grid.debugScreen(); //VERY intensive call.
+		
+		debugCanvas = document.createElement('canvas');
+		debugContext = debugCanvas.getContext('2d');
+		debugCanvas.width = canvas.width;
+		debugCanvas.height = canvas.height;
+		debugContext.drawImage(canvas, 0, 0);
+	}
 }
 
 function updateAll() {
@@ -56,11 +71,19 @@ var background = (function(){
 
 function drawAll() {
 	background.clear();
+	
+	//Debug code to draw a representation of the hex on screen
+	if(hexDebug){
+		//Pick one, comment the other out
+		//canvasContext.drawImage(debugCanvas, 0, 0);
+		grid.drawBounds();
+	}
 	cannon.draw();
 	
-	grid.drawBounds();
 	
-	//Debug code to output the coordinates of hex containing mouse. Somewhat CPU intensive.
-//	var mouseHex = grid.screenCoordsToGrid(mouse.x, mouse.y);
-//	console.log(mouseHex.x, mouseHex.y);
+	//Debug code to output coordinates of hex containing mouse
+	if(hexDebug){
+		var mouseHex = grid.screenCoordsToGrid(mouse.x, mouse.y);
+		console.log(mouseHex.x, mouseHex.y);
+	}
 }

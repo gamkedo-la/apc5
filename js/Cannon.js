@@ -19,6 +19,7 @@ var cannon = (function () {
 	var draw = function(){
 		colorRect(x,y, width,height, color, rot, 0, -height/2);
 	};
+	
 	return {
 		x: x,
 		y: y,

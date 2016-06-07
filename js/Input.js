@@ -14,16 +14,16 @@ function setupInput() {
 function mousePressed(evt) {
 	switch(evt.button){
 		case 0:
-			console.log("Mouse 0"); //debug
+			if(debug){console.log("Mouse 0");} //debug
 			mouse.left = true;
 			break;
 		case 1:
-			console.log("Mouse 1"); //debug
+			if(debug){console.log("Mouse 1");} //debug
 			evt.preventDefault();
 			mouse.middle = true;
 			break;
 		case 2:
-			console.log("Mouse 2"); //debug
+			if(debug){console.log("Mouse 2");} //debug
 			mouse.right = true;
 			break;
 	}
@@ -32,16 +32,16 @@ function mousePressed(evt) {
 function mouseReleased(evt) {
 	switch(evt.button){
 		case 0:
-			console.log("Mouse 0 up"); //debug
+			if(debug){console.log("Mouse 0 up");} //debug
 			mouse.left = false;
 			break;
 		case 1:
-			console.log("Mouse 1 up"); //debug
+			if(debug){console.log("Mouse 1 up");} //debug
 			evt.preventDefault();
 			mouse.middle = false;
 			break;
 		case 2:
-			console.log("Mouse 2 up"); //debug
+			if(debug){console.log("Mouse 2 up");} //debug
 			mouse.right = false;
 			break;
 	}
@@ -55,9 +55,13 @@ function updateMousePos(evt) {
   mouse.y = evt.clientY - rect.top - root.scrollTop;
 }
 
+//mouse object stores mouse information
 var mouse = (function () {
+	//Position
 	var x = 0;
 	var y = 0;
+	
+	//Button states
 	var left = 0;
 	var right = 0;
 	var middle = 0;
