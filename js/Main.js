@@ -1,4 +1,4 @@
-var canvas, canvasContext;
+var canvas, canvasContext, grid, deltaTime, prevTime;
 
 //Prevents player from drag selecting
 document.onselectstart = function()
@@ -20,30 +20,30 @@ window.onload = function() {
 	colorRect(0,0, canvas.width,canvas.height, 'white');
 
 	var framesPerSecond = 60;
+	prevTime = Date.now();
+	gameStart();
 	setInterval(updateAll, 1000/framesPerSecond);
 }
 
 function gameStart(){
-	//Initialization stuff goes here
+	grid = new Grid(150, 50);
+//	grid.debugScreen(); //VERY intensive debug code. Turn off background refresh to use
 }
 
 function updateAll() {
+	var now = Date.now();
+	deltaTime = now - prevTime;
+	prevTime = now;
+	
 	moveAll();
 	drawAll();
 }
 
 function moveAll() {
-//	var mouseRow = getMouseRow();
+	cannon.calculateRotation();
 }
 
-/*
-function getMouseRow(){
-	var q = (mouse.x * Math.sqrt(3)/3 - mouse.y / 3) / grid.size;
-	var r = mouse.y * 2/3 / grid.size;
-	console.log(mouse.x + ", " + mouse.y + ", " + grid.size + "\n" + q + ", " + r);
-}
-*/
-
+//Might redo how the background code works
 var background = (function(){
 	var color = "white";
 	clear = function(){
@@ -57,4 +57,10 @@ var background = (function(){
 function drawAll() {
 	background.clear();
 	cannon.draw();
+	
+	grid.drawBounds();
+	
+	//Debug code to output the coordinates of hex containing mouse. Somewhat CPU intensive.
+//	var mouseHex = grid.screenCoordsToGrid(mouse.x, mouse.y);
+//	console.log(mouseHex.x, mouseHex.y);
 }

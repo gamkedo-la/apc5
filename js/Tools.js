@@ -9,7 +9,7 @@ function distCoords(x1, y1, x2, y2){
 }
 
 //Point class
-function point(_x, _y) {
+function Point(_x, _y) {
 	this.x = _x;
 	this.y = _y;
 }
