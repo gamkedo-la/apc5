@@ -1,6 +1,6 @@
 var Grid = function (_centerX, _centerY) {
-	var centerX = 0;
-	var centerY = 0;
+	var centerX = _centerX;
+	var centerY = _centerY;
 	var size = 30;
 	var height = size * 2;
 	var width = Math.sqrt(3)/2 * height;
