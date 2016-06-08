@@ -1,11 +1,15 @@
-var Grid = function (_centerX, _centerY) {
-	var centerX = _centerX;
-	var centerY = _centerY;
+var Grid = function (_offsetX, _offsetY, _cols, _rows) {
+	var offsetX = _offsetX;
+	var offsetY = _offsetY;
+	var cols = _cols;
+	var rows = _rows;
 	var size = 30;
-	var height = size * 2;
-	var width = Math.sqrt(3)/2 * height;
-	var distX = height * 3/4;
-	var distY = width;
+	var hexHeight = size * 2;
+	var hexWidth = Math.sqrt(3)/2 * hexHeight;
+	var spacingX = hexHeight * 3/4; //Unused so far
+	var spacingY = hexWidth; //Unused so far
+	
+	//var bubbleArray [];
 	
 	//Find corner i of hex at Point "center"
 	var hexCorner = function(center, i){
@@ -50,16 +54,16 @@ var Grid = function (_centerX, _centerY) {
 	
 	//Take hex coordinates and return center in pixel coordinates
 	var gridCoordsToScreen = function (_q, _r){
-		var x = size * (_q * Math.sqrt(3) + _r * Math.sqrt(3)/2) + centerX;
-		var y = size * 3/2 * _r + centerY;
+		var x = size * (_q * Math.sqrt(3) + _r * Math.sqrt(3)/2) + offsetX;
+		var y = size * 3/2 * _r + offsetY;
 		
 		return new Point(x, y);
 	}
 	
 	//Take pixel coordinates and return coordinates of hex that pixel is in
 	var screenCoordsToGrid = function(_x, _y){
-		var q = ((_x - centerX) * Math.sqrt(3)/3 - (_y - centerY)/3) / size;
-		var r = (_y - centerY) * 2/3 / size;
+		var q = ((_x - offsetX) * Math.sqrt(3)/3 - (_y - offsetY)/3) / size;
+		var r = (_y - offsetY) * 2/3 / size;
 		
     return hexRound(new Point(q, r));
 	}

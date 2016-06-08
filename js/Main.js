@@ -31,7 +31,14 @@ window.onload = function() {
 
 //Code to run every time the main game is started (past the main menu)
 function gameStart(){
-	grid = new Grid(150, 50);
+	var numBubbleCols = 10;
+	var numBubbleRows = 10;
+	
+	//Next line is temp code to center the hex grid in the middle of the canvas
+	var gridCenterX = (canvas.width - Math.sqrt(3)/2 * 60 * numBubbleCols)/2 + (Math.sqrt(3)/2 * 30)/2;
+	var gridCenterY = 50;
+	
+	grid = new Grid(gridCenterX, gridCenterY, numBubbleCols, numBubbleRows);
 	
 	//Debug code that creates and caches a 4 color map of all hexes
 	if(hexDebug){
@@ -84,6 +91,6 @@ function drawAll() {
 	//Debug code to output coordinates of hex containing mouse
 	if(hexDebug){
 		var mouseHex = grid.screenCoordsToGrid(mouse.x, mouse.y);
-		console.log(mouseHex.x, mouseHex.y);
+		//console.log(mouseHex.x, mouseHex.y);
 	}
 }
