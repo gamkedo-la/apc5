@@ -28,3 +28,23 @@ function colorRect(topLeftX,topLeftY, width,height, fillColor, rotation, centerX
 	
 	canvasContext.restore();
 }
+
+function drawCircleFill(centerX, centerY, size, color, alpha) {
+//  canvasContext.lineWidth = 1;
+	
+	if(alpha === undefined)
+	{
+		alpha = 1;
+	}
+	
+  canvasContext.beginPath();
+	canvasContext.save();
+	canvasContext.scale(size, size);
+	canvasContext.arc(centerX/size, centerY/size, 1, 0, 2 * Math.PI);
+//	canvasContext.arc(centerX/size, centerY/size, 1, 1 * Math.PI, 2 * Math.PI);
+	canvasContext.globalAlpha = alpha;
+  canvasContext.strokeStyle = color;
+  canvasContext.closePath();
+  canvasContext.fill();
+	canvasContext.restore();
+}

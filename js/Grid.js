@@ -19,10 +19,20 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 		                 center.y + size * Math.sin(angleRad))
 	}
 	
+	var drawBubbles = function(){
+		for(var i = 0; i < cols; i++){
+			for(var j = 0 - Math.floor(i/2); j < rows - i/2; j++){
+				console.log("Bubble draw");
+				var center = gridCoordsToScreen(j, i);
+				drawCircleFill(center.x, center.y, 20, "red", 1);
+			}
+		}
+	}
+	
 	//Draw bounds of all hexes in grid
 	var drawBounds = function(){
-		for(var i = 0; i < 10; i++){
-			for(var j = 0 - Math.floor(i/2); j < 10 - i/2; j++){
+		for(var i = 0; i < cols; i++){
+			for(var j = 0 - Math.floor(i/2); j < rows - i/2; j++){
 				drawHex(j, i);
 			}
 		}
@@ -116,6 +126,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 		screenCoordsToGrid: screenCoordsToGrid,
 		drawBounds: drawBounds,
 		hexRound: hexRound,
-		debugScreen: debugScreen
+		debugScreen: debugScreen,
+		drawBubbles: drawBubbles
 	};
 };

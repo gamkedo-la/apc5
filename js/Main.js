@@ -86,7 +86,7 @@ function drawAll() {
 		grid.drawBounds();
 	}
 	cannon.draw();
-	
+	grid.drawBubbles();
 	
 	//Debug code to output coordinates of hex containing mouse
 	if(hexDebug){
