@@ -16,6 +16,7 @@ function mousePressed(evt) {
 		case 0:
 			if(debug){console.log("Mouse 0");} //debug
 			mouse.left = true;
+			grid.findColorHere(mouse.x,mouse.y);
 			break;
 		case 1:
 			if(debug){console.log("Mouse 1");} //debug
@@ -49,10 +50,10 @@ function mouseReleased(evt) {
 
 function updateMousePos(evt) {
 	var rect = canvas.getBoundingClientRect();
-	var root = document.documentElement;
+	//var root = document.documentElement;
 	
-	mouse.x = evt.clientX - rect.left - root.scrollLeft;
-  mouse.y = evt.clientY - rect.top - root.scrollTop;
+	mouse.x = evt.clientX - rect.left;// - root.scrollLeft;
+  	mouse.y = evt.clientY - rect.top;// - root.scrollTop;
 }
 
 //mouse object stores mouse information

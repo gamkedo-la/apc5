@@ -9,22 +9,54 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 	var spacingX = hexHeight * 3/4; //Unused so far
 	var spacingY = hexWidth; //Unused so far
 	
+	const BUBBLE_NONE = 0;
+	const BUBBLE_RED = 1;
+	const BUBBLE_GREEN = 2;
+	const BUBBLE_BLUE = 3;
+	const BUBBLE_KINDS = 4;
+	var bubbleDefs = [];
+	var bubbleColor = ["white","red","green","blue"];
+
+	var bubbleCRToIndex = function(atC,atR) {
+		return atC + (atR+atC/2) * cols;
+	}
+	var findColorHere = function(pixelX,pixelY) {
+		var curHex = screenCoordsToGrid(pixelX, pixelY);
+		var idx = bubbleCRToIndex(curHex.y,curHex.x);
+		console.log(curHex.x + " " + curHex.y + " " + bubbleColor[bubbleDefs[idx]]);
+	}
+	var drawBubbleAt = function(atC,atR) {
+		var bubbleHere = bubbleDefs[ bubbleCRToIndex(atC,atR) ];
+		if(bubbleHere != BUBBLE_NONE) {
+			var center = gridCoordsToScreen(atR, atC);
+			drawCircleFill(center.x, center.y, 26, bubbleColor[bubbleHere], 1);
+		}
+	}
+
+	var genStartBubbles = function(){
+		bubbleDefs = [];
+		for(var c=0;c<cols+1;c++) { // extra column helps offset rows (note: careful of right bounds if matching)
+			for(var r=0;r<rows;r++) {
+				bubbleDefs.push( Math.floor(Math.random()*BUBBLE_KINDS) );
+			}
+		}
+	}
+	genStartBubbles(); // NOTE: immediatly calling this function ^
+
 	//var bubbleArray [];
 	
 	//Find corner i of hex at Point "center"
 	var hexCorner = function(center, i){
-    var angleDeg = 60 * i   + 30;
-    var angleRad = Math.PI / 180 * angleDeg;
-    return new Point(center.x + size * Math.cos(angleRad),
-		                 center.y + size * Math.sin(angleRad))
+	    var angleDeg = 60 * i   + 30;
+	    var angleRad = Math.PI / 180 * angleDeg;
+	    return new Point(center.x + size * Math.cos(angleRad),
+			                 center.y + size * Math.sin(angleRad))
 	}
 	
 	var drawBubbles = function(){
 		for(var i = 0; i < cols; i++){
 			for(var j = 0 - Math.floor(i/2); j < rows - i/2; j++){
-				console.log("Bubble draw");
-				var center = gridCoordsToScreen(j, i);
-				drawCircleFill(center.x, center.y, 20, "red", 1);
+				drawBubbleAt(i,j);
 			}
 		}
 	}
@@ -124,6 +156,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 	return {
 		size: size,
 		screenCoordsToGrid: screenCoordsToGrid,
+		findColorHere: findColorHere,
 		drawBounds: drawBounds,
 		hexRound: hexRound,
 		debugScreen: debugScreen,

@@ -2,7 +2,7 @@
 var canvas, canvasContext, grid, deltaTime, prevTime;
 
 //Global debug variables
-var debugCanvas, debugContext, hexDebug = true, debug = true;
+var debugCanvas, debugContext, hexDebug = false, debug = true;
 
 //Prevents player from drag selecting
 document.onselectstart = function()
