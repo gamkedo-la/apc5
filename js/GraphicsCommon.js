@@ -24,6 +24,9 @@ function colorRect(topLeftX,topLeftY, width,height, fillColor, rotation, centerX
 	if(!centerY){
 		centerY = 0;
 	}
+	if(!rotation){
+		rotation = 0;
+	}
 	canvasContext.save();
 	canvasContext.translate(topLeftX, topLeftY);
 	canvasContext.rotate(rotation);

@@ -4,7 +4,7 @@ var cannon = (function () {
 	var rot = 90;
 	var width = 75;
 	var height = 10;
-	var color = "green";
+	var color = "#AAAAAA";
 	
 	var calculateRotation = function(){
 		var yDiff = y - mouse.y;

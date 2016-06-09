@@ -68,18 +68,30 @@ function moveAll() {
 
 //Might redo how the background code works
 var background = (function(){
-	var color = "white";
+	var color = "#935636";
 	clear = function(){
-		colorRect(0,0, canvas.width,canvas.height, 'white');
+		colorRect(0,0, canvas.width,canvas.height, color);
 	}
 	return{
 		clear: clear
 	}
 })();
 
+function drawBounds() {
+	var marginW = 123;
+	var marginH = 20;
+	var playableW = canvas.width-marginW*2;
+	var playableH = canvas.height-marginH*2;
+	var outOfBoundsColor = "#20AF6F";
+	colorRect(0,0,canvas.width,marginH,outOfBoundsColor); // top
+	colorRect(0,canvas.height-marginH,canvas.width,marginH,outOfBoundsColor); // bottom
+	colorRect(0,marginH,marginW,playableH,outOfBoundsColor); // left
+	colorRect(canvas.width-marginW,marginH,marginW,playableH,outOfBoundsColor); // right
+}
+
 function drawAll() {
 	background.clear();
-	
+
 	//Debug code to draw a representation of the hex on screen
 	if(hexDebug){
 		//Pick one, comment the other out
@@ -88,7 +100,9 @@ function drawAll() {
 	}
 	cannon.draw();
 	grid.drawBubbles();
-	
+
+	drawBounds();
+		
 	//Debug code to output coordinates of hex containing mouse
 	if(hexDebug){
 		var mouseHex = grid.screenCoordsToGrid(mouse.x, mouse.y);
