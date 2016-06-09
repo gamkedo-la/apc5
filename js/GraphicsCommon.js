@@ -1,3 +1,8 @@
+function drawCenteredImage(imageVar, cx,cy) {
+	canvasContext.drawImage(imageVar,
+			cx-imageVar.width/2, cy-imageVar.height/2);
+}
+
 function drawLines(pointArray){
 	canvasContext.beginPath();
 	canvasContext.moveTo(pointArray[0].x, pointArray[0].y);

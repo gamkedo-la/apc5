@@ -16,7 +16,7 @@ function mousePressed(evt) {
 		case 0:
 			if(debug){console.log("Mouse 0");} //debug
 			mouse.left = true;
-			grid.findColorHere(mouse.x,mouse.y);
+			grid.findSuitHere(mouse.x,mouse.y);
 			break;
 		case 1:
 			if(debug){console.log("Mouse 1");} //debug

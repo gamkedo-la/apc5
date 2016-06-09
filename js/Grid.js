@@ -13,23 +13,33 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 	const BUBBLE_RED = 1;
 	const BUBBLE_GREEN = 2;
 	const BUBBLE_BLUE = 3;
-	const BUBBLE_KINDS = 4;
+	const BUBBLE_ORANGE = 4;
+	const BUBBLE_KINDS = 5;
 	var bubbleDefs = [];
-	var bubbleColor = ["white","red","green","blue"];
+	var bubbleColor = ["gap","red","green","blue","orange"];
+	var bubbleSuit = ["none","heart","spade","diamond","club"];
+	var bubbleImage = [null,imgBubbleHeart,imgBubbleSpade,imgBubbleDiamond,imgBubbleClub];
 
 	var bubbleCRToIndex = function(atC,atR) {
 		return atC + (atR+atC/2) * cols;
 	}
-	var findColorHere = function(pixelX,pixelY) {
+	var findSuitHere = function(pixelX,pixelY) {
 		var curHex = screenCoordsToGrid(pixelX, pixelY);
 		var idx = bubbleCRToIndex(curHex.y,curHex.x);
-		console.log(curHex.x + " " + curHex.y + " " + bubbleColor[bubbleDefs[idx]]);
+		console.log(curHex.x + " " + curHex.y + " " + 
+			(useCardSuits ? bubbleSuit[bubbleDefs[idx]] : 
+				bubbleColor[bubbleDefs[idx]]));
 	}
 	var drawBubbleAt = function(atC,atR) {
 		var bubbleHere = bubbleDefs[ bubbleCRToIndex(atC,atR) ];
 		if(bubbleHere != BUBBLE_NONE) {
 			var center = gridCoordsToScreen(atR, atC);
-			drawCircleFill(center.x, center.y, 26, bubbleColor[bubbleHere], 1);
+			if(useCardSuits) {
+				drawCenteredImage(bubbleImage[bubbleHere],
+					center.x, center.y);
+			} else {
+				drawCircleFill(center.x, center.y, 26, bubbleColor[bubbleHere], 1);
+			}
 		}
 	}
 
@@ -156,7 +166,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 	return {
 		size: size,
 		screenCoordsToGrid: screenCoordsToGrid,
-		findColorHere: findColorHere,
+		findSuitHere: findSuitHere,
 		drawBounds: drawBounds,
 		hexRound: hexRound,
 		debugScreen: debugScreen,

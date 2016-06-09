@@ -3,6 +3,7 @@ var canvas, canvasContext, grid, deltaTime, prevTime;
 
 //Global debug variables
 var debugCanvas, debugContext, hexDebug = false, debug = true;
+var useCardSuits = true; // turning to false goes back to color circles
 
 //Prevents player from drag selecting
 document.onselectstart = function()
