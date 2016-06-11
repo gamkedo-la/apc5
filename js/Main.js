@@ -63,7 +63,7 @@ function updateAll() {
 }
 
 function moveAll() {
-	cannon.calculateRotation();
+	cannon.move();
 }
 
 //Might redo how the background code works
@@ -98,8 +98,8 @@ function drawAll() {
 		//canvasContext.drawImage(debugCanvas, 0, 0);
 		grid.drawBounds();
 	}
-	cannon.draw();
 	grid.drawBubbles();
+	cannon.draw();
 
 	drawBounds();
 		
