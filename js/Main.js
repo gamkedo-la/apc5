@@ -1,5 +1,5 @@
 //Global variables
-var canvas, canvasContext, grid, deltaTime, prevTime;
+var canvas, canvasContext, grid, cannon, ball, deltaTime, prevTime;
 
 //Global debug variables
 var debugCanvas, debugContext, hexDebug = false, debug = true;
@@ -40,6 +40,8 @@ function gameStart(){
 	var gridCenterY = 50;
 	
 	grid = new Grid(gridCenterX, gridCenterY, numBubbleCols, numBubbleRows);
+	cannon = new Cannon();
+	ball = new Ball();
 	
 	//Debug code that creates and caches a 4 color map of all hexes
 	if(hexDebug){
@@ -63,7 +65,8 @@ function updateAll() {
 }
 
 function moveAll() {
-	cannon.move();
+	cannon.calculateRotation();
+	ball.move();
 }
 
 //Might redo how the background code works
@@ -98,8 +101,9 @@ function drawAll() {
 		//canvasContext.drawImage(debugCanvas, 0, 0);
 		grid.drawBounds();
 	}
-	grid.drawBubbles();
 	cannon.draw();
+	grid.drawBubbles();
+	ball.draw();
 
 	drawBounds();
 		
