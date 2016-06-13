@@ -1,11 +1,11 @@
-var cannon = (function () {
+var Cannon = function () {
 	var x = 400;
 	var y = 600;
 	var rot = 90;
 	var width = 75;
 	var height = 10;
 	var color = "#AAAAAA";
-	
+
 	var calculateRotation = function(){
 		var yDiff = y - mouse.y;
 		var xDiff = x - mouse.x;
@@ -15,9 +15,13 @@ var cannon = (function () {
 			rot = Math.atan(yDiff/xDiff) - Math.PI;
 		}
 	};
-	
+
 	var draw = function(){
 		colorRect(x,y, width,height, color, rot, 0, -height/2);
+	};
+
+	var rotation = function(){
+		return rot;
 	};
 	
 	return {
@@ -28,6 +32,6 @@ var cannon = (function () {
 		color: color,
 		draw: draw,
 		calculateRotation: calculateRotation,
-		rot: rot
+		rotation: rotation
 	};
-})();
+};
