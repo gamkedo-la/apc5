@@ -22,26 +22,25 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 
 	var bubbleCRToIndex = function(atC,atR) {
 		return atC + (atR+atC/2) * cols;
-	}
+	};
 	var findSuitHere = function(pixelX,pixelY) {
 		var curHex = screenCoordsToGrid(pixelX, pixelY);
 		var idx = bubbleCRToIndex(curHex.y,curHex.x);
 		console.log(curHex.x + " " + curHex.y + " " +
 			(useCardSuits ? bubbleSuit[bubbleDefs[idx]] : 
 				bubbleColor[bubbleDefs[idx]]));
-	}
+	};
 	var drawBubbleAt = function(atC,atR) {
 		var bubbleHere = bubbleDefs[ bubbleCRToIndex(atC,atR) ];
 		if(bubbleHere != BUBBLE_NONE) {
 			var center = gridCoordsToScreen(atR, atC);
 			if(useCardSuits) {
-				drawCenteredImage(bubbleImage[bubbleHere],
-					center.x, center.y);
+				drawCenteredImage(canvasContext, bubbleImage[bubbleHere], center.x, center.y);
 			} else {
-				drawCircleFill(center.x, center.y, 26, bubbleColor[bubbleHere], 1);
+				drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubbleHere], 1);
 			}
 		}
-	}
+	};
 
 	var genStartBubbles = function(){
 		bubbleDefs = [];
@@ -50,7 +49,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 				bubbleDefs.push( Math.floor(Math.random()*BUBBLE_KINDS) );
 			}
 		}
-	}
+	};
 	genStartBubbles(); // NOTE: immediatly calling this function ^
 
 	//var bubbleArray [];
@@ -61,7 +60,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 	    var angleRad = Math.PI / 180 * angleDeg;
 	    return new Point(center.x + size * Math.cos(angleRad),
 			                 center.y + size * Math.sin(angleRad))
-	}
+	};
 	
 	var drawBubbles = function(){
 		for(var i = 0; i < cols; i++){
@@ -69,7 +68,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 				drawBubbleAt(i,j);
 			}
 		}
-	}
+	};
 	
 	//Draw bounds of all hexes in grid
 	var drawBounds = function(){
@@ -78,7 +77,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 				drawHex(j, i);
 			}
 		}
-	}
+	};
 	
 	//Draw half of the bounds around a hex
 	var drawHalfHex = function(_q, _r){
@@ -89,8 +88,8 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 			hexPoints[i] = hexCorner(hexCenter, i);
 		}
 		
-		drawLines(hexPoints);
-	}
+		drawLines(canvasContext, hexPoints);
+	};
 	
 	//Draw the bounds around a hex
 	var drawHex = function(_q, _r){
@@ -101,8 +100,8 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 			hexPoints[i] = hexCorner(hexCenter, i);
 		}
 		
-		drawLines(hexPoints);
-	}
+		drawLines(canvasContext, hexPoints);
+	};
 	
 	//Take hex coordinates and return center in pixel coordinates
 	var gridCoordsToScreen = function (_q, _r){
@@ -110,7 +109,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 		var y = size * 3/2 * _r + offsetY;
 		
 		return new Point(x, y);
-	}
+	};
 	
 	//Take pixel coordinates and return coordinates of hex that pixel is in
 	var screenCoordsToGrid = function(_x, _y){
@@ -118,7 +117,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 		var r = (_y - offsetY) * 2/3 / size;
 		
     return hexRound(new Point(q, r));
-	}
+	};
 	
 	//Generate 4 color map of hex grid
 	var debugScreen = function(){
@@ -128,31 +127,31 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 				curHex = screenCoordsToGrid(i, j);
 				if(Math.round(curHex.x) % 2 === 0){
 					if(Math.round(curHex.y) % 2 === 0){
-						drawPixel(i, j, "red");
+						drawPixel(canvasContext, i, j, "red");
 					} else {
-						drawPixel(i, j, "green");
+						drawPixel(canvasContext, i, j, "green");
 					}
 				} else {
 					if(Math.round(curHex.y) % 2 === 0){
-						drawPixel(i, j, "blue");
+						drawPixel(canvasContext, i, j, "blue");
 					} else {
-						drawPixel(i, j, "yellow");
+						drawPixel(canvasContext, i, j, "yellow");
 					}
 				}
 			}
 		}
-	}
+	};
 	
 	//Corrects trapezoidal grid into hex grid
 	var hexRound = function(h){
 		h.z = -h.x - h.y;
-		var rx = Math.round(h.x)
-		var ry = Math.round(h.y)
-		var rz = Math.round(h.z)
+		var rx = Math.round(h.x);
+		var ry = Math.round(h.y);
+		var rz = Math.round(h.z);
 		
-		var x_diff = Math.abs(rx - h.x)
-		var y_diff = Math.abs(ry - h.y)
-		var z_diff = Math.abs(rz - h.z)
+		var x_diff = Math.abs(rx - h.x);
+		var y_diff = Math.abs(ry - h.y);
+		var z_diff = Math.abs(rz - h.z);
 		
 		if(x_diff > y_diff && x_diff > z_diff){
 			rx = -ry-rz
@@ -161,7 +160,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 		}
 		
 		return new Point(rx, ry);
-	}
+	};
 
 	return {
 		size: size,

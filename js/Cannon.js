@@ -1,6 +1,6 @@
 var Cannon = function () {
-	var x = 400;
-	var y = 600;
+	var x = canvas.width / 2;
+	var y = canvas.height;
 	var rot = 90;
 	var width = 75;
 	var height = 10;
@@ -17,13 +17,13 @@ var Cannon = function () {
 	};
 
 	var draw = function(){
-		colorRect(x,y, width,height, color, rot, 0, -height/2);
+		colorRect(canvasContext, x,y, width,height, color, rot, 0, -height/2);
 	};
 
 	var rotation = function(){
 		return rot;
 	};
-	
+
 	return {
 		x: x,
 		y: y,

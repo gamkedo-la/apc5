@@ -73,6 +73,6 @@ var mouse = (function () {
 		y: y,
 		left: left,
 		middle: middle,
-		right: right,
+		right: right
 	};
 })();

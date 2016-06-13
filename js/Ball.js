@@ -27,6 +27,12 @@ var Ball = function () {
 		}
 
 		if (fired) {
+			// Check if the next position makes the ball fall out of bounds on the sides.
+			var ballBounds = size - Math.abs(vx);
+			if (ballBounds >= x || x >= canvas.width-ballBounds) {
+				vx = -vx;
+			}
+
             x += vx;
             y += vy;
         }
@@ -39,7 +45,7 @@ var Ball = function () {
 
 	var draw = function(){
 		if (fired) {
-			drawCircleFill(x, y, size, color, 1);
+			drawCircleFill(canvasContext, x, y, size, color, 1);
 		}
 	};
 
