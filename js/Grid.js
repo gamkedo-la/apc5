@@ -23,6 +23,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 	var bubbleCRToIndex = function(atC,atR) {
 		return atC + (atR+atC/2) * cols;
 	};
+	
 	var findSuitHere = function(pixelX,pixelY) {
 		var curHex = screenCoordsToGrid(pixelX, pixelY);
 		var idx = bubbleCRToIndex(curHex.y,curHex.x);
@@ -30,6 +31,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 			(useCardSuits ? bubbleSuit[bubbleDefs[idx]] : 
 				bubbleColor[bubbleDefs[idx]]));
 	};
+	
 	var drawBubbleAt = function(atC,atR) {
 		var bubbleHere = bubbleDefs[ bubbleCRToIndex(atC,atR) ];
 		if(bubbleHere != BUBBLE_NONE) {

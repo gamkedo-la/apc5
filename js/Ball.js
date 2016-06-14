@@ -35,11 +35,11 @@ var Ball = function () {
 			// Check if the next position makes the ball fall out of bounds on the sides.
 			if (leftBound > x) {
 				vx = -vx;
-				x += leftBound - x;
+				x += (leftBound - x) * 2;
 			}
 			if (x > rightBound) {
 				vx = -vx;
-				x += rightBound - x;
+				x += (rightBound - x) * 2;
 			}
 		}
 

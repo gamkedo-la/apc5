@@ -14,6 +14,12 @@ var Cannon = function () {
 		} else {
 			rot = Math.atan(yDiff/xDiff) - Math.PI;
 		}
+
+		if(rot > -Math.PI/10){
+			rot = -Math.PI/10;
+		} else if(rot < -Math.PI + Math.PI/10){
+			rot = -Math.PI + Math.PI/10;
+		}
 	};
 
 	var draw = function(){
