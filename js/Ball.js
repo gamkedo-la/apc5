@@ -7,6 +7,8 @@ var Ball = function () {
 	var vy = 0;
 	var color = "#00FFFF";
 	var fired = false;
+	var leftBound = size;
+	var rightBound = canvas.width - size;
 
 	var reset = function(){
 		fired = true;
@@ -27,15 +29,19 @@ var Ball = function () {
 		}
 
 		if (fired) {
-			// Check if the next position makes the ball fall out of bounds on the sides.
-			var ballBounds = size - Math.abs(vx);
-			if (ballBounds >= x || x >= canvas.width-ballBounds) {
-				vx = -vx;
-			}
+			x += vx;
+			y += vy;
 
-            x += vx;
-            y += vy;
-        }
+			// Check if the next position makes the ball fall out of bounds on the sides.
+			if (leftBound > x) {
+				vx = -vx;
+				x += leftBound - x;
+			}
+			if (x > rightBound) {
+				vx = -vx;
+				x += rightBound - x;
+			}
+		}
 
         // Very simple out of bounds check for debugging
         if (y < 0) {
