@@ -1,4 +1,4 @@
-var Grid = function (_offsetX, _offsetY, _cols, _rows) {
+var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows) {
 	var offsetX = _offsetX;
 	var offsetY = _offsetY;
 	var cols = _cols;
@@ -6,8 +6,8 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 	var size = 30;
 	var hexHeight = size * 2;
 	var hexWidth = Math.sqrt(3)/2 * hexHeight;
-	var spacingX = hexHeight * 3/4; //Unused so far
-	var spacingY = hexWidth; //Unused so far
+	var spacingX = hexWidth;
+	var spacingY = hexHeight * 3/4;
 	
 	const BUBBLE_NONE = 0;
 	const BUBBLE_RED = 1;
@@ -15,27 +15,32 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 	const BUBBLE_BLUE = 3;
 	const BUBBLE_ORANGE = 4;
 	const BUBBLE_KINDS = 5;
-	var bubbleDefs = [];
+	
+	//2D array
+	var bubbleArray = [];
+	bubbleArray[_cols, _rows] = BUBBLE_NONE;
+	
 	var bubbleColor = ["gap","red","green","blue","orange"];
 	var bubbleSuit = ["none","heart","spade","diamond","club"];
 	var bubbleImage = [null,imgBubbleHeart,imgBubbleSpade,imgBubbleDiamond,imgBubbleClub];
-
+	
+	//TODO is this still needed with the new coordinate system?
 	var bubbleCRToIndex = function(atC,atR) {
 		return atC + (atR+atC/2) * cols;
 	};
 	
-	var findSuitHere = function(pixelX,pixelY) {
-		var curHex = screenCoordsToGrid(pixelX, pixelY);
-		var idx = bubbleCRToIndex(curHex.y,curHex.x);
-		console.log(curHex.x + " " + curHex.y + " " +
-			(useCardSuits ? bubbleSuit[bubbleDefs[idx]] : 
-				bubbleColor[bubbleDefs[idx]]));
+	//Finds the suit/color at a given pixel
+	var findSuitHere = function(x, y){
+		var hex = screenCoordsToGrid(x, y);
+		console.log(hex.x + ", " + hex.y + ": " + 
+		            (useCardSuits ? bubbleSuit[bubbleArray[hex.x, hex.y]]
+		             : bubbleColor[bubbleArray[hex.x, hex.y]]));
 	};
 	
-	var drawBubbleAt = function(atC,atR) {
-		var bubbleHere = bubbleDefs[ bubbleCRToIndex(atC,atR) ];
+	var drawBubbleAt = function(c, r) {
+		var bubbleHere = bubbleArray[c, r];
 		if(bubbleHere != BUBBLE_NONE) {
-			var center = gridCoordsToScreen(atR, atC);
+			var center = gridCoordsToScreen(c, r);
 			if(useCardSuits) {
 				drawCenteredImage(canvasContext, bubbleImage[bubbleHere], center.x, center.y);
 			} else {
@@ -43,18 +48,21 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 			}
 		}
 	};
-
+	
 	var genStartBubbles = function(){
-		bubbleDefs = [];
-		for(var c=0;c<cols+1;c++) { // extra column helps offset rows (note: careful of right bounds if matching)
-			for(var r=0;r<rows;r++) {
-				bubbleDefs.push( Math.floor(Math.random()*BUBBLE_KINDS) );
+		for(var c = 0; c < cols; c++){
+			for(var r = 0; r < initialRows; r++){
+				bubbleArray[c, r] = ( Math.floor(Math.random()*(BUBBLE_KINDS - 1)) + 1);
+			}
+		}
+		
+		for(var c = 0; c < cols; c++){
+			for(var r = initialRows; r < rows; r++){
+				bubbleArray[c, r] = BUBBLE_NONE;
 			}
 		}
 	};
 	genStartBubbles(); // NOTE: immediatly calling this function ^
-
-	//var bubbleArray [];
 	
 	//Find corner i of hex at Point "center"
 	var hexCorner = function(center, i){
@@ -64,38 +72,33 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 			                 center.y + size * Math.sin(angleRad))
 	};
 	
+	//TODO test with new grid system
+	var gridCoordsToArray = function(q, r){
+		var y = r;
+		var x = q + Math.floor(y/2);
+		return new Point(x, y);
+	}
+	
 	var drawBubbles = function(){
-		for(var i = 0; i < cols; i++){
-			for(var j = 0 - Math.floor(i/2); j < rows - i/2; j++){
-				drawBubbleAt(i,j);
+		for(var r = 0; r < rows; r++){
+			for(var c = 0; c < cols; c++){
+				drawBubbleAt(c, r);
 			}
 		}
 	};
 	
 	//Draw bounds of all hexes in grid
 	var drawBounds = function(){
-		for(var i = 0; i < cols; i++){
-			for(var j = 0 - Math.floor(i/2); j < rows - i/2; j++){
-				drawHex(j, i);
+		for(var r = 0; r < rows; r++){
+			for(var c = 0; c < cols; c++){
+				drawHex(c, r);
 			}
 		}
 	};
 	
-	//Draw half of the bounds around a hex
-	var drawHalfHex = function(_q, _r){
-		var hexCenter = gridCoordsToScreen(_q, _r);
-		var hexPoints = [];
-		
-		for(var i = 0; i < 4; i++){
-			hexPoints[i] = hexCorner(hexCenter, i);
-		}
-		
-		drawLines(canvasContext, hexPoints);
-	};
-	
 	//Draw the bounds around a hex
-	var drawHex = function(_q, _r){
-		var hexCenter = gridCoordsToScreen(_q, _r);
+	var drawHex = function(c, r){
+		var hexCenter = gridCoordsToScreen(c, r);
 		var hexPoints = [];
 		
 		for(var i = 0; i < 7; i++){
@@ -106,19 +109,22 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 	};
 	
 	//Take hex coordinates and return center in pixel coordinates
-	var gridCoordsToScreen = function (_q, _r){
-		var x = size * (_q * Math.sqrt(3) + _r * Math.sqrt(3)/2) + offsetX;
-		var y = size * 3/2 * _r + offsetY;
+	var gridCoordsToScreen = function (c, r){
+		var x = offsetX + c * spacingX + r%2 * spacingX/2;
+		var y = offsetY + r * spacingY;
 		
 		return new Point(x, y);
 	};
 	
 	//Take pixel coordinates and return coordinates of hex that pixel is in
-	var screenCoordsToGrid = function(_x, _y){
-		var q = ((_x - offsetX) * Math.sqrt(3)/3 - (_y - offsetY)/3) / size;
-		var r = (_y - offsetY) * 2/3 / size;
+	var screenCoordsToGrid = function(x, y){
+		var q = ((x - offsetX) * Math.sqrt(3)/3 - (y - offsetY)/3) / size;
+		var r = (y - offsetY) * 2/3 / size;
 		
-    return hexRound(new Point(q, r));
+		var hex = hexRound(new Point(q, r));
+		hex.x += Math.floor(hex.y / 2);
+		
+    return hex;
 	};
 	
 	//Generate 4 color map of hex grid
@@ -171,6 +177,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows) {
 		drawBounds: drawBounds,
 		hexRound: hexRound,
 		debugScreen: debugScreen,
-		drawBubbles: drawBubbles
+		drawBubbles: drawBubbles,
+		gridCoordsToArray: gridCoordsToArray
 	};
 };

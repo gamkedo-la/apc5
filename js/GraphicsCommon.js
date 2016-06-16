@@ -49,7 +49,6 @@ function drawCircleFill(canvasContext, centerX, centerY, size, color, alpha) {
 	canvasContext.save();
 	canvasContext.scale(size, size);
 	canvasContext.arc(centerX/size, centerY/size, 1, 0, 2 * Math.PI);
-	// canvasContext.arc(centerX/size, centerY/size, 1, 1 * Math.PI, 2 * Math.PI);
 	canvasContext.globalAlpha = alpha;
 	canvasContext.fillStyle = color;
 	canvasContext.closePath();

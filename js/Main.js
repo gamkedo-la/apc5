@@ -3,7 +3,7 @@ var canvas, canvasContext, scoresCanvas, scoresContext, grid, cannon, ball, delt
 var canvasColor = "#935636", gameBoardColor = "#20AF6F";
 
 //Global debug variables
-var hexDebug = false, debug = true;
+var hexDebug = true, debug = true, debugCanvas, debugContext;
 var useCardSuits = true; // turning to false goes back to color circles
 
 //Prevents player from drag selecting
@@ -38,18 +38,25 @@ window.onload = function() {
 function gameStart(){
 	var numBubbleCols = 10;
 	var numBubbleRows = 10;
+	var filledRows = 8;
 	
 	//Next line is temp code to center the hex grid in the middle of the canvas
 	var gridCenterX = (canvas.width - Math.sqrt(3)/2 * 60 * numBubbleCols)/2 + (Math.sqrt(3)/2 * 30)/2;
 	var gridCenterY = 50;
 
-	grid = new Grid(gridCenterX, gridCenterY, numBubbleCols, numBubbleRows);
+	grid = new Grid(gridCenterX, gridCenterY, numBubbleCols, numBubbleRows, filledRows);
 	cannon = new Cannon();
 	ball = new Ball();
 	
 	//Debug code that creates and caches a 4 color map of all hexes
 	if(hexDebug){
 		grid.debugScreen(); //VERY intensive call.
+		
+		debugCanvas = document.createElement('canvas');
+		debugContext = debugCanvas.getContext('2d');
+		debugCanvas.width = canvas.width;
+		debugCanvas.height = canvas.height;
+		debugContext.drawImage(canvas, 0, 0);
 	}
 }
 
@@ -84,8 +91,8 @@ function drawAll() {
 	//Debug code to draw a representation of the hex on screen
 	if(hexDebug){
 		//Pick one, comment the other out
-		//canvasContext.drawImage(debugCanvas, 0, 0);
-		grid.drawBounds();
+		canvasContext.drawImage(debugCanvas, 0, 0);
+		//grid.drawBounds();
 	}
 	cannon.draw();
 	grid.drawBubbles();
