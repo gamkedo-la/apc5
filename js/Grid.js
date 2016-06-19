@@ -1,9 +1,9 @@
-var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows) {
+var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	var offsetX = _offsetX;
 	var offsetY = _offsetY;
 	var cols = _cols;
 	var rows = _rows;
-	var size = 30;
+	var size = _size;
 	var hexHeight = size * 2;
 	var hexWidth = Math.sqrt(3)/2 * hexHeight;
 	var spacingX = hexWidth;
@@ -16,13 +16,77 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows) {
 	const BUBBLE_ORANGE = 4;
 	const BUBBLE_KINDS = 5;
 	
-	//2D array
 	var bubbleArray = [];
-	bubbleArray[_cols, _rows] = BUBBLE_NONE;
+	
+	//Make bubbleArray 2D
+	for(var i = 0; i < cols; i++){
+		bubbleArray[i] = [];
+	}
 	
 	var bubbleColor = ["gap","red","green","blue","orange"];
 	var bubbleSuit = ["none","heart","spade","diamond","club"];
 	var bubbleImage = [null,imgBubbleHeart,imgBubbleSpade,imgBubbleDiamond,imgBubbleClub];
+	
+	//Check if the current bubble is of the same type as the next one
+	var checkBubble = function(bubble, nextBubble){
+		if(nextBubble){
+			if(bubble.value === nextBubble.value){
+				return nextBubble;
+			}
+		}
+		return false;
+	};
+	
+	//Runs check on all adjacent bubbles
+	//Returns array with all that pass
+	var checkAllAdjacentBubbles = function(bubble, check){
+		var bubblesThatPass = [];
+		var temp;
+		var checkResult;
+		
+		var c = bubble.col;
+		var r = bubble.row;
+		
+		var leftRow = r%2 === 0 ? -1 : 0;
+		c += leftRow;
+		
+		for(var i = 0; i < 2; i++){
+			for(var j = -1; j < 2; j++){
+				
+				//Don't check self
+				if(j === 0 && i + leftRow === 0){
+					temp = bubbleArray[c + i - (2*leftRow + 1)];
+					
+					if(!temp){continue;} //Don't check out of col bounds
+					
+					checkResult = check(bubble, temp[r + j]);
+				} else {
+					temp = bubbleArray[c + i];
+					
+					if(!temp){continue;} //Don't check out of col bounds
+					
+					checkResult = check(bubble, temp[r + j]);
+				}
+				if(checkResult){
+					bubblesThatPass = bubblesThatPass.concat(checkResult);
+				}
+			}
+		}
+		return bubblesThatPass;
+	};
+	
+	//Attatch new bubble first, then call this function on it
+	//Finds combo of bubbles that pass checkBubble. Only checks each bubble once.
+	//Returns array with all bubbles in the combo.
+	var findCombo = function(c, r){
+		var bubbleCombo = [bubbleArray[c][r]];
+		
+		for(var i = 0; i < bubbleCombo.length; i++){
+			bubbleCombo = concatUnique(bubbleCombo, checkAllAdjacentBubbles(bubbleCombo[i], checkBubble));
+		}
+		
+		return bubbleCombo;
+	};
 	
 	//TODO is this still needed with the new coordinate system?
 	var bubbleCRToIndex = function(atC,atR) {
@@ -32,19 +96,25 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows) {
 	//Finds the suit/color at a given pixel
 	var findSuitHere = function(x, y){
 		var hex = screenCoordsToGrid(x, y);
-		console.log(hex.x + ", " + hex.y + ": " + 
-		            (useCardSuits ? bubbleSuit[bubbleArray[hex.x, hex.y]]
-		             : bubbleColor[bubbleArray[hex.x, hex.y]]));
+		console.log(hex.x + ", " + hex.y + ": " + bubbleArray[hex.x][hex.y].value);
 	};
 	
 	var drawBubbleAt = function(c, r) {
-		var bubbleHere = bubbleArray[c, r];
-		if(bubbleHere != BUBBLE_NONE) {
+		var bubbleHere = bubbleArray[c][r];
+		if(bubbleHere) {
 			var center = gridCoordsToScreen(c, r);
 			if(useCardSuits) {
-				drawCenteredImage(canvasContext, bubbleImage[bubbleHere], center.x, center.y);
+				drawCenteredImage(canvasContext, bubbleImage[bubbleHere.value], center.x, center.y);
 			} else {
-				drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubbleHere], 1);
+				drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubbleHere.value], 1);
+			}
+		}
+	};
+	
+	var drawBubbles = function(){
+		for(var r = 0; r < rows; r++){
+			for(var c = 0; c < cols; c++){
+				drawBubbleAt(c, r);
 			}
 		}
 	};
@@ -52,13 +122,13 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows) {
 	var genStartBubbles = function(){
 		for(var c = 0; c < cols; c++){
 			for(var r = 0; r < initialRows; r++){
-				bubbleArray[c, r] = ( Math.floor(Math.random()*(BUBBLE_KINDS - 1)) + 1);
+				bubbleArray[c][r] = new Bubble(c, r, Math.floor(Math.random()*(BUBBLE_KINDS - 1)) + 1);
 			}
 		}
 		
 		for(var c = 0; c < cols; c++){
 			for(var r = initialRows; r < rows; r++){
-				bubbleArray[c, r] = BUBBLE_NONE;
+				bubbleArray[c][r] = BUBBLE_NONE;
 			}
 		}
 	};
@@ -77,14 +147,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows) {
 		var y = r;
 		var x = q + Math.floor(y/2);
 		return new Point(x, y);
-	}
-	
-	var drawBubbles = function(){
-		for(var r = 0; r < rows; r++){
-			for(var c = 0; c < cols; c++){
-				drawBubbleAt(c, r);
-			}
-		}
 	};
 	
 	//Draw bounds of all hexes in grid
@@ -178,6 +240,10 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows) {
 		hexRound: hexRound,
 		debugScreen: debugScreen,
 		drawBubbles: drawBubbles,
-		gridCoordsToArray: gridCoordsToArray
+		gridCoordsToArray: gridCoordsToArray,
+		findCombo: findCombo,
+		bubbleArray: bubbleArray,
+		checkAllAdjacentBubbles: checkAllAdjacentBubbles,
+		checkBubble: checkBubble
 	};
 };

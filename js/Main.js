@@ -3,7 +3,7 @@ var canvas, canvasContext, scoresCanvas, scoresContext, grid, cannon, ball, delt
 var canvasColor = "#935636", gameBoardColor = "#20AF6F";
 
 //Global debug variables
-var hexDebug = true, debug = true, debugCanvas, debugContext;
+var hexDebug = false, debug = true, debugCanvas, debugContext;
 var useCardSuits = true; // turning to false goes back to color circles
 
 //Prevents player from drag selecting
@@ -41,10 +41,12 @@ function gameStart(){
 	var filledRows = 8;
 	
 	//Next line is temp code to center the hex grid in the middle of the canvas
-	var gridCenterX = (canvas.width - Math.sqrt(3)/2 * 60 * numBubbleCols)/2 + (Math.sqrt(3)/2 * 30)/2;
-	var gridCenterY = 50;
-
-	grid = new Grid(gridCenterX, gridCenterY, numBubbleCols, numBubbleRows, filledRows);
+	var bubbleSize = 30;
+	var gridCenterX = (canvas.width - Math.sqrt(3)/2 * 60 * numBubbleCols)/2
+	                + (Math.sqrt(3)/2 * bubbleSize)/2;
+	var gridCenterY = bubbleSize;
+	
+	grid = new Grid(gridCenterX, gridCenterY, numBubbleCols, numBubbleRows, filledRows, bubbleSize);
 	cannon = new Cannon();
 	ball = new Ball();
 	

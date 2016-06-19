@@ -21,3 +21,9 @@ function distPoints(p1, p2){
 
 	return Math.sqrt(distX*distX + distY*distY);
 }
+
+function concatUnique(array1, array2){
+	return array1.concat(array2.filter(function(n){
+		return array1.indexOf(n) < 0;
+	}));
+}
