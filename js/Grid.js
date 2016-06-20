@@ -45,25 +45,35 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		return results;
 	};
 	
+	//Marks all bubbles as not connected then checks each
+	//one and marks connected bubbles as such
 	var checkConnected = function(){
 		runOnAllBubbles(function(b){
 			b.connected = false;
 		});
 		
 		runOnAllBubbles(checkConnectedHelper);
+		
+		//Need to make a Bubble.pop function or some such
+		//runOnAllBubbles(function(b){if(!b.connected){b.pop;}});
 	};
 	
+	//Recursively searches for connected bubbles from neighbors, marking as it goes
 	var checkConnectedHelper = function(connectedBubbles, bubbleIndex){
+		//If this is called on a single bubble we need to make the array and set the index
 		if(bubbleIndex === undefined){
 			bubbleIndex = 0;
 			connectedBubbles = [connectedBubbles];
 		}
 		
 		var curBubble = connectedBubbles[bubbleIndex];
+		//This only happens if we run out of bubbles, which means we couldn't find a
+		//bubble in row == 0, which means we are disconnected
 		if(!curBubble){
 			return false;
 		}
 		
+		//Recursive base step
 		if(curBubble.row === 0){
 			curBubble.connected = true;
 			return true;
@@ -71,11 +81,13 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			return true;
 		}
 		
+		//Add all as-yet unadded neighbors to the array
 		connectedBubbles = concatUnique(connectedBubbles,
 		 checkAllAdjacentBubbles(curBubble, function(adjacentBubble){
 			if(adjacentBubble){return adjacentBubble;}
 		}));
 		
+		//Recursive call
 		var result = checkConnectedHelper(connectedBubbles, bubbleIndex + 1);
 		curBubble.connected = result;
 		
@@ -96,7 +108,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	//Returns array with all that pass
 	var checkAllAdjacentBubbles = function(bubble, check){
 		var bubblesThatPass = [];
-		var temp;
+		var inBoundsCol;
 		var checkResult;
 		
 		var c = bubble.col;
@@ -110,13 +122,15 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 				
 				//Don't check self
 				if(j === 0 && i + leftRow === 0){
-					temp = bubbleArray[c + i - (2*leftRow + 1)];
-				} else {
-					temp = bubbleArray[c + i];
+					inBoundsCol = bubbleArray[c + i - (2*leftRow + 1)];
+				} else { //but check all other neighbors
+					inBoundsCol = bubbleArray[c + i];
 				}
-				if(!temp){continue;} //Don't check out of col bounds
-				checkResult = check(temp[r + j], bubble);
 				
+				if(!inBoundsCol){continue;} //Don't check out of col bounds
+				checkResult = check(inBoundsCol[r + j], bubble);
+				
+				//If the check passed, add it to the array
 				if(checkResult){
 					bubblesThatPass = bubblesThatPass.concat(checkResult);
 				}
