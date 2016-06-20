@@ -27,10 +27,65 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	var bubbleSuit = ["none","heart","spade","diamond","club"];
 	var bubbleImage = [null,imgBubbleHeart,imgBubbleSpade,imgBubbleDiamond,imgBubbleClub];
 	
+	//Runs func on all bubbles and returns the results in
+	//a 2D array corresponding with the bubble's position
+	var runOnAllBubbles = function(func){
+		var results = [];
+		for(var i = 0; i < cols; i++){
+			results[i] = [];
+		}
+		
+		for(var r = 0; r < rows; r++){
+			for(var c = 0; c < cols; c++){
+				if(bubbleArray[c][r]){
+					results[c][r] = func(bubbleArray[c][r]);
+				}
+			}
+		}
+		return results;
+	};
+	
+	var checkConnected = function(){
+		runOnAllBubbles(function(b){
+			b.connected = false;
+		});
+		
+		runOnAllBubbles(checkConnectedHelper);
+	};
+	
+	var checkConnectedHelper = function(connectedBubbles, bubbleIndex){
+		if(bubbleIndex === undefined){
+			bubbleIndex = 0;
+			connectedBubbles = [connectedBubbles];
+		}
+		
+		var curBubble = connectedBubbles[bubbleIndex];
+		if(!curBubble){
+			return false;
+		}
+		
+		if(curBubble.row === 0){
+			curBubble.connected = true;
+			return true;
+		} else if(curBubble.connected){
+			return true;
+		}
+		
+		connectedBubbles = concatUnique(connectedBubbles,
+		 checkAllAdjacentBubbles(curBubble, function(adjacentBubble){
+			if(adjacentBubble){return adjacentBubble;}
+		}));
+		
+		var result = checkConnectedHelper(connectedBubbles, bubbleIndex + 1);
+		curBubble.connected = result;
+		
+		return result;
+	};
+	
 	//Check if the current bubble is of the same type as the next one
-	var checkBubble = function(bubble, nextBubble){
+	var checkBubble = function(nextBubble, thisBubble){
 		if(nextBubble){
-			if(bubble.value === nextBubble.value){
+			if(thisBubble.value === nextBubble.value){
 				return nextBubble;
 			}
 		}
@@ -56,17 +111,12 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 				//Don't check self
 				if(j === 0 && i + leftRow === 0){
 					temp = bubbleArray[c + i - (2*leftRow + 1)];
-					
-					if(!temp){continue;} //Don't check out of col bounds
-					
-					checkResult = check(bubble, temp[r + j]);
 				} else {
 					temp = bubbleArray[c + i];
-					
-					if(!temp){continue;} //Don't check out of col bounds
-					
-					checkResult = check(bubble, temp[r + j]);
 				}
+				if(!temp){continue;} //Don't check out of col bounds
+				checkResult = check(temp[r + j], bubble);
+				
 				if(checkResult){
 					bubblesThatPass = bubblesThatPass.concat(checkResult);
 				}
@@ -99,36 +149,27 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		console.log(hex.x + ", " + hex.y + ": " + bubbleArray[hex.x][hex.y].value);
 	};
 	
-	var drawBubbleAt = function(c, r) {
-		var bubbleHere = bubbleArray[c][r];
-		if(bubbleHere) {
-			var center = gridCoordsToScreen(c, r);
-			if(useCardSuits) {
-				drawCenteredImage(canvasContext, bubbleImage[bubbleHere.value], center.x, center.y);
-			} else {
-				drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubbleHere.value], 1);
-			}
+	var drawBubbleAt = function(bubble) {
+		var center = gridCoordsToScreen(bubble.col, bubble.row);
+		if(useCardSuits) {
+			drawCenteredImage(canvasContext, bubbleImage[bubble.value], center.x, center.y);
+		} else {
+			drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubble.value], 1);
 		}
 	};
 	
 	var drawBubbles = function(){
-		for(var r = 0; r < rows; r++){
-			for(var c = 0; c < cols; c++){
-				drawBubbleAt(c, r);
-			}
-		}
+		runOnAllBubbles(drawBubbleAt);
 	};
 	
 	var genStartBubbles = function(){
 		for(var c = 0; c < cols; c++){
-			for(var r = 0; r < initialRows; r++){
-				bubbleArray[c][r] = new Bubble(c, r, Math.floor(Math.random()*(BUBBLE_KINDS - 1)) + 1);
-			}
-		}
-		
-		for(var c = 0; c < cols; c++){
-			for(var r = initialRows; r < rows; r++){
-				bubbleArray[c][r] = BUBBLE_NONE;
+			for(var r = 0; r < rows; r++){
+				if(r < initialRows){
+					bubbleArray[c][r] = new Bubble(c, r, Math.floor(Math.random()*(BUBBLE_KINDS - 1)) + 1);
+				} else{
+					bubbleArray[c][r] = BUBBLE_NONE;
+				}
 			}
 		}
 	};
@@ -243,7 +284,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		gridCoordsToArray: gridCoordsToArray,
 		findCombo: findCombo,
 		bubbleArray: bubbleArray,
-		checkAllAdjacentBubbles: checkAllAdjacentBubbles,
-		checkBubble: checkBubble
+		checkConnected: checkConnected,
 	};
 };
