@@ -1,9 +1,10 @@
 //Global variables
-var canvas, canvasContext, scoresCanvas, scoresContext, grid, cannon, ball, deltaTime, prevTime;
+var canvas, canvasContext, scoresCanvas, scoresContext, grid, cannon, deltaTime, prevTime;
 var canvasColor = "#935636", gameBoardColor = "#20AF6F";
+var bubbleSize = 30;
 
 //Global debug variables
-var hexDebug = false, debug = true, debugCanvas, debugContext;
+var hexDebug = false, debug = true, debugCanvas, debugContext, mainGameLoop;
 var useCardSuits = true; // turning to false goes back to color circles
 
 //Prevents player from drag selecting
@@ -31,7 +32,7 @@ window.onload = function() {
 	var framesPerSecond = 60;
 	prevTime = Date.now();
 	gameStart();
-	setInterval(updateAll, 1000/framesPerSecond);
+	mainGameLoop = setInterval(updateAll, 1000/framesPerSecond);
 };
 
 //Code to run every time the main game is started (past the main menu)
@@ -41,14 +42,12 @@ function gameStart(){
 	var filledRows = 8;
 	
 	//Next line is temp code to center the hex grid in the middle of the canvas
-	var bubbleSize = 30;
 	var gridCenterX = (canvas.width - Math.sqrt(3)/2 * 60 * numBubbleCols)/2
 	                + (Math.sqrt(3)/2 * bubbleSize)/2;
 	var gridCenterY = bubbleSize;
 	
 	grid = new Grid(gridCenterX, gridCenterY, numBubbleCols, numBubbleRows, filledRows, bubbleSize);
 	cannon = new Cannon();
-	ball = new Ball();
 	
 	//Debug code that creates and caches a 4 color map of all hexes
 	if(hexDebug){
@@ -73,7 +72,9 @@ function updateAll() {
 
 function moveAll() {
 	cannon.calculateRotation();
-	ball.move();
+	if(cannon.projectile){
+		cannon.projectile.move();
+	}
 }
 
 //Might redo how the background code works
@@ -97,8 +98,10 @@ function drawAll() {
 		//grid.drawBounds();
 	}
 	cannon.draw();
-	grid.drawBubbles();
-	ball.draw();
+	grid.drawAllBubbles();
+	if(cannon.projectile){
+		cannon.projectile.draw();
+	}
 
 	// For now, only draw the name in the scores context.
 	drawText(scoresContext, 25, 20, "#000000", "APC5");

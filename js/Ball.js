@@ -1,71 +1,59 @@
-var Ball = function () {
-	var size = 25;
-	var x = 0;
-	var y = 0;
+var Ball = function (_x, _y, _offset, _angle) {
+	var size = bubbleSize;
+	var x = _x + Math.cos(_angle) * _offset;
+	var y = _y + Math.sin(_angle) * _offset;
+	var prevX = x;
+	var prevY = y;
 	var speed = 5;
-	var vx = 0;
-	var vy = 0;
-	var color = "#00FFFF";
-	var fired = false;
+	var vx = Math.cos(_angle) * speed;;
+	var vy = Math.sin(_angle) * speed;;
+	var value = grid.randomBubbleColor();
 	var leftBound = size;
 	var rightBound = canvas.width - size;
-
-	var reset = function(){
-		fired = true;
-
-		// Make sure the ball is set right at the end of the cannon barrel
-		var nozzle = cannon.width + (size - 2);
-		x = cannon.x + Math.cos(cannon.rotation()) * nozzle;
-		y = cannon.y + Math.sin(cannon.rotation()) * nozzle;
-
-		// Calculate the speed
-		vx = Math.cos(cannon.rotation()) * speed;
-		vy = Math.sin(cannon.rotation()) * speed;
-	};
-
+	
 	var move = function(){
-		if (mouse.left && !fired) {
-			reset();
+		prevX = x;
+		prevY = y;
+		x += vx;
+		y += vy;
+		
+		// Check if the next position makes the ball fall out of bounds on the sides.
+		if (leftBound > x) {
+			vx = -vx;
+			x += (leftBound - x) * 2;
 		}
-
-		if (fired) {
-			x += vx;
-			y += vy;
-
-			// Check if the next position makes the ball fall out of bounds on the sides.
-			if (leftBound > x) {
-				vx = -vx;
-				x += (leftBound - x) * 2;
-			}
-			if (x > rightBound) {
-				vx = -vx;
-				x += (rightBound - x) * 2;
-			}
+		if (x > rightBound) {
+			vx = -vx;
+			x += (rightBound - x) * 2;
 		}
-
-        // Very simple out of bounds check for debugging
-        if (y < 0) {
-            fired = false;
-        }
+		getCurrentHex();
+		
+		// Very simple out of bounds check for debugging
+		if (y < 0) {
+			cannon.projectile = undefined;
+		}
 	};
 
 	var draw = function(){
-		if (fired) {
-			drawCircleFill(canvasContext, x, y, size, color, 1);
-		}
+			drawCenteredImage(canvasContext, grid.bubbleImage[value], x, y);
+			//drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubble.value], 1);
 	};
 
-    var hasFired = function(){
-        return fired;
-    };
-
+	var getCurrentHex = function(){
+		if(grid.findSuitHere(x, y) > 0){
+			grid.attatchBall(prevX, prevY, value);
+			cannon.projectile = undefined;
+		}
+	};
+	
 	return {
 		x: x,
 		y: y,
 		size: size,
-		color: color,
 		draw: draw,
 		move: move,
-        hasFired: hasFired
+		prevX: prevX,
+		prevY: prevY,
+		value: value,
 	};
 };

@@ -160,10 +160,16 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	//Finds the suit/color at a given pixel
 	var findSuitHere = function(x, y){
 		var hex = screenCoordsToGrid(x, y);
-		console.log(hex.x + ", " + hex.y + ": " + bubbleArray[hex.x][hex.y].value);
+		
+		if(hex.x < cols && hex.x >= 0 && hex.y < rows && hex.y >= 0){
+			console.log(hex.x + ", " + hex.y + ": " + bubbleArray[hex.x][hex.y].value);
+			return bubbleArray[hex.x][hex.y].value;
+		} else{
+			return undefined;
+		}
 	};
 	
-	var drawBubbleAt = function(bubble) {
+	var drawBubble = function(bubble) {
 		var center = gridCoordsToScreen(bubble.col, bubble.row);
 		if(useCardSuits) {
 			drawCenteredImage(canvasContext, bubbleImage[bubble.value], center.x, center.y);
@@ -172,15 +178,19 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		}
 	};
 	
-	var drawBubbles = function(){
-		runOnAllBubbles(drawBubbleAt);
+	var drawAllBubbles = function(){
+		runOnAllBubbles(drawBubble);
+	};
+	
+	var randomBubbleColor = function() {
+		return Math.floor(Math.random()*(BUBBLE_KINDS - 1)) + 1;
 	};
 	
 	var genStartBubbles = function(){
 		for(var c = 0; c < cols; c++){
 			for(var r = 0; r < rows; r++){
 				if(r < initialRows){
-					bubbleArray[c][r] = new Bubble(c, r, Math.floor(Math.random()*(BUBBLE_KINDS - 1)) + 1);
+					bubbleArray[c][r] = new Bubble(c, r, randomBubbleColor());
 				} else{
 					bubbleArray[c][r] = BUBBLE_NONE;
 				}
@@ -197,12 +207,13 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			                 center.y + size * Math.sin(angleRad))
 	};
 	
-	//TODO test with new grid system
-	var gridCoordsToArray = function(q, r){
+	//TODO test with new grid system (more like remove)
+/*	var gridCoordsToArray = function(q, r){
 		var y = r;
 		var x = q + Math.floor(y/2);
 		return new Point(x, y);
 	};
+*/
 	
 	//Draw bounds of all hexes in grid
 	var drawBounds = function(){
@@ -227,6 +238,11 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	
 	//Take hex coordinates and return center in pixel coordinates
 	var gridCoordsToScreen = function (c, r){
+		if(r === undefined){
+			r = c.row;
+			c = c.col;
+		}
+		
 		var x = offsetX + c * spacingX + r%2 * spacingX/2;
 		var y = offsetY + r * spacingY;
 		
@@ -235,6 +251,11 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	
 	//Take pixel coordinates and return coordinates of hex that pixel is in
 	var screenCoordsToGrid = function(x, y){
+		/*if(y === undefined){
+			y = x.y;
+			x = x.x;
+		}
+		*/
 		var q = ((x - offsetX) * Math.sqrt(3)/3 - (y - offsetY)/3) / size;
 		var r = (y - offsetY) * 2/3 / size;
 		
@@ -286,7 +307,18 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		
 		return new Point(rx, ry);
 	};
-
+	
+	var attatchBubble = function(c, r, v) {
+		if(c < cols && c >= 0 && r < rows && r >= 0){
+			bubbleArray[c][r] = new Bubble(c, r, v);
+		}
+	};
+	
+	var attatchBall = function(x, y, value){
+		var coords = screenCoordsToGrid(x, y);
+		attatchBubble(coords.x, coords.y, value);
+	};
+	
 	return {
 		size: size,
 		screenCoordsToGrid: screenCoordsToGrid,
@@ -294,10 +326,14 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		drawBounds: drawBounds,
 		hexRound: hexRound,
 		debugScreen: debugScreen,
-		drawBubbles: drawBubbles,
-		gridCoordsToArray: gridCoordsToArray,
+		drawAllBubbles: drawAllBubbles,
+		//gridCoordsToArray: gridCoordsToArray,
 		findCombo: findCombo,
+		//attatchBubble: attatchBubble,
+		attatchBall: attatchBall,
 		bubbleArray: bubbleArray,
 		checkConnected: checkConnected,
+		bubbleImage: bubbleImage,
+		randomBubbleColor: randomBubbleColor,
 	};
 };

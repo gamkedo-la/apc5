@@ -1,6 +1,13 @@
 var Bubble = function(c, r, val){
-	this.col = c;
-	this.row = r;
-	this.value = val;
-	this.connected = true;
-}
+	var col = c;
+	var row = r;
+	var value = val;
+	var connected = true;
+	
+	return {
+		col: col,
+		row: row,
+		value: value,
+		connected: connected,
+	};
+};

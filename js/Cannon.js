@@ -5,7 +5,9 @@ var Cannon = function () {
 	var width = 75;
 	var height = 10;
 	var color = "#AAAAAA";
-
+	var nozzle = width + (bubbleSize - 2);
+	var projectile;
+	
 	var calculateRotation = function(){
 		var yDiff = y - mouse.y;
 		var xDiff = x - mouse.x;
@@ -15,10 +17,10 @@ var Cannon = function () {
 			rot = Math.atan(yDiff/xDiff) - Math.PI;
 		}
 
-		if(rot > -Math.PI/10){
-			rot = -Math.PI/10;
-		} else if(rot < -Math.PI + Math.PI/10){
-			rot = -Math.PI + Math.PI/10;
+		if(rot > -Math.PI/8){
+			rot = -Math.PI/8;
+		} else if(rot < -Math.PI + Math.PI/8){
+			rot = -Math.PI + Math.PI/8;
 		}
 	};
 
@@ -29,6 +31,11 @@ var Cannon = function () {
 	var rotation = function(){
 		return rot;
 	};
+	
+	//This should take the object to fire once we get multiple things to shoot
+	var fire = function(){
+		this.projectile = new Ball(x, y, nozzle, rot);
+	};
 
 	return {
 		x: x,
@@ -38,6 +45,9 @@ var Cannon = function () {
 		color: color,
 		draw: draw,
 		calculateRotation: calculateRotation,
-		rotation: rotation
+		rotation: rotation,
+		fire: fire,
+		projectile: projectile,
+		nozzle: nozzle,
 	};
 };

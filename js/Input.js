@@ -15,6 +15,7 @@ function mousePressed(evt) {
 	switch(evt.button){
 		case 0:
 			if(debug){console.log("Mouse 0");} //debug
+			cannon.fire();
 			mouse.left = true;
 			grid.findSuitHere(mouse.x,mouse.y);
 			break;
