@@ -25,7 +25,7 @@ var Cannon = function () {
 	};
 
 	var draw = function(){
-		colorRect(canvasContext, x,y, width,height, color, rot, 0, -height/2);
+		colorRect(canvasContext, x,y+10, width+10,height, color, rot, 0, -height/2);
 	};
 
 	var rotation = function(){

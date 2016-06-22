@@ -6,6 +6,8 @@ var bubbleSize = 30;
 //Global debug variables
 var hexDebug = false, debug = true, debugCanvas, debugContext, mainGameLoop;
 var useCardSuits = true; // turning to false goes back to color circles
+var particleList = [];
+
 
 //Prevents player from drag selecting
 document.onselectstart = function()
@@ -67,6 +69,8 @@ function updateAll() {
 	prevTime = now;
 	
 	moveAll();
+
+	grid.explodeAllBubbles();
 	drawAll();
 }
 
@@ -74,6 +78,15 @@ function moveAll() {
 	cannon.calculateRotation();
 	if(cannon.projectile){
 		cannon.projectile.move();
+	}
+	var i;
+	for (i = 0; i < particleList.length; i++) {
+		particleList[i].move();
+	}
+	for (i = particleList.length-1; i >= 0; i--) {
+		if (particleList[i].isReadyToRemove()) {
+			particleList.splice(i, 1);
+		}
 	}
 }
 
@@ -101,6 +114,10 @@ function drawAll() {
 	grid.drawAllBubbles();
 	if(cannon.projectile){
 		cannon.projectile.draw();
+	}
+
+	for (var i = 0; i < particleList.length; i++) {
+		particleList[i].draw();
 	}
 
 	// For now, only draw the name in the scores context.

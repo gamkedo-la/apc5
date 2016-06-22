@@ -139,7 +139,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		return bubblesThatPass;
 	};
 	
-	//Attatch new bubble first, then call this function on it
+	//attach new bubble first, then call this function on it
 	//Finds combo of bubbles that pass checkBubble. Only checks each bubble once.
 	//Returns array with all bubbles in the combo.
 	var findCombo = function(c, r){
@@ -157,16 +157,26 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		return atC + (atR+atC/2) * cols;
 	};
 	
-	//Finds the suit/color at a given pixel
-	var findSuitHere = function(x, y){
+	//Finds the bubble at a given pixel
+	var findBubbleHere = function(x, y){
 		var hex = screenCoordsToGrid(x, y);
 		
 		if(hex.x < cols && hex.x >= 0 && hex.y < rows && hex.y >= 0){
 			console.log(hex.x + ", " + hex.y + ": " + bubbleArray[hex.x][hex.y].value);
-			return bubbleArray[hex.x][hex.y].value;
+			return bubbleArray[hex.x][hex.y];
 		} else{
 			return undefined;
 		}
+	};
+
+	//Finds the suit/color at a given pixel
+	var findSuitHere = function(x, y){
+		var bubble = findBubbleHere(x, y);
+		if (bubble) {
+			return bubble.value;
+		}
+
+		return undefined;
 	};
 	
 	var drawBubble = function(bubble) {
@@ -177,9 +187,27 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubble.value], 1);
 		}
 	};
-	
+
 	var drawAllBubbles = function(){
 		runOnAllBubbles(drawBubble);
+	};
+	
+	var explodeBubble = function(bubble) {
+		if (bubble.isExploding()) {
+			// spawn particles!
+			var hexCenter = gridCoordsToScreen(bubble.col, bubble.row);
+			var numParticles = 4 + Math.floor(Math.random() * 8);
+			for (var i = 0; i < numParticles; i++) {
+				var tempParticle = new Particle(hexCenter.x, hexCenter.y);
+				particleList.push(tempParticle);
+			}
+
+			bubbleArray[bubble.col][bubble.row] = BUBBLE_NONE;
+		}
+	};
+
+	var explodeAllBubbles = function(){
+		runOnAllBubbles(explodeBubble);
 	};
 	
 	var randomBubbleColor = function() {
@@ -308,29 +336,31 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		return new Point(rx, ry);
 	};
 	
-	var attatchBubble = function(c, r, v) {
+	var attachBubble = function(c, r, v) {
 		if(c < cols && c >= 0 && r < rows && r >= 0){
 			bubbleArray[c][r] = new Bubble(c, r, v);
 		}
 	};
 	
-	var attatchBall = function(x, y, value){
+	var attachBall = function(x, y, value){
 		var coords = screenCoordsToGrid(x, y);
-		attatchBubble(coords.x, coords.y, value);
+		attachBubble(coords.x, coords.y, value);
 	};
 	
 	return {
 		size: size,
 		screenCoordsToGrid: screenCoordsToGrid,
+		findBubbleHere: findBubbleHere,
 		findSuitHere: findSuitHere,
 		drawBounds: drawBounds,
 		hexRound: hexRound,
 		debugScreen: debugScreen,
 		drawAllBubbles: drawAllBubbles,
+		explodeAllBubbles: explodeAllBubbles,
 		//gridCoordsToArray: gridCoordsToArray,
 		findCombo: findCombo,
-		//attatchBubble: attatchBubble,
-		attatchBall: attatchBall,
+		//attachBubble: attachBubble,
+		attachBall: attachBall,
 		bubbleArray: bubbleArray,
 		checkConnected: checkConnected,
 		bubbleImage: bubbleImage,

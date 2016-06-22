@@ -5,8 +5,8 @@ var Ball = function (_x, _y, _offset, _angle) {
 	var prevX = x;
 	var prevY = y;
 	var speed = 5;
-	var vx = Math.cos(_angle) * speed;;
-	var vy = Math.sin(_angle) * speed;;
+	var vx = Math.cos(_angle) * speed;
+	var vy = Math.sin(_angle) * speed;
 	var value = grid.randomBubbleColor();
 	var leftBound = size;
 	var rightBound = canvas.width - size;
@@ -35,13 +35,13 @@ var Ball = function (_x, _y, _offset, _angle) {
 	};
 
 	var draw = function(){
-			drawCenteredImage(canvasContext, grid.bubbleImage[value], x, y);
-			//drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubble.value], 1);
+		drawCenteredImage(canvasContext, grid.bubbleImage[value], x, y);
+		//drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubble.value], 1);
 	};
 
 	var getCurrentHex = function(){
 		if(grid.findSuitHere(x, y) > 0){
-			grid.attatchBall(prevX, prevY, value);
+			grid.attachBall(prevX, prevY, value);
 			cannon.projectile = undefined;
 		}
 	};

@@ -27,6 +27,10 @@ function mousePressed(evt) {
 		case 2:
 			if(debug){console.log("Mouse 2");} //debug
 			mouse.right = true;
+			var bubble = grid.findBubbleHere(mouse.x,mouse.y);
+			if (bubble) {
+				bubble.explode();
+			}
 			break;
 	}
 }
