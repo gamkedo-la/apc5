@@ -75,10 +75,10 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		var curBubble = connectedBubbles[bubbleIndex];
 		//This only happens if we run out of bubbles, which means we couldn't find a
 		//bubble in row == 0, which means we are disconnected
-		if(!curBubble){
+		if(!curBubble || curBubble.isExploding()){
 			return false;
 		}
-		
+
 		//Recursive base step
 		if(curBubble.row === 0){
 			curBubble.connected = true;
@@ -86,7 +86,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		} else if(curBubble.connected){
 			return true;
 		}
-		
+
 		//Add all as-yet unadded neighbors to the array
 		connectedBubbles = concatUnique(connectedBubbles,
 		 checkAllAdjacentBubbles(curBubble, function(adjacentBubble){
