@@ -50,12 +50,18 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	var checkConnected = function(){
 		runOnAllBubbles(function(b){
 			b.connected = false;
+			return b;
 		});
 		
 		runOnAllBubbles(checkConnectedHelper);
 		
 		//Need to make a Bubble.pop function or some such
-		//runOnAllBubbles(function(b){if(!b.connected){b.pop;}});
+		runOnAllBubbles(function(b){
+			if (!b.connected){
+				b.explode();
+			}
+			return b;
+		});
 	};
 	
 	//Recursively searches for connected bubbles from neighbors, marking as it goes
@@ -345,6 +351,14 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	var attachBall = function(x, y, value){
 		var coords = screenCoordsToGrid(x, y);
 		attachBubble(coords.x, coords.y, value);
+		var combo = findCombo(coords.x, coords.y);
+		if (combo.length >= minCombo) {
+			for (var i = 0; i < combo.length; i++) {
+				combo[i].explode();
+			}
+			// This explodes stray bubbles.
+			checkConnected();
+		}
 	};
 	
 	return {

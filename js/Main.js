@@ -2,6 +2,7 @@
 var canvas, canvasContext, scoresCanvas, scoresContext, grid, cannon, deltaTime, prevTime;
 var canvasColor = "#935636", gameBoardColor = "#20AF6F";
 var bubbleSize = 30;
+var minCombo = 3;
 
 //Global debug variables
 var hexDebug = false, debug = true, debugCanvas, debugContext, mainGameLoop;
