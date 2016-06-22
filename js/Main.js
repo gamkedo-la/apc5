@@ -38,7 +38,7 @@ window.onload = function() {
 //Code to run every time the main game is started (past the main menu)
 function gameStart(){
 	var numBubbleCols = 10;
-	var numBubbleRows = 10;
+	var numBubbleRows = 11;
 	var filledRows = 8;
 	
 	//Next line is temp code to center the hex grid in the middle of the canvas
@@ -97,8 +97,9 @@ function drawAll() {
 		canvasContext.drawImage(debugCanvas, 0, 0);
 		//grid.drawBounds();
 	}
-	cannon.draw();
+	
 	grid.drawAllBubbles();
+	cannon.draw();
 	if(cannon.projectile){
 		cannon.projectile.draw();
 	}

@@ -1,7 +1,7 @@
 var Ball = function (_x, _y, _offset, _angle) {
 	var size = bubbleSize;
-	var x = _x + Math.cos(_angle) * _offset;
-	var y = _y + Math.sin(_angle) * _offset;
+	var x = _x;// + Math.cos(_angle) * _offset;
+	var y = _y;// + Math.sin(_angle) * _offset;
 	var prevX = x;
 	var prevY = y;
 	var speed = 5;

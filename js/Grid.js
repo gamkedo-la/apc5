@@ -319,6 +319,16 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		attatchBubble(coords.x, coords.y, value);
 	};
 	
+	var dropDown = function(){
+		for(var c = 0; c < cols; c++){
+			for(var r = rows; r > 0; r--){
+						bubbleArray[c][r] = bubbleArray[c][r-1];
+						bubbleArray[c][r].row++;
+			}
+			bubbleArray[c][0] = new Bubble(c, r, randomBubbleColor());
+		}
+	}
+	
 	return {
 		size: size,
 		screenCoordsToGrid: screenCoordsToGrid,
@@ -335,5 +345,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		checkConnected: checkConnected,
 		bubbleImage: bubbleImage,
 		randomBubbleColor: randomBubbleColor,
+		dropDown: dropDown,
 	};
 };

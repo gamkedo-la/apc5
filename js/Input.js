@@ -25,7 +25,7 @@ function mousePressed(evt) {
 			mouse.middle = true;
 			break;
 		case 2:
-			if(debug){console.log("Mouse 2");} //debug
+			if(debug){console.log("Mouse 2"); grid.dropDown();} //debug
 			mouse.right = true;
 			break;
 	}
