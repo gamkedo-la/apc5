@@ -20,12 +20,12 @@ function mousePressed(evt) {
 			grid.findSuitHere(mouse.x,mouse.y);
 			break;
 		case 1:
-			if(debug){console.log("Mouse 1");} //debug
+			if(debug){console.log("Mouse 1"); grid.dropDown();} //debug
 			evt.preventDefault();
 			mouse.middle = true;
 			break;
 		case 2:
-			if(debug){console.log("Mouse 2"); grid.dropDown();} //debug
+			if(debug){console.log("Mouse 2");} //debug
 			mouse.right = true;
 			break;
 	}
