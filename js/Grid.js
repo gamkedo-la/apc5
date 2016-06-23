@@ -24,7 +24,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	}
 	
 	var bubbleColor = ["gap","red","green","blue","orange"];
-	var bubbleSuit = ["none","heart","spade","diamond","club"];
 	var bubbleImage = [null,imgBubbleHeart,imgBubbleSpade,imgBubbleDiamond,imgBubbleClub];
 	
 	//Runs func on all bubbles and returns the results in
@@ -158,11 +157,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		return bubbleCombo;
 	};
 	
-	//TODO is this still needed with the new coordinate system?
-	var bubbleCRToIndex = function(atC,atR) {
-		return atC + (atR+atC/2) * cols;
-	};
-	
 	//Finds the bubble at a given pixel
 	var findBubbleHere = function(x, y){
 		var hex = screenCoordsToGrid(x, y);
@@ -187,11 +181,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	
 	var drawBubble = function(bubble) {
 		var center = gridCoordsToScreen(bubble.col, bubble.row);
-		if(useCardSuits) {
-			drawCenteredImage(canvasContext, bubbleImage[bubble.value], center.x, center.y);
-		} else {
-			drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubble.value], 1);
-		}
+		drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubble.value], 1);
 	};
 
 	var drawAllBubbles = function(){
@@ -204,10 +194,10 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			var hexCenter = gridCoordsToScreen(bubble.col, bubble.row);
 			var numParticles = 4 + Math.floor(Math.random() * 8);
 			for (var i = 0; i < numParticles; i++) {
-				var tempParticle = new Particle(hexCenter.x, hexCenter.y);
+				var tempParticle = new Particle(hexCenter.x, hexCenter.y, bubbleColor[bubble.value]);
 				particleList.push(tempParticle);
 			}
-
+			
 			bubbleArray[bubble.col][bubble.row] = BUBBLE_NONE;
 		}
 	};
@@ -240,14 +230,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	    return new Point(center.x + size * Math.cos(angleRad),
 			                 center.y + size * Math.sin(angleRad))
 	};
-	
-	//TODO test with new grid system (more like remove)
-/*	var gridCoordsToArray = function(q, r){
-		var y = r;
-		var x = q + Math.floor(y/2);
-		return new Point(x, y);
-	};
-*/
 	
 	//Draw bounds of all hexes in grid
 	var drawBounds = function(){
@@ -350,15 +332,23 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	
 	var attachBall = function(x, y, value){
 		var coords = screenCoordsToGrid(x, y);
+		if(bubbleArray[coords.x][coords.y] != BUBBLE_NONE)
+		{
+			return false;
+		}
+		cannon.projectile = undefined;
 		attachBubble(coords.x, coords.y, value);
 		var combo = findCombo(coords.x, coords.y);
 		if (combo.length >= minCombo) {
 			for (var i = 0; i < combo.length; i++) {
+				console.log(combo[i]);
 				combo[i].explode();
 			}
 			// This explodes stray bubbles.
 			checkConnected();
 		}
+		
+		return true;
 	};
 	
 	var dropDown = function(){
@@ -381,14 +371,13 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		debugScreen: debugScreen,
 		drawAllBubbles: drawAllBubbles,
 		explodeAllBubbles: explodeAllBubbles,
-		//gridCoordsToArray: gridCoordsToArray,
 		findCombo: findCombo,
-		//attachBubble: attachBubble,
 		attachBall: attachBall,
 		bubbleArray: bubbleArray,
 		checkConnected: checkConnected,
 		bubbleImage: bubbleImage,
 		randomBubbleColor: randomBubbleColor,
 		dropDown: dropDown,
+		bubbleColor: bubbleColor,
 	};
 };

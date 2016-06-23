@@ -7,6 +7,7 @@ var Cannon = function () {
 	var color = "#AAAAAA";
 	var nozzle = width + (bubbleSize - 2);
 	var projectile;
+	var value = grid.randomBubbleColor();
 	
 	var calculateRotation = function(){
 		var yDiff = y - mouse.y;
@@ -26,6 +27,7 @@ var Cannon = function () {
 
 	var draw = function(){
 		colorRect(canvasContext, x,y+10, width+10,height, color, rot, 0, -height/2);
+		drawCircleFill(canvasContext, x, y, 26, grid.bubbleColor[value], 1);
 	};
 
 	var rotation = function(){
@@ -34,7 +36,8 @@ var Cannon = function () {
 	
 	//This should take the object to fire once we get multiple things to shoot
 	var fire = function(){
-		this.projectile = new Ball(x, y, nozzle, rot);
+		this.projectile = new Ball(x, y, nozzle, rot, value);
+		value = grid.randomBubbleColor();
 	};
 
 	return {

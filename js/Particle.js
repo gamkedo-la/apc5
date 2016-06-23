@@ -1,6 +1,7 @@
-var Particle = function(start_x,start_y){
+var Particle = function(start_x,start_y, color){
 	var x = start_x;
 	var y = start_y;
+	var color = color;
 	var vx = 5 - Math.random()*8;
 	var vy = 5 - Math.random()*8;
 	var size = bubbleSize / 2;
@@ -43,7 +44,7 @@ var Particle = function(start_x,start_y){
 	};
 
 	var draw = function() {
-		drawCircleFill(canvasContext, x, y, size, 'red', 1);
+		drawCircleFill(canvasContext, x, y, size, color, 1);
 	};
 
 	var isReadyToRemove = function() {

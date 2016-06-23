@@ -1,5 +1,6 @@
 //Global variables
 var canvas, canvasContext, scoresCanvas, scoresContext, grid, cannon, deltaTime, prevTime;
+var framesPerSecond = 60;
 var canvasColor = "#935636", gameBoardColor = "#20AF6F";
 var bubbleSize = 30;
 var minCombo = 3;
@@ -32,7 +33,6 @@ window.onload = function() {
 	colorRect(canvasContext, 0,0, canvas.width,canvas.height, canvasColor);
 	colorRect(scoresContext, 0,0, scoresCanvas.width,scoresCanvas.height, gameBoardColor);
 
-	var framesPerSecond = 60;
 	prevTime = Date.now();
 	gameStart();
 	mainGameLoop = setInterval(updateAll, 1000/framesPerSecond);

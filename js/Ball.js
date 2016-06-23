@@ -1,23 +1,51 @@
-var Ball = function (_x, _y, _offset, _angle) {
+var Ball = function (_x, _y, _offset, _angle, _v) {
 	var size = bubbleSize;
-	var x = _x;// + Math.cos(_angle) * _offset;
-	var y = _y;// + Math.sin(_angle) * _offset;
+	var x = _x;
+	var y = _y;
 	var prevX = x;
 	var prevY = y;
-	var speed = 5;
+	var speed = 10;
 	var vx = Math.cos(_angle) * speed;
 	var vy = Math.sin(_angle) * speed;
-	var value = grid.randomBubbleColor();
+	var value = _v;
 	var leftBound = size;
 	var rightBound = canvas.width - size;
 	
 	var move = function(){
+		advancePosition();
+		getCurrentHex();
+		
+		// Very simple out of bounds check for debugging
+		if (y < bubbleSize) {
+			grid.attachBall(prevX, prevY, value);
+/*			if(!grid.attachBall(prevX, prevY, value)){
+				reversePosition();
+			}
+*/
+		}
+	};
+	
+	var reversePosition = function(){
+		x -= vx * deltaTime/(1000/framesPerSecond) * 2;
+		y -= vy * deltaTime/(1000/framesPerSecond) * 2;
+		checkBounds();
 		prevX = x;
 		prevY = y;
-		x += vx;
-		y += vy;
-		
-		// Check if the next position makes the ball fall out of bounds on the sides.
+		x += vx * deltaTime/(1000/framesPerSecond);
+		y += vy * deltaTime/(1000/framesPerSecond);
+		checkBounds();
+	};
+	
+	var advancePosition = function(){
+		prevX = x;
+		prevY = y;
+		x += vx * deltaTime/(1000/framesPerSecond);
+		y += vy * deltaTime/(1000/framesPerSecond);
+		checkBounds();
+	};
+	
+	// Check if the next position makes the ball fall out of bounds on the sides.
+	var checkBounds = function(){
 		if (leftBound > x) {
 			vx = -vx;
 			x += (leftBound - x) * 2;
@@ -26,23 +54,15 @@ var Ball = function (_x, _y, _offset, _angle) {
 			vx = -vx;
 			x += (rightBound - x) * 2;
 		}
-		getCurrentHex();
-		
-		// Very simple out of bounds check for debugging
-		if (y < 0) {
-			cannon.projectile = undefined;
-		}
 	};
-
+	
 	var draw = function(){
-		drawCenteredImage(canvasContext, grid.bubbleImage[value], x, y);
-		//drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubble.value], 1);
+		drawCircleFill(canvasContext, x, y, 26, grid.bubbleColor[value], 1);
 	};
 
 	var getCurrentHex = function(){
 		if(grid.findSuitHere(x, y) > 0){
 			grid.attachBall(prevX, prevY, value);
-			cannon.projectile = undefined;
 		}
 	};
 	
