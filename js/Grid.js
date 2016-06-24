@@ -55,15 +55,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		});
 		
 		runOnAllBubbles(checkConnectedHelper);
-		
-		//Need to make a Bubble.pop function or some such
-		runOnAllBubbles(function(b){
-			if (!b.connected){
-				console.log("connected: ", b);
-				b.explode();
-			}
-			return b;
-		});
 	};
 	
 	//Recursively search for connected bubbles from neighbors
@@ -82,18 +73,24 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		}
 		
 		//Recursive base step
-		if(curBubble.row === 0){
+		if(curBubble.row === 0) {
 			curBubble.connected = true;
 			return true;
 		} else if(curBubble.connected){
 			return true;
 		}
 
-		//Add all as-yet unadded neighbors to the array
+		//Add all as-yet unadded, non-exploding neighbors to the array
 		connectedBubbles = concatUnique(connectedBubbles,
 		 checkAllAdjacentBubbles(curBubble, function(adjacentBubble){
-			if(adjacentBubble){return adjacentBubble;}
+			if(adjacentBubble && !adjacentBubble.willExplode()){
+				return adjacentBubble;
+			}
 		}));
+
+		if (connectedBubbles.length <= 0) {
+			return false;
+		}
 		
 		//Recursive call
 		var result = checkConnectedHelper(connectedBubbles, bubbleIndex + 1);
@@ -192,7 +189,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	};
 	
 	var explodeBubble = function(bubble) {
-		if (bubble.isExploding() || !bubble.connected) {
+		if (bubble.isExploding()) {
 			// spawn particles!
 			var hexCenter = gridCoordsToScreen(bubble.col, bubble.row);
 			var numParticles = 4 + Math.floor(Math.random() * 8);
@@ -347,14 +344,23 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		attachBubble(coords.x, coords.y, value);
 		var combo = findCombo(coords.x, coords.y);
 		if (combo.length >= minCombo) {
+			var explodeDelay = 1;
 			for (var i = 0; i < combo.length; i++) {
 				console.log("combo: ", combo[i]);
-				combo[i].explode();
+				combo[i].explode(explodeDelay);
+				explodeDelay += explodeDelayIncrease;
 			}
-			explodeAllBubbles();
 			
 			// This explodes stray bubbles.
 			checkConnected();
+			runOnAllBubbles(function(bubble) {
+				if (!bubble.connected && !bubble.willExplode()) {
+					console.log("stray bubble: ", bubble);
+					bubble.explode(explodeDelay);
+					explodeDelay += explodeDelayIncrease;
+				}
+			});
+
 			explodeAllBubbles();
 		}
 		
@@ -363,7 +369,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	
 	var combineBall = function(x, y, value){
 		var coords = screenCoordsToGrid(x, y);
-		bubble = bubbleArray[coords.x][coords.y];
+		var bubble = bubbleArray[coords.x][coords.y];
 		
 		if(bubble.value === value){
 			return false;
@@ -388,7 +394,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			}
 			bubbleArray[c][0] = new Bubble(c, r, randomBubbleColor());
 		}
-	}
+	};
 	
 	return {
 		size: size,

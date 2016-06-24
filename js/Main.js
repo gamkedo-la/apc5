@@ -4,6 +4,7 @@ var framesPerSecond = 60;
 var canvasColor = "#935636", gameBoardColor = "#20AF6F";
 var bubbleSize = 26, HEX_TO_CIRCLE_RATIO = Math.sqrt(3)/2;
 var minCombo = 3;
+var explodeDelayIncrease = 6;
 
 //Global debug variables
 var hexDebug = false, debug = true, debugCanvas, debugContext, mainGameLoop;

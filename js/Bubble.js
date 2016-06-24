@@ -4,12 +4,18 @@ var Bubble = function(c, r, val){
 	var value = val;
 	var connected = true;
 	var exploding = false;
+	var explodeDelay = 0;
 
-	var isExploding = function() {
+	var willExploding = function() {
 		return exploding;
 	};
 
-	var explode = function() {
+	var isExploding = function() {
+		return exploding && (explodeDelay-- < 0);
+	};
+
+	var explode = function(delay) {
+		explodeDelay = delay;
 		exploding = true;
 	};
 	
@@ -19,6 +25,7 @@ var Bubble = function(c, r, val){
 		value: value,
 		connected: connected,
 		explode: explode,
+		willExplode: willExploding,
 		isExploding: isExploding
 	};
 };

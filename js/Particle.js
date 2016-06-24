@@ -1,7 +1,7 @@
-var Particle = function(start_x,start_y, color){
+var Particle = function(start_x,start_y, start_color){
 	var x = start_x;
 	var y = start_y;
-	var color = color;
+	var color = start_color;
 	var vx = 5 - Math.random()*8;
 	var vy = 5 - Math.random()*8;
 	var size = bubbleSize / 2;

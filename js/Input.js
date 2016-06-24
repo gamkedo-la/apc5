@@ -31,7 +31,7 @@ function mousePressed(evt) {
 			mouse.right = true;
 			var bubble = grid.findBubbleHere(mouse.x,mouse.y);
 			if (bubble) {
-				bubble.explode();
+				bubble.explode(0);
 			}
 			break;
 	}
