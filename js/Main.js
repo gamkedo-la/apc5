@@ -2,7 +2,7 @@
 var canvas, canvasContext, scoresCanvas, scoresContext, grid, cannon, deltaTime, prevTime;
 var framesPerSecond = 60;
 var canvasColor = "#935636", gameBoardColor = "#20AF6F";
-var bubbleSize = 30;
+var bubbleSize = 26, HEX_TO_CIRCLE_RATIO = Math.sqrt(3)/2;
 var minCombo = 3;
 
 //Global debug variables
@@ -40,16 +40,7 @@ window.onload = function() {
 
 //Code to run every time the main game is started (past the main menu)
 function gameStart(){
-	var numBubbleCols = 10;
-	var numBubbleRows = 11;
-	var filledRows = 8;
-	
-	//Next line is temp code to center the hex grid in the middle of the canvas
-	var gridCenterX = (canvas.width - Math.sqrt(3)/2 * 60 * numBubbleCols)/2
-	                + (Math.sqrt(3)/2 * bubbleSize)/2;
-	var gridCenterY = bubbleSize;
-	
-	grid = new Grid(gridCenterX, gridCenterY, numBubbleCols, numBubbleRows, filledRows, bubbleSize);
+	makeGrid();
 	cannon = new Cannon();
 	
 	//Debug code that creates and caches a 4 color map of all hexes
@@ -62,6 +53,18 @@ function gameStart(){
 		debugCanvas.height = canvas.height;
 		debugContext.drawImage(canvas, 0, 0);
 	}
+}
+
+function makeGrid() {
+	var numBubbleCols = 10;
+	var numBubbleRows = 11;
+	var filledRows = 8;
+	var circleToHexRatio = 2/Math.sqrt(3);
+	//Next line is temp code to center the hex grid in the middle of the canvas
+	var gridCenterX = bubbleSize * circleToHexRatio;
+	var gridCenterY = bubbleSize * circleToHexRatio;
+	
+	grid = new Grid(gridCenterX, gridCenterY, numBubbleCols, numBubbleRows, filledRows, bubbleSize * circleToHexRatio);
 }
 
 function updateAll() {

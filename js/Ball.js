@@ -8,20 +8,19 @@ var Ball = function (_x, _y, _offset, _angle, _v) {
 	var vx = Math.cos(_angle) * speed;
 	var vy = Math.sin(_angle) * speed;
 	var value = _v;
-	var leftBound = size;
-	var rightBound = canvas.width - size;
+//	var leftBound = size;
+//	var rightBound = canvas.width - size;
 	
 	var move = function(){
 		advancePosition();
 		getCurrentHex();
 		
 		// Very simple out of bounds check for debugging
-		if (y < bubbleSize) {
-			grid.attachBall(prevX, prevY, value);
-/*			if(!grid.attachBall(prevX, prevY, value)){
-				reversePosition();
-			}
-*/
+		if (y < bubbleSize/4){ 
+			console.log("ERROR: Ball out of bounds");
+			cannon.projectile = undefined;
+		}else if (y < bubbleSize) {
+			grid.attachBall(x, y, value);
 		}
 	};
 	
@@ -46,23 +45,25 @@ var Ball = function (_x, _y, _offset, _angle, _v) {
 	
 	// Check if the next position makes the ball fall out of bounds on the sides.
 	var checkBounds = function(){
-		if (leftBound > x) {
+		if (grid.leftBound > x) {
 			vx = -vx;
-			x += (leftBound - x) * 2;
+			x += (grid.leftBound - x) * 2;
 		}
-		if (x > rightBound) {
+		if (x > grid.rightBound) {
 			vx = -vx;
-			x += (rightBound - x) * 2;
+			x += (grid.rightBound - x) * 2;
 		}
 	};
 	
 	var draw = function(){
-		drawCircleFill(canvasContext, x, y, 26, grid.bubbleColor[value], 1);
+		drawCircleFill(canvasContext, x, y, bubbleSize, grid.bubbleColor[value], 1);
 	};
 
 	var getCurrentHex = function(){
 		if(grid.findSuitHere(x, y) > 0){
-			grid.attachBall(prevX, prevY, value);
+			if(!grid.combineBall(x, y, value)){
+				grid.attachBall(prevX, prevY, value);
+			}
 		}
 	};
 	

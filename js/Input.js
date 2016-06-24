@@ -15,7 +15,9 @@ function mousePressed(evt) {
 	switch(evt.button){
 		case 0:
 			if(debug){console.log("Mouse 0");} //debug
-			cannon.fire();
+			if(!cannon.projectile){
+				cannon.fire();
+			}
 			mouse.left = true;
 			grid.findSuitHere(mouse.x,mouse.y);
 			break;
@@ -25,7 +27,7 @@ function mousePressed(evt) {
 			mouse.middle = true;
 			break;
 		case 2:
-			if(debug){console.log("Mouse 2");} //debug
+			if(debug){console.log("Mouse 2");cannon.swapValues();} //debug
 			mouse.right = true;
 			var bubble = grid.findBubbleHere(mouse.x,mouse.y);
 			if (bubble) {

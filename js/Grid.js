@@ -5,16 +5,18 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	var rows = _rows;
 	var size = _size;
 	var hexHeight = size * 2;
-	var hexWidth = Math.sqrt(3)/2 * hexHeight;
+	var hexWidth = HEX_TO_CIRCLE_RATIO * hexHeight;
 	var spacingX = hexWidth;
 	var spacingY = hexHeight * 3/4;
+	var leftBound = offsetX;
+	var rightBound = offsetX + bubbleSize * cols * 2 - bubbleSize;
 	
 	const BUBBLE_NONE = 0;
 	const BUBBLE_RED = 1;
 	const BUBBLE_GREEN = 2;
 	const BUBBLE_BLUE = 3;
 	const BUBBLE_ORANGE = 4;
-	const BUBBLE_KINDS = 5;
+	const BUBBLE_KINDS = 7;
 	
 	var bubbleArray = [];
 	
@@ -23,7 +25,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		bubbleArray[i] = [];
 	}
 	
-	var bubbleColor = ["gap","red","green","blue","orange"];
+	var bubbleColor = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"];
 	var bubbleImage = [null,imgBubbleHeart,imgBubbleSpade,imgBubbleDiamond,imgBubbleClub];
 	
 	//Runs func on all bubbles and returns the results in
@@ -57,27 +59,28 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		//Need to make a Bubble.pop function or some such
 		runOnAllBubbles(function(b){
 			if (!b.connected){
+				console.log("connected: ", b);
 				b.explode();
 			}
 			return b;
 		});
 	};
 	
-	//Recursively searches for connected bubbles from neighbors, marking as it goes
+	//Recursively search for connected bubbles from neighbors
 	var checkConnectedHelper = function(connectedBubbles, bubbleIndex){
-		//If this is called on a single bubble we need to make the array and set the index
+		//When called on a single bubble, make the array and set the index
 		if(bubbleIndex === undefined){
 			bubbleIndex = 0;
 			connectedBubbles = [connectedBubbles];
 		}
 		
 		var curBubble = connectedBubbles[bubbleIndex];
-		//This only happens if we run out of bubbles, which means we couldn't find a
-		//bubble in row == 0, which means we are disconnected
-		if(!curBubble || curBubble.isExploding()){
+		
+		//We ran out of bubbles, so we are disconnected
+		if(bubbleIndex >= connectedBubbles.length){
 			return false;
 		}
-
+		
 		//Recursive base step
 		if(curBubble.row === 0){
 			curBubble.connected = true;
@@ -162,7 +165,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		var hex = screenCoordsToGrid(x, y);
 		
 		if(hex.x < cols && hex.x >= 0 && hex.y < rows && hex.y >= 0){
-			console.log(hex.x + ", " + hex.y + ": " + bubbleArray[hex.x][hex.y].value);
+			//console.log(hex.x + ", " + hex.y + ": " + bubbleArray[hex.x][hex.y].value);
 			return bubbleArray[hex.x][hex.y];
 		} else{
 			return undefined;
@@ -181,7 +184,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	
 	var drawBubble = function(bubble) {
 		var center = gridCoordsToScreen(bubble.col, bubble.row);
-		drawCircleFill(canvasContext, center.x, center.y, 26, bubbleColor[bubble.value], 1);
+		drawCircleFill(canvasContext, center.x, center.y, bubbleSize, bubbleColor[bubble.value], 1);
 	};
 
 	var drawAllBubbles = function(){
@@ -189,7 +192,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	};
 	
 	var explodeBubble = function(bubble) {
-		if (bubble.isExploding()) {
+		if (bubble.isExploding() || !bubble.connected) {
 			// spawn particles!
 			var hexCenter = gridCoordsToScreen(bubble.col, bubble.row);
 			var numParticles = 4 + Math.floor(Math.random() * 8);
@@ -334,21 +337,47 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		var coords = screenCoordsToGrid(x, y);
 		if(bubbleArray[coords.x][coords.y] != BUBBLE_NONE)
 		{
+			console.log("Game Over");
+			makeGrid();
+			cannon.projectile = undefined;
 			return false;
 		}
+		
 		cannon.projectile = undefined;
 		attachBubble(coords.x, coords.y, value);
 		var combo = findCombo(coords.x, coords.y);
 		if (combo.length >= minCombo) {
 			for (var i = 0; i < combo.length; i++) {
-				console.log(combo[i]);
+				console.log("combo: ", combo[i]);
 				combo[i].explode();
 			}
+			explodeAllBubbles();
+			
 			// This explodes stray bubbles.
 			checkConnected();
+			explodeAllBubbles();
 		}
 		
 		return true;
+	};
+	
+	var combineBall = function(x, y, value){
+		var coords = screenCoordsToGrid(x, y);
+		bubble = bubbleArray[coords.x][coords.y];
+		
+		if(bubble.value === value){
+			return false;
+		}else if(bubble.value <= 3 && value <= 3){
+			bubble.value += ++value;
+			cannon.projectile = undefined;
+			return true;
+		}else if(value + bubble.value === 7){
+			bubble.value = 7;
+			cannon.projectile = undefined;
+			return true;
+		}
+		//["gap", "cyan","magenta","yellow", "blue","green","red", "white"];
+		return false;
 	};
 	
 	var dropDown = function(){
@@ -379,5 +408,8 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		randomBubbleColor: randomBubbleColor,
 		dropDown: dropDown,
 		bubbleColor: bubbleColor,
+		leftBound: leftBound,
+		rightBound: rightBound,
+		combineBall: combineBall,
 	};
 };
