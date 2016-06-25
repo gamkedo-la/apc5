@@ -31,6 +31,7 @@ function mousePressed(evt) {
 			mouse.right = true;
 			var bubble = grid.findBubbleHere(mouse.x,mouse.y);
 			if (bubble) {
+				console.log('Explode', grid.screenCoordsToGrid(mouse.x,mouse.y));
 				bubble.explode(0);
 			}
 			break;
@@ -40,16 +41,16 @@ function mousePressed(evt) {
 function mouseReleased(evt) {
 	switch(evt.button){
 		case 0:
-			if(debug){console.log("Mouse 0 up");} //debug
+			if(debug){console.log("Mouse 0 up", grid.screenCoordsToGrid(mouse.x,mouse.y));} //debug
 			mouse.left = false;
 			break;
 		case 1:
-			if(debug){console.log("Mouse 1 up");} //debug
+			if(debug){console.log("Mouse 1 up", grid.screenCoordsToGrid(mouse.x,mouse.y));} //debug
 			evt.preventDefault();
 			mouse.middle = false;
 			break;
 		case 2:
-			if(debug){console.log("Mouse 2 up");} //debug
+			if(debug){console.log("Mouse 2 up", grid.screenCoordsToGrid(mouse.x,mouse.y));} //debug
 			mouse.right = false;
 			break;
 	}

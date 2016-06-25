@@ -82,8 +82,8 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 
 		//Add all as-yet unadded, non-exploding neighbors to the array
 		connectedBubbles = concatUnique(connectedBubbles,
-		 checkAllAdjacentBubbles(curBubble, function(adjacentBubble){
-			if(adjacentBubble && !adjacentBubble.willExplode()){
+		 checkAllAdjacentBubbles(curBubble, function(adjacentBubble, otherBubble){
+			if(adjacentBubble && !adjacentBubble.willExplode() && !otherBubble.willExplode()){
 				return adjacentBubble;
 			}
 		}));
@@ -91,14 +91,14 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		if (connectedBubbles.length <= 0) {
 			return false;
 		}
-		
+
 		//Recursive call
 		var result = checkConnectedHelper(connectedBubbles, bubbleIndex + 1);
 		curBubble.connected = result;
-		
+
 		return result;
 	};
-	
+
 	//Check if the current bubble is of the same type as the next one
 	var checkBubble = function(nextBubble, thisBubble){
 		if(nextBubble){
