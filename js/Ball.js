@@ -19,6 +19,7 @@ var Ball = function (_x, _y, _offset, _angle, _v) {
 			cannon.clearProjectile();
 		}else if (y < bubbleSize) {
 			attachToGrid();
+			cannon.clearProjectile();
 			grid.dropDown();
 		}
 	};

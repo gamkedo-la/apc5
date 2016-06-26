@@ -309,7 +309,9 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		for(var c = 0; c < cols; c++){
 			for(var r = rows; r > 0; r--){
 						bubbleArray[c][r] = bubbleArray[c][r-1];
-						bubbleArray[c][r].shiftDown();
+						if(bubbleArray[c][r]){
+							bubbleArray[c][r].shiftDown();
+						}
 			}
 			bubbleArray[c][0] = new Bubble(c, r);
 		}
@@ -326,6 +328,15 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		};
 	};
 	
+	var removeBottomRow = function(){
+		runOnAllBubbles(function(b){
+			if(!bubbleArray[b.getPos().c][b.getPos().r+1]){
+				//BubblePopper.push(b);
+				bubbleArray[b.getPos().c][b.getPos().r] = 0;
+			}
+		});
+	};
+	
 	return {
 		screenCoordsToGrid: screenCoordsToGrid,
 		findBubbleHere: findBubbleHere,
@@ -337,6 +348,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		getBounds: getBounds,
 		removeBubble: removeBubble,
 		gridCoordsToScreen: gridCoordsToScreen,
+		removeBottomRow: removeBottomRow,
 		
 		//Debug use only
 		bubbleArray: bubbleArray,

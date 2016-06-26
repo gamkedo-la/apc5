@@ -93,7 +93,7 @@ var Bubble = function(_c, _r, _v){
 var BubblePopper = function(){
 	//var totalPopped = 0;
 	var explodingBubbles = [];
-	var explodeInterval = 6;
+	var explodeInterval = 3;
 	var explodeDelay = 0;
 	
 	//Draw exploding bubbles
@@ -137,10 +137,16 @@ var BubblePopper = function(){
 	};
 	*/
 	
+	var restart = function(){
+		explodingBubbles = [];
+		explodeDelay = 0;
+	};
+	
 	return {
 		draw: draw,
 		push: push,
 		update: update,
+		restart: restart,
 		//getNumPopped: getNumPopped,
 	};
 }();
