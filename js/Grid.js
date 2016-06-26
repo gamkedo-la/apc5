@@ -46,7 +46,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	//Marks all bubbles as not connected then checks each
 	//one and marks connected bubbles as such
 	var checkConnected = function(){
-		console.log("checkConnected");
 		runOnAllBubbles(function(b){
 			b.disconnect();
 			return b;
@@ -317,7 +316,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	};
 	
 	var removeBubble = function(pos){
-		console.log("remove: ", pos);
 		bubbleArray[pos.c][pos.r] = BUBBLE_NONE;
 	};
 	
