@@ -43,36 +43,16 @@ window.onload = function() {
 
 //Code to run every time the main game is started (past the main menu)
 function startGame(){
-	if(rgbMode){
-		bubbleColors = rgbColorList;
-	}else{
-		bubbleColors = cmykColorList;
-	}
-	makeGrid();
-	cannon = new Cannon();
-	
-	//Debug code that creates and caches a 4 color map of all hexes
-	if(hexDebug){
-		grid.debugScreen(); //VERY intensive call.
-		
-		debugCanvas = document.createElement('canvas');
-		debugContext = debugCanvas.getContext('2d');
-		debugCanvas.width = canvas.width;
-		debugCanvas.height = canvas.height;
-		debugContext.drawImage(canvas, 0, 0);
-	}
+	Game.restart();
 }
 
 function makeGrid() {
-	var numBubbleCols = 10;
-	var numBubbleRows = 11;
-	var filledRows = 8;
 	var circleToHexRatio = 2/Math.sqrt(3);
 	//Next line is temp code to center the hex grid in the middle of the canvas
 	var gridCenterX = bubbleSize * circleToHexRatio;
 	var gridCenterY = bubbleSize * circleToHexRatio;
 	
-	grid = new Grid(gridCenterX, gridCenterY, numBubbleCols, numBubbleRows, filledRows, bubbleSize * circleToHexRatio);
+	grid = new Grid(gridCenterX, gridCenterY, Game.getCs(), Game.getRs(), Game.startRs(), bubbleSize * circleToHexRatio);
 }
 
 function updateAll() {
@@ -80,27 +60,12 @@ function updateAll() {
 	deltaTime = now - prevTime;
 	prevTime = now;
 	
-	moveAll();
-	drawAll();
-}
-
-function moveAll() {
-	cannon.move();
-	var i;
-	for (i = 0; i < particleList.length; i++) {
-		particleList[i].move();
-	}
-	for (i = particleList.length-1; i >= 0; i--) {
-		if (particleList[i].isReadyToRemove()) {
-			particleList.splice(i, 1);
-		}
-	}
-	
-	BubblePopper.update();
-	
-	if(BubblePopper.getNumPopped() > 100){
-		console.log("You win!");
-		startGame();
+	if(Game.checkWin()){
+		VictoryScreen.move();
+		VictoryScreen.draw();
+	} else {
+		Game.moveAll();
+		Game.draw();
 	}
 }
 
@@ -121,24 +86,3 @@ var background = (function(){
 		clear: clear
 	}
 })();
-
-function drawAll() {
-	background.clear();
-	
-	grid.drawAllBubbles();
-	BubblePopper.draw();
-	cannon.draw();
-
-	for (var i = 0; i < particleList.length; i++) {
-		particleList[i].draw();
-	}
-
-	// For now, only draw the name in the scores context.
-	drawText(scoresContext, 25, 20, "#000000", "APC5");
-
-	//Debug code to output coordinates of hex containing mouse
-	if(hexDebug){
-		var mouseHex = grid.screenCoordsToGrid(mouse.x, mouse.y);
-		//console.log(mouseHex.x, mouseHex.y);
-	}
-}

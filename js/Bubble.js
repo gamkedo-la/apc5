@@ -91,7 +91,7 @@ var Bubble = function(_c, _r, _v){
 
 //Handle exploding bubbles
 var BubblePopper = function(){
-	var totalPopped = 0;
+	//var totalPopped = 0;
 	var explodingBubbles = [];
 	var explodeInterval = 6;
 	var explodeDelay = 0;
@@ -123,7 +123,7 @@ var BubblePopper = function(){
 		if(explodingBubbles.length > 0){
 			if(explodeDelay <= 0){
 				explodingBubbles[0].explode();
-				totalPopped++;
+				Game.addPop(1);
 				explodingBubbles.shift();
 				explodeDelay = explodeInterval;
 			}
@@ -131,14 +131,16 @@ var BubblePopper = function(){
 		}
 	};
 	
+	/*
 	var getNumPopped = function(){
 		return totalPopped;
 	};
+	*/
 	
 	return {
 		draw: draw,
 		push: push,
 		update: update,
-		getNumPopped: getNumPopped,
+		//getNumPopped: getNumPopped,
 	};
 }();
