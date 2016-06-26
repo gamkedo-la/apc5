@@ -48,7 +48,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	var checkConnected = function(){
 		console.log("checkConnected");
 		runOnAllBubbles(function(b){
-			b.setConnected(false);
+			b.disconnect();
 			return b;
 		});
 		
@@ -72,12 +72,12 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		
 		//Recursive base step
 		if(curBubble.getPos().r === 0) {
-			curBubble.setConnected(true);
+			curBubble.connect(true);
 			return true;
 		} else if(curBubble.isConnected()){
 			return true;
 		}
-
+		
 		//Add all as-yet unadded, non-exploding neighbors to the array
 		connectedBubbles = concatUnique(connectedBubbles,
 		 checkAllAdjacentBubbles(curBubble, function(adjacentBubble){
@@ -85,14 +85,14 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 				return adjacentBubble;
 			}
 		}));
-
+		
 		//Recursive call
 		var result = checkConnectedHelper(connectedBubbles, bubbleIndex + 1);
-		curBubble.setConnected(result);
-
+		result ? curBubble.connect() : curBubble.disconnect();
+		
 		return result;
 	};
-
+	
 	//Check if the current bubble is of the same type as the next one
 	var checkBubble = function(nextBubble, thisBubble){
 		if(nextBubble){
@@ -321,6 +321,13 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		bubbleArray[pos.c][pos.r] = BUBBLE_NONE;
 	};
 	
+	var getBounds = function(){
+		return {
+			left: leftBound,
+			right: rightBound,
+		};
+	};
+	
 	return {
 		screenCoordsToGrid: screenCoordsToGrid,
 		findBubbleHere: findBubbleHere,
@@ -329,8 +336,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		attachBubble: attachBubble,
 		checkConnected: checkConnected,
 		dropDown: dropDown,
-		leftBound: leftBound,
-		rightBound: rightBound,
+		getBounds: getBounds,
 		removeBubble: removeBubble,
 		gridCoordsToScreen: gridCoordsToScreen,
 		

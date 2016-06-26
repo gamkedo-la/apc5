@@ -59,9 +59,13 @@ var Bubble = function(_c, _r, _v){
 		return new Position(col, row);
 	};
 	
-	var setConnected = function(_con){
-		connected = _con;
-	}
+	var connect = function(){
+		connected = true;
+	};
+	
+	var disconnect = function(){
+		connected = false;
+	};
 	
 	var isConnected = function(){
 		return connected;
@@ -69,7 +73,7 @@ var Bubble = function(_c, _r, _v){
 	
 	var shiftDown = function(){
 		row++;
-	}
+	};
 	
 	return {
 		getValue: getValue,

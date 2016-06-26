@@ -43,13 +43,14 @@ var Ball = function (_x, _y, _offset, _angle, _v) {
 	
 	// Check if the next position makes the ball fall out of bounds on the sides.
 	var checkBounds = function(){
-		if (grid.leftBound > x) {
+		var bounds = grid.getBounds();
+		if (bounds.left > x) {
 			vx = -vx;
-			x += (grid.leftBound - x) * 2;
+			x += (bounds.left - x) * 2;
 		}
-		if (x > grid.rightBound) {
+		if (x > bounds.right) {
 			vx = -vx;
-			x += (grid.rightBound - x) * 2;
+			x += (bounds.right - x) * 2;
 		}
 	};
 	

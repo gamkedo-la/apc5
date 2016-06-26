@@ -33,7 +33,7 @@ function concatUnique(array1, array2){
 	}));
 }
 
-var randomColor = function() {
+function randomColor(){
 	//return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 1)) + 1];
 	return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 2)) + 1];
-};
+}
