@@ -45,6 +45,7 @@ var Bubble = function(_c, _r, _v){
 		var combinedIndex = getCombinedColorIndex(_valIndex);
 		if (combinedIndex) {
 			value = bubbleColors[combinedIndex];
+			grid.handleCombo(this);
 			return true;
 		}
 		return false;
