@@ -18,23 +18,33 @@ var Bubble = function(_c, _r, _v){
 		var center = grid.gridCoordsToScreen(col, row);
 		drawCircleFill(canvasContext, center.x, center.y, bubbleSize, value, 1);
 	};
-	
-	var combineColors = function(_valIndex){
+
+	var getCombinedColorIndex = function(_valIndex){
 		var valIndex = bubbleColors.indexOf(value);
 		var newVal = valIndex;
-		
+
 		if(valIndex === _valIndex){
 			return false;
+		}
 		//If both bubbles are primary colors, combine them
-		}else if(valIndex <= 3 && _valIndex <= 3){
+		else if(valIndex <= 3 && _valIndex <= 3){
 			newVal += ++_valIndex;
+		}
 		//If both colors add to black, combine them
-		}else if(valIndex + _valIndex === 7){
+		else if(valIndex + _valIndex === 7){
 			newVal = 7;
 		}
-		
+
 		if(valIndex != newVal){
-			value = bubbleColors[newVal];
+			return newVal;
+		}
+		return false;
+	};
+	
+	var combineColors = function(_valIndex){
+		var combinedIndex = getCombinedColorIndex(_valIndex);
+		if (combinedIndex) {
+			value = bubbleColors[combinedIndex];
 			return true;
 		}
 		return false;
@@ -55,6 +65,7 @@ var Bubble = function(_c, _r, _v){
 		explode: explode,
 		draw: draw,
 		combineColors: combineColors,
+		getCombinedIndex: getCombinedColorIndex
 	};
 };
 

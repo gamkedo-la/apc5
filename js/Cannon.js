@@ -9,6 +9,7 @@ var Cannon = function () {
 	var projectile;
 	var value = randomColor();
 	var nextValue = randomColor();
+	var previewBubble = new PreviewBubble(value);
 	
 	var calculateRotation = function(){
 		var yDiff = y - mouse.y;
@@ -41,6 +42,9 @@ var Cannon = function () {
 		if(projectile){
 			projectile.draw();
 		}
+		else {
+			previewBubble.draw();
+		}
 	};
 
 	var getRotation = function(){
@@ -52,12 +56,15 @@ var Cannon = function () {
 		projectile = new Ball(x, y, nozzle, rotation, value);
 		value = nextValue;
 		nextValue = randomColor();
+		previewBubble.setValue(value);
 	};
 	
 	var swapValues = function(){
 		var temp = value;
 		value = nextValue;
 		nextValue = temp;
+
+		previewBubble.setValue(value);
 	};
 	
 	function getProjectile(){
