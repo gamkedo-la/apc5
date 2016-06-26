@@ -78,10 +78,7 @@ function updateAll() {
 }
 
 function moveAll() {
-	cannon.calculateRotation();
-	if(cannon.getProjectile()){
-		cannon.getProjectile().move();
-	}
+	cannon.move();
 	var i;
 	for (i = 0; i < particleList.length; i++) {
 		particleList[i].move();
@@ -119,10 +116,6 @@ function drawAll() {
 	grid.drawAllBubbles();
 	BubblePopper.draw();
 	cannon.draw();
-	
-	if(cannon.getProjectile()){
-		cannon.getProjectile().draw();
-	}
 
 	for (var i = 0; i < particleList.length; i++) {
 		particleList[i].draw();

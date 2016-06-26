@@ -26,10 +26,21 @@ var Cannon = function () {
 		}
 	};
 
+	var move = function(){
+		calculateRotation();
+		if(projectile){
+			projectile.move();
+		}
+	};
+
 	var draw = function(){
 		colorRect(canvasContext, x,y+10, width+10,height, color, rotation, 0, -height/2);
 		drawCircleFill(canvasContext, x, y, bubbleSize, value, 1);
 		drawCircleFill(canvasContext, x, y, bubbleSize/2, nextValue, 1);
+
+		if(projectile){
+			projectile.draw();
+		}
 	};
 
 	var getRotation = function(){
@@ -67,6 +78,7 @@ var Cannon = function () {
 		//width: width,
 		//height: height,
 		//color: color,
+		move: move,
 		draw: draw,
 		calculateRotation: calculateRotation,
 		getRotation: getRotation,
