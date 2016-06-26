@@ -14,6 +14,11 @@ function Point(_x, _y) {
 	this.y = _y;
 }
 
+function Position(_c, _r){
+	this.c = _c;
+	this.r = _r;
+}
+
 //Find the distance between two points
 function distPoints(p1, p2){
 	var distX = Math.abs(p1.x - p2.x);

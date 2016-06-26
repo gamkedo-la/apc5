@@ -55,14 +55,28 @@ var Bubble = function(_c, _r, _v){
 		return value;
 	};
 	
+	var getPos = function(){
+		return new Position(col, row);
+	};
+	
+	var setConnected = function(_con){
+		connected = _con;
+	}
+	
+	var isConnected = function(){
+		return connected;
+	};
+	
+	var shiftDown = function(){
+		row++;
+	}
+	
 	return {
 		getValue: getValue,
-		
-		
-		col: col,
-		row: row,
-		//value: this.value,
-		connected: connected,
+		getPos: getPos,
+		isConnected: isConnected,
+		setConnected: setConnected,
+		shiftDown: shiftDown,
 		explode: explode,
 		draw: draw,
 		combineColors: combineColors,
@@ -90,12 +104,12 @@ var BubblePopper = function(){
 		
 		if(bubblesIn.length === undefined){
 			explodingBubbles.push(bubblesIn);
-			grid.removeBubble(bubblesIn);
+			grid.removeBubble(bubblesIn.getPos());
 		}
 		
 		for(var i = 0; i < bubblesIn.length; i++){
 			explodingBubbles.push(bubblesIn[i]);
-			grid.removeBubble(bubblesIn[i]);
+			grid.removeBubble(bubblesIn[i].getPos());
 		}
 	};
 	

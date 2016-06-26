@@ -16,7 +16,7 @@ var PreviewBubble = function(_v) {
 				}
 				alpha += va;
 
-				var center = grid.gridCoordsToScreen(bubble.col, bubble.row);
+				var center = grid.gridCoordsToScreen(bubble.getPos().c, bubble.getPos().r);
 				drawCircleFill(canvasContext, center.x, center.y, previewSize, bubbleColors[combinedIndex], alpha);
 			}
 		}

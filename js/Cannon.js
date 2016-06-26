@@ -80,11 +80,6 @@ var Cannon = function () {
 	}
 	
 	return {
-//		x: x,
-	//	y: y,
-		//width: width,
-		//height: height,
-		//color: color,
 		move: move,
 		draw: draw,
 		calculateRotation: calculateRotation,

@@ -73,13 +73,7 @@ var Ball = function (_x, _y, _offset, _angle, _v) {
 	};
 	
 	return {
-		x: x,
-		y: y,
-		size: size,
 		draw: draw,
 		move: move,
-		prevX: prevX,
-		prevY: prevY,
-		value: value,
 	};
 };

@@ -46,8 +46,9 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	//Marks all bubbles as not connected then checks each
 	//one and marks connected bubbles as such
 	var checkConnected = function(){
+		console.log("checkConnected");
 		runOnAllBubbles(function(b){
-			b.connected = false;
+			b.setConnected(false);
 			return b;
 		});
 		
@@ -70,10 +71,10 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		}
 		
 		//Recursive base step
-		if(curBubble.row === 0) {
-			curBubble.connected = true;
+		if(curBubble.getPos().r === 0) {
+			curBubble.setConnected(true);
 			return true;
-		} else if(curBubble.connected){
+		} else if(curBubble.isConnected()){
 			return true;
 		}
 
@@ -87,7 +88,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 
 		//Recursive call
 		var result = checkConnectedHelper(connectedBubbles, bubbleIndex + 1);
-		curBubble.connected = result;
+		curBubble.setConnected(result);
 
 		return result;
 	};
@@ -109,24 +110,23 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		var inBoundsCol;
 		var checkResult;
 		
-		var c = bubble.col;
-		var r = bubble.row;
+		var pos = bubble.getPos();
 		
-		var leftRow = r%2 === 0 ? -1 : 0;
-		c += leftRow;
+		var leftRow = pos.r%2 === 0 ? -1 : 0;
+		pos.c += leftRow;
 		
 		for(var i = 0; i < 2; i++){
 			for(var j = -1; j < 2; j++){
 				
 				//Don't check self
 				if(j === 0 && i + leftRow === 0){
-					inBoundsCol = bubbleArray[c + i - (2*leftRow + 1)];
+					inBoundsCol = bubbleArray[pos.c + i - (2*leftRow + 1)];
 				} else { //but check all other neighbors
-					inBoundsCol = bubbleArray[c + i];
+					inBoundsCol = bubbleArray[pos.c + i];
 				}
 				
 				if(!inBoundsCol){continue;} //Don't check out of col bounds
-				checkResult = check(inBoundsCol[r + j], bubble);
+				checkResult = check(inBoundsCol[pos.r + j], bubble);
 				
 				//If the check passed, add it to the array
 				if(checkResult){
@@ -162,7 +162,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			// This explodes stray bubbles.
 			checkConnected();
 			runOnAllBubbles(function(bubble) {
-				if (!bubble.connected) {
+				if (!bubble.isConnected()) {
 					BubblePopper.push(bubble);
 				}
 			});
@@ -229,11 +229,11 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	
 	//Take hex coordinates and return center in pixel coordinates
 	var gridCoordsToScreen = function (c, r){
-		if(r === undefined){
-			r = c.row;
-			c = c.col;
+/*		if(r === undefined){
+			r = c.getPos().row;
+			c = c.getPos().col;
 		}
-		
+	*/	
 		var x = offsetX + c * spacingX + r%2 * spacingX/2;
 		var y = offsetY + r * spacingY;
 		
@@ -310,18 +310,18 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		for(var c = 0; c < cols; c++){
 			for(var r = rows; r > 0; r--){
 						bubbleArray[c][r] = bubbleArray[c][r-1];
-						bubbleArray[c][r].row++;
+						bubbleArray[c][r].shiftDown();
 			}
 			bubbleArray[c][0] = new Bubble(c, r);
 		}
 	};
 	
-	var removeBubble = function(b){
-		bubbleArray[b.col][b.row] = BUBBLE_NONE;
+	var removeBubble = function(pos){
+		console.log("remove: ", pos);
+		bubbleArray[pos.c][pos.r] = BUBBLE_NONE;
 	};
 	
 	return {
-		size: size,
 		screenCoordsToGrid: screenCoordsToGrid,
 		findBubbleHere: findBubbleHere,
 		drawAllBubbles: drawAllBubbles,
