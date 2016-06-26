@@ -19,10 +19,10 @@ function mousePressed(evt) {
 				cannon.fire();
 			}
 			mouse.left = true;
-			grid.findSuitHere(mouse.x,mouse.y);
+			grid.findBubbleHere(mouse.x,mouse.y);
 			break;
 		case 1:
-			if(debug){console.log("Mouse 1"); grid.dropDown();} //debug
+			if(debug){console.log("Mouse 1", grid.findBubbleHere(mouse.x, mouse.y));}// grid.dropDown();} //debug
 			evt.preventDefault();
 			mouse.middle = true;
 			break;
@@ -32,7 +32,7 @@ function mousePressed(evt) {
 			var bubble = grid.findBubbleHere(mouse.x,mouse.y);
 			if (bubble) {
 				console.log('Explode', grid.screenCoordsToGrid(mouse.x,mouse.y));
-				bubble.explode(0);
+				BubblePopper.push(bubble);
 			}
 			break;
 	}

@@ -4,23 +4,21 @@ var Ball = function (_x, _y, _offset, _angle, _v) {
 	var y = _y;
 	var prevX = x;
 	var prevY = y;
-	var speed = 10;
+	var speed = 15;
 	var vx = Math.cos(_angle) * speed;
 	var vy = Math.sin(_angle) * speed;
 	var value = _v;
-//	var leftBound = size;
-//	var rightBound = canvas.width - size;
 	
 	var move = function(){
 		advancePosition();
-		getCurrentHex();
+		testCurrentHex();
 		
 		// Very simple out of bounds check for debugging
 		if (y < bubbleSize/4){ 
 			console.log("ERROR: Ball out of bounds");
-			cannon.projectile = undefined;
+			cannon.clearProjectile();
 		}else if (y < bubbleSize) {
-			grid.attachBall(x, y, value);
+			attachToGrid();
 		}
 	};
 	
@@ -56,15 +54,22 @@ var Ball = function (_x, _y, _offset, _angle, _v) {
 	};
 	
 	var draw = function(){
-		drawCircleFill(canvasContext, x, y, bubbleSize, grid.bubbleColor[value], 1);
+		drawCircleFill(canvasContext, x, y, bubbleSize, value, 1);
 	};
-
-	var getCurrentHex = function(){
-		if(grid.findSuitHere(x, y) > 0){
-			if(!grid.combineBall(x, y, value)){
-				grid.attachBall(prevX, prevY, value);
+	
+	var testCurrentHex = function(){
+		var bubble = grid.findBubbleHere(x, y);
+		if(bubble){
+			if(!bubble.combineColors(bubbleColors.indexOf(value))){
+				attachToGrid();
 			}
+			cannon.clearProjectile();
 		}
+	};
+	
+	var attachToGrid = function(){
+		var coords = grid.screenCoordsToGrid(prevX, prevY)
+		grid.handleCombo(grid.attachBubble(coords.x, coords.y, value));
 	};
 	
 	return {

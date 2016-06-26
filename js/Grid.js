@@ -25,9 +25,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		bubbleArray[i] = [];
 	}
 	
-	var bubbleColor = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"];
-	var bubbleImage = [null,imgBubbleHeart,imgBubbleSpade,imgBubbleDiamond,imgBubbleClub];
-	
 	//Runs func on all bubbles and returns the results in
 	//a 2D array corresponding with the bubble's position
 	var runOnAllBubbles = function(func){
@@ -82,15 +79,11 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 
 		//Add all as-yet unadded, non-exploding neighbors to the array
 		connectedBubbles = concatUnique(connectedBubbles,
-		 checkAllAdjacentBubbles(curBubble, function(adjacentBubble, otherBubble){
-			if(adjacentBubble && !adjacentBubble.willExplode() && !otherBubble.willExplode()){
+		 checkAllAdjacentBubbles(curBubble, function(adjacentBubble){
+			if(adjacentBubble){
 				return adjacentBubble;
 			}
 		}));
-
-		if (connectedBubbles.length <= 0) {
-			return false;
-		}
 
 		//Recursive call
 		var result = checkConnectedHelper(connectedBubbles, bubbleIndex + 1);
@@ -102,7 +95,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	//Check if the current bubble is of the same type as the next one
 	var checkBubble = function(nextBubble, thisBubble){
 		if(nextBubble){
-			if(thisBubble.value === nextBubble.value){
+			if(thisBubble.getValue() === nextBubble.getValue()){
 				return nextBubble;
 			}
 		}
@@ -144,17 +137,36 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		return bubblesThatPass;
 	};
 	
-	//attach new bubble first, then call this function on it
 	//Finds combo of bubbles that pass checkBubble. Only checks each bubble once.
 	//Returns array with all bubbles in the combo.
-	var findCombo = function(c, r){
-		var bubbleCombo = [bubbleArray[c][r]];
+	var makeCombo = function(b){
+		var combo = [b];
 		
-		for(var i = 0; i < bubbleCombo.length; i++){
-			bubbleCombo = concatUnique(bubbleCombo, checkAllAdjacentBubbles(bubbleCombo[i], checkBubble));
+		for(var i = 0; i < combo.length; i++){
+			combo = concatUnique(combo, checkAllAdjacentBubbles(combo[i], checkBubble));
 		}
 		
-		return bubbleCombo;
+		return combo;
+	};
+	
+	var handleCombo = function(b){
+		if(!b){
+			return;
+		}
+		
+		var combo = makeCombo(b);
+		
+		if (combo.length >= minCombo) {
+			BubblePopper.push(combo);
+			
+			// This explodes stray bubbles.
+			checkConnected();
+			runOnAllBubbles(function(bubble) {
+				if (!bubble.connected) {
+					BubblePopper.push(bubble);
+				}
+			});
+		}
 	};
 	
 	//Finds the bubble at a given pixel
@@ -169,52 +181,15 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		}
 	};
 
-	//Finds the suit/color at a given pixel
-	var findSuitHere = function(x, y){
-		var bubble = findBubbleHere(x, y);
-		if (bubble) {
-			return bubble.value;
-		}
-
-		return undefined;
-	};
-	
-	var drawBubble = function(bubble) {
-		var center = gridCoordsToScreen(bubble.col, bubble.row);
-		drawCircleFill(canvasContext, center.x, center.y, bubbleSize, bubbleColor[bubble.value], 1);
-	};
-
 	var drawAllBubbles = function(){
-		runOnAllBubbles(drawBubble);
-	};
-	
-	var explodeBubble = function(bubble) {
-		if (bubble.isExploding()) {
-			// spawn particles!
-			var hexCenter = gridCoordsToScreen(bubble.col, bubble.row);
-			var numParticles = 4 + Math.floor(Math.random() * 8);
-			for (var i = 0; i < numParticles; i++) {
-				var tempParticle = new Particle(hexCenter.x, hexCenter.y, bubbleColor[bubble.value]);
-				particleList.push(tempParticle);
-			}
-			
-			bubbleArray[bubble.col][bubble.row] = BUBBLE_NONE;
-		}
-	};
-
-	var explodeAllBubbles = function(){
-		runOnAllBubbles(explodeBubble);
-	};
-	
-	var randomBubbleColor = function() {
-		return Math.floor(Math.random()*(BUBBLE_KINDS - 1)) + 1;
+		runOnAllBubbles(function(b){b.draw();});
 	};
 	
 	var genStartBubbles = function(){
 		for(var c = 0; c < cols; c++){
 			for(var r = 0; r < rows; r++){
 				if(r < initialRows){
-					bubbleArray[c][r] = new Bubble(c, r, randomBubbleColor());
+					bubbleArray[c][r] = new Bubble(c, r);
 				} else{
 					bubbleArray[c][r] = BUBBLE_NONE;
 				}
@@ -267,11 +242,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	
 	//Take pixel coordinates and return coordinates of hex that pixel is in
 	var screenCoordsToGrid = function(x, y){
-		/*if(y === undefined){
-			y = x.y;
-			x = x.x;
-		}
-		*/
 		var q = ((x - offsetX) * Math.sqrt(3)/3 - (y - offsetY)/3) / size;
 		var r = (y - offsetY) * 2/3 / size;
 		
@@ -325,65 +295,15 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	};
 	
 	var attachBubble = function(c, r, v) {
-		if(c < cols && c >= 0 && r < rows && r >= 0){
+		if(r >= rows){
+			console.log("GAME OVER");
+			makeGrid();
+			cannon.clearProjectile();
+			return;
+		}else	if(c < cols && c >= 0 && r >= 0){
 			bubbleArray[c][r] = new Bubble(c, r, v);
 		}
-	};
-	
-	var attachBall = function(x, y, value){
-		var coords = screenCoordsToGrid(x, y);
-		if(bubbleArray[coords.x][coords.y] != BUBBLE_NONE)
-		{
-			console.log("Game Over");
-			makeGrid();
-			cannon.projectile = undefined;
-			return false;
-		}
-		
-		cannon.projectile = undefined;
-		attachBubble(coords.x, coords.y, value);
-		var combo = findCombo(coords.x, coords.y);
-		if (combo.length >= minCombo) {
-			var explodeDelay = 1;
-			for (var i = 0; i < combo.length; i++) {
-				console.log("combo: ", combo[i]);
-				combo[i].explode(explodeDelay);
-				explodeDelay += explodeDelayIncrease;
-			}
-			
-			// This explodes stray bubbles.
-			checkConnected();
-			runOnAllBubbles(function(bubble) {
-				if (!bubble.connected && !bubble.willExplode()) {
-					console.log("stray bubble: ", bubble);
-					bubble.explode(explodeDelay);
-					explodeDelay += explodeDelayIncrease;
-				}
-			});
-
-			explodeAllBubbles();
-		}
-		
-		return true;
-	};
-	
-	var combineBall = function(x, y, value){
-		var coords = screenCoordsToGrid(x, y);
-		var bubble = bubbleArray[coords.x][coords.y];
-		
-		if(bubble.value === value){
-			return false;
-		}else if(bubble.value <= 3 && value <= 3){
-			bubble.value += ++value;
-			cannon.projectile = undefined;
-			return true;
-		}else if(value + bubble.value === 7){
-			bubble.value = 7;
-			cannon.projectile = undefined;
-			return true;
-		}
-		//["gap", "cyan","magenta","yellow", "blue","green","red", "white"];
-		return false;
+		return bubbleArray[c][r];
 	};
 	
 	var dropDown = function(){
@@ -392,30 +312,31 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 						bubbleArray[c][r] = bubbleArray[c][r-1];
 						bubbleArray[c][r].row++;
 			}
-			bubbleArray[c][0] = new Bubble(c, r, randomBubbleColor());
+			bubbleArray[c][0] = new Bubble(c, r);
 		}
+	};
+	
+	var removeBubble = function(b){
+		bubbleArray[b.col][b.row] = BUBBLE_NONE;
 	};
 	
 	return {
 		size: size,
 		screenCoordsToGrid: screenCoordsToGrid,
 		findBubbleHere: findBubbleHere,
-		findSuitHere: findSuitHere,
-		drawBounds: drawBounds,
-		hexRound: hexRound,
-		debugScreen: debugScreen,
 		drawAllBubbles: drawAllBubbles,
-		explodeAllBubbles: explodeAllBubbles,
-		findCombo: findCombo,
-		attachBall: attachBall,
-		bubbleArray: bubbleArray,
+		handleCombo: handleCombo,
+		attachBubble: attachBubble,
 		checkConnected: checkConnected,
-		bubbleImage: bubbleImage,
-		randomBubbleColor: randomBubbleColor,
 		dropDown: dropDown,
-		bubbleColor: bubbleColor,
 		leftBound: leftBound,
 		rightBound: rightBound,
-		combineBall: combineBall,
+		removeBubble: removeBubble,
+		gridCoordsToScreen: gridCoordsToScreen,
+		
+		//Debug use only
+		bubbleArray: bubbleArray,
+		debugScreen: debugScreen,
+		drawBounds: drawBounds,
 	};
 };

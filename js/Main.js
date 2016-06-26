@@ -4,7 +4,7 @@ var framesPerSecond = 60;
 var canvasColor = "#935636", gameBoardColor = "#20AF6F";
 var bubbleSize = 26, HEX_TO_CIRCLE_RATIO = Math.sqrt(3)/2;
 var minCombo = 3;
-var explodeDelayIncrease = 6;
+var bubbleColors = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"];
 
 //Global debug variables
 var hexDebug = false, debug = true, debugCanvas, debugContext, mainGameLoop;
@@ -74,15 +74,13 @@ function updateAll() {
 	prevTime = now;
 	
 	moveAll();
-
-	grid.explodeAllBubbles();
 	drawAll();
 }
 
 function moveAll() {
 	cannon.calculateRotation();
-	if(cannon.projectile){
-		cannon.projectile.move();
+	if(cannon.getProjectile()){
+		cannon.getProjectile().move();
 	}
 	var i;
 	for (i = 0; i < particleList.length; i++) {
@@ -93,6 +91,8 @@ function moveAll() {
 			particleList.splice(i, 1);
 		}
 	}
+	
+	BubblePopper.update();
 }
 
 //Might redo how the background code works
@@ -100,6 +100,13 @@ var background = (function(){
 	clear = function(){
 		colorRect(canvasContext, 0,0, canvas.width,canvas.height, canvasColor);
 		colorRect(scoresContext, 0,0, scoresCanvas.width,scoresCanvas.height, gameBoardColor);
+		
+		//Debug code to draw a representation of the hex on screen
+		if(hexDebug){
+			//Pick one, comment the other out
+			canvasContext.drawImage(debugCanvas, 0, 0);
+			//grid.drawBounds();
+		}
 	};
 	return{
 		clear: clear
@@ -108,18 +115,13 @@ var background = (function(){
 
 function drawAll() {
 	background.clear();
-
-	//Debug code to draw a representation of the hex on screen
-	if(hexDebug){
-		//Pick one, comment the other out
-		canvasContext.drawImage(debugCanvas, 0, 0);
-		//grid.drawBounds();
-	}
 	
 	grid.drawAllBubbles();
+	BubblePopper.draw();
 	cannon.draw();
-	if(cannon.projectile){
-		cannon.projectile.draw();
+	
+	if(cannon.getProjectile()){
+		cannon.getProjectile().draw();
 	}
 
 	for (var i = 0; i < particleList.length; i++) {

@@ -27,3 +27,8 @@ function concatUnique(array1, array2){
 		return array1.indexOf(n) < 0;
 	}));
 }
+
+var randomColor = function() {
+	//return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 1)) + 1];
+	return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 2)) + 1];
+};
