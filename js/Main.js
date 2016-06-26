@@ -4,13 +4,15 @@ var framesPerSecond = 60;
 var canvasColor = "#935636", gameBoardColor = "#20AF6F";
 var bubbleSize = 26, HEX_TO_CIRCLE_RATIO = Math.sqrt(3)/2;
 var minCombo = 3;
-var bubbleColors = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"];
+var bubbleColors;
+var rgbColorList = ["gap", "blue","green","red", "cyan","magenta","yellow", "white"];
+var cmykColorList = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"]; 
 
 //Global debug variables
 var hexDebug = false, debug = true, debugCanvas, debugContext, mainGameLoop;
 var useCardSuits = true; // turning to false goes back to color circles
 var particleList = [];
-
+var rgbMode = true;
 
 //Prevents player from drag selecting
 document.onselectstart = function()
@@ -41,6 +43,11 @@ window.onload = function() {
 
 //Code to run every time the main game is started (past the main menu)
 function gameStart(){
+	if(rgbMode){
+		bubbleColors = rgbColorList;
+	}else{
+		bubbleColors = cmykColorList;
+	}
 	makeGrid();
 	cannon = new Cannon();
 	
