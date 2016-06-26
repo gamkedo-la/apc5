@@ -37,12 +37,12 @@ window.onload = function() {
 	colorRect(scoresContext, 0,0, scoresCanvas.width,scoresCanvas.height, gameBoardColor);
 
 	prevTime = Date.now();
-	gameStart();
+	startGame();
 	mainGameLoop = setInterval(updateAll, 1000/framesPerSecond);
 };
 
 //Code to run every time the main game is started (past the main menu)
-function gameStart(){
+function startGame(){
 	if(rgbMode){
 		bubbleColors = rgbColorList;
 	}else{
@@ -97,6 +97,11 @@ function moveAll() {
 	}
 	
 	BubblePopper.update();
+	
+	if(BubblePopper.getNumPopped() > 100){
+		console.log("You win!");
+		startGame();
+	}
 }
 
 //Might redo how the background code works

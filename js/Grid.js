@@ -296,7 +296,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	var attachBubble = function(c, r, v) {
 		if(r >= rows){
 			console.log("GAME OVER");
-			makeGrid();
+			startGame();
 			cannon.clearProjectile();
 			return;
 		}else	if(c < cols && c >= 0 && r >= 0){
