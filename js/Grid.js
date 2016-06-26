@@ -72,7 +72,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		
 		//Recursive base step
 		if(curBubble.getPos().r === 0) {
-			curBubble.connect(true);
+			curBubble.connect();
 			return true;
 		} else if(curBubble.isConnected()){
 			return true;

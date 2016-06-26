@@ -1,29 +1,28 @@
 var PreviewBubble = function(_v) {
 	var value;
-	var minAlpha = 0.35;
-	var maxAlpha = 1;
-	var alpha = minAlpha;
-	var va = 0.01;
-	var previewSize = bubbleSize * .6;
+	var vSize = 0.3;
+	var minSize = bubbleSize * 0.4;
+	var maxSize = bubbleSize * 0.8;
+	var previewSize = minSize;
 
 	var draw = function() {
 		var bubble = grid.findBubbleHere(mouse.x,mouse.y);
 		if (bubble) {
 			var combinedIndex = bubble.getCombinedIndex(value);
 			if (combinedIndex) {
-				if (alpha > maxAlpha || alpha < minAlpha) {
-					va = -va;
+				if (previewSize > maxSize || previewSize < minSize) {
+					vSize = -vSize;
 				}
-				alpha += va;
+				previewSize += vSize;
 
 				var center = grid.gridCoordsToScreen(bubble.getPos().c, bubble.getPos().r);
-				drawCircleFill(canvasContext, center.x, center.y, previewSize, bubbleColors[combinedIndex], alpha);
+				drawCircleFill(canvasContext, center.x, center.y, previewSize, bubbleColors[combinedIndex], 1);
 			}
 		}
 	};
 
 	var setValue = function(_v) {
-		alpha = minAlpha;
+		previewSize = minSize;
 		value = bubbleColors.indexOf(_v);
 	};
 	setValue(_v);
