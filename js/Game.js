@@ -65,6 +65,8 @@ var Game = function(){
 	
 		// For now, only draw the name in the scores context.
 		drawText(scoresContext, 25, 20, "#000000", "APC5");
+		drawText(scoresContext, 25, 20 + textHeight, "#000000", "Score:");
+		drawText(scoresContext, 25, 20 + textHeight * 2, "#000000", bubblesPopped);
 	
 		//Debug code to output coordinates of hex containing mouse
 		if(hexDebug){

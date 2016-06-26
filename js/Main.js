@@ -7,6 +7,7 @@ var minCombo = 3;
 var bubbleColors;
 var rgbColorList = ["gap", "blue","green","red", "cyan","magenta","yellow", "white"];
 var cmykColorList = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"]; 
+var textHeight = 16;
 
 //Global debug variables
 var hexDebug = false, debug = true, debugCanvas, debugContext, mainGameLoop;

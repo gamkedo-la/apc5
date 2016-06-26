@@ -1,6 +1,6 @@
 var VictoryScreen = function(){
 	var frameCount = 0;
-	var framesBetweenSwap = 15;
+	var framesBetweenSwap = 20;
 	var readyToRestart = false;
 	var firstRun = true;
 	
