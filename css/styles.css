@@ -23,12 +23,19 @@ body {
 
 #gameCanvas {
     position: relative;
-    left: 123px;
-    top: 20px;
+    margin: 20px 0 0 4px;
 }
 
 #scoresCanvas {
-    position: absolute;
-    left: 4px;
-    top: 20px;
+    position: relative;
+    margin: 20px 0 0 4px;
+}
+
+#powerUps {
+    clear: both;
+    display: none;
+}
+
+#powerUps * {
+    cursor: pointer;
 }

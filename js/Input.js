@@ -32,7 +32,7 @@ function mousePressed(evt) {
 			var bubble = grid.findBubbleHere(mouse.x,mouse.y);
 			if (bubble) {
 				console.log('Explode', grid.screenCoordsToGrid(mouse.x,mouse.y));
-				BubblePopper.push(bubble);
+				bubblePopper.push(bubble);
 			}
 			break;
 	}

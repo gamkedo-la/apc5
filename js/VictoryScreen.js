@@ -10,7 +10,7 @@ var VictoryScreen = function(){
 	
 	var move = function(){
 		Game.moveParticles();
-		BubblePopper.update();
+		bubblePopper.update();
 		
 		if(frameCount <= 0){
 			if(firstRun){

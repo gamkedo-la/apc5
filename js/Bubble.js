@@ -90,10 +90,10 @@ var Bubble = function(_c, _r, _v){
 };
 
 //Handle exploding bubbles
-var BubblePopper = function(){
+var BubblePopper = function(_interval){
 	//var totalPopped = 0;
 	var explodingBubbles = [];
-	var explodeInterval = 3;
+	var explodeInterval = _interval;
 	var explodeDelay = 0;
 	
 	//Draw exploding bubbles
@@ -136,12 +136,12 @@ var BubblePopper = function(){
 		return totalPopped;
 	};
 	*/
-	
+
 	var restart = function(){
 		explodingBubbles = [];
 		explodeDelay = 0;
 	};
-	
+
 	return {
 		draw: draw,
 		push: push,
@@ -149,4 +149,4 @@ var BubblePopper = function(){
 		restart: restart,
 		//getNumPopped: getNumPopped,
 	};
-}();
+};

@@ -38,7 +38,7 @@ var Game = function(){
 		makeGrid();
 		cannon = new Cannon();
 		bubblesPopped = 0;
-		BubblePopper.restart();
+		bubblePopper = new BubblePopper(3);
 		
 		//Debug code that creates and caches a 4 color map of all hexes
 		if(hexDebug){
@@ -56,7 +56,7 @@ var Game = function(){
 		background.clear();
 		
 		grid.drawAllBubbles();
-		BubblePopper.draw();
+		bubblePopper.draw();
 		cannon.draw();
 	
 		for (var i = 0; i < particleList.length; i++) {
@@ -78,7 +78,7 @@ var Game = function(){
 	var moveAll = function(){
 		cannon.move();
 		moveParticles();
-		BubblePopper.update();
+		bubblePopper.update();
 	};
 	
 	var moveParticles = function(){

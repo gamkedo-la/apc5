@@ -37,3 +37,7 @@ function randomColor(){
 	//return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 1)) + 1];
 	return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 2)) + 1];
 }
+
+function inheritsFrom(child, parent) {
+	child.prototype = Object.create(parent.prototype);
+}

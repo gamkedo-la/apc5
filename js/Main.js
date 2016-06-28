@@ -1,5 +1,5 @@
 //Global variables
-var canvas, canvasContext, scoresCanvas, scoresContext, grid, cannon, deltaTime, prevTime;
+var canvas, canvasContext, scoresCanvas, scoresContext, grid, cannon, bubblePopper, deltaTime, prevTime;
 var framesPerSecond = 60;
 var canvasColor = "#935636", gameBoardColor = "#20AF6F";
 var bubbleSize = 26, HEX_TO_CIRCLE_RATIO = Math.sqrt(3)/2;
@@ -44,6 +44,11 @@ window.onload = function() {
 
 //Code to run every time the main game is started (past the main menu)
 function startGame(){
+	document.getElementById('powerUps').style.display = 'block';
+	document.getElementById('cannonBall').onclick = function(event){
+		cannon.setCannonball();
+		event.preventDefault();
+	};
 	Game.restart();
 }
 

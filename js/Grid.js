@@ -156,16 +156,19 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		var combo = makeCombo(b);
 		
 		if (combo.length >= minCombo) {
-			BubblePopper.push(combo);
-			
-			// This explodes stray bubbles.
-			checkConnected();
-			runOnAllBubbles(function(bubble) {
-				if (!bubble.isConnected()) {
-					BubblePopper.push(bubble);
-				}
-			});
+			bubblePopper.push(combo);
+			checkStrayBubbles();
 		}
+	};
+
+	var checkStrayBubbles = function() {
+		// This explodes stray bubbles.
+		checkConnected();
+		runOnAllBubbles(function(bubble) {
+			if (!bubble.isConnected()) {
+				bubblePopper.push(bubble);
+			}
+		});
 	};
 	
 	//Finds the bubble at a given pixel
@@ -331,7 +334,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	var removeBottomRow = function(){
 		runOnAllBubbles(function(b){
 			if(!bubbleArray[b.getPos().c][b.getPos().r+1]){
-				//BubblePopper.push(b);
+				//bubblePopper.push(b);
 				bubbleArray[b.getPos().c][b.getPos().r] = 0;
 			}
 		});
@@ -342,6 +345,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		findBubbleHere: findBubbleHere,
 		drawAllBubbles: drawAllBubbles,
 		handleCombo: handleCombo,
+		checkStrayBubbles: checkStrayBubbles,
 		attachBubble: attachBubble,
 		checkConnected: checkConnected,
 		dropDown: dropDown,

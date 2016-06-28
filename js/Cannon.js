@@ -10,7 +10,10 @@ var Cannon = function () {
 	var value = randomColor();
 	var nextValue = randomColor();
 	var previewBubble = new PreviewBubble(value);
-	
+	var nextPowerup;
+
+	const CANNONBALL = 1;
+
 	var calculateRotation = function(){
 		var yDiff = y - mouse.y;
 		var xDiff = x - mouse.x;
@@ -36,8 +39,16 @@ var Cannon = function () {
 
 	var draw = function(){
 		colorRect(canvasContext, x,y+10, width+10,height, color, rotation, 0, -height/2);
-		drawCircleFill(canvasContext, x, y, bubbleSize, value, 1);
-		drawCircleFill(canvasContext, x, y, bubbleSize/2, nextValue, 1);
+
+		switch (nextPowerup) {
+			case CANNONBALL:
+				drawCircleFill(canvasContext, x, y, bubbleSize, 'black', 1);
+				break;
+			default:
+				drawCircleFill(canvasContext, x, y, bubbleSize, value, 1);
+				drawCircleFill(canvasContext, x, y, bubbleSize/2, nextValue, 1);
+				break;
+		}
 
 		if(projectile){
 			projectile.draw();
@@ -53,10 +64,21 @@ var Cannon = function () {
 	
 	//This should take the object to fire once we get multiple things to shoot
 	var fire = function(){
-		projectile = new Ball(x, y, nozzle, rotation, value);
-		value = nextValue;
-		nextValue = randomColor();
-		previewBubble.setValue(value);
+		switch (nextPowerup) {
+			case CANNONBALL:
+				projectile = new CannonBall(x, y, rotation);
+				break;
+			default:
+				projectile = new Ball(x, y, rotation, value);
+				value = nextValue;
+				nextValue = randomColor();
+				previewBubble.setValue(value);
+				break;
+		}
+
+		if (nextPowerup) {
+			nextPowerup = undefined;
+		}
 	};
 	
 	var swapValues = function(){
@@ -78,6 +100,10 @@ var Cannon = function () {
 	function getNozzle(){
 		return nozzle;
 	}
+
+	function setCannonball() {
+		nextPowerup = CANNONBALL;
+	}
 	
 	return {
 		move: move,
@@ -89,5 +115,8 @@ var Cannon = function () {
 		clearProjectile: clearProjectile,
 		getNozzle: getNozzle,
 		swapValues: swapValues,
+
+		// Powerups
+		setCannonball: setCannonball
 	};
 };
