@@ -1,5 +1,4 @@
 var Ball = function (_x, _y, _offset, _angle, _v) {
-	var size = bubbleSize;
 	var x = _x;
 	var y = _y;
 	var prevX = x;
@@ -71,7 +70,7 @@ var Ball = function (_x, _y, _offset, _angle, _v) {
 	};
 	
 	var attachToGrid = function(){
-		var coords = grid.screenCoordsToGrid(prevX, prevY)
+		var coords = grid.screenCoordsToGrid(prevX, prevY);
 		grid.handleCombo(grid.attachBubble(coords.x, coords.y, value));
 	};
 	

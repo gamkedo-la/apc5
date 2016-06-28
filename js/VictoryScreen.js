@@ -8,7 +8,6 @@ var VictoryScreen = function(){
 		Game.draw();
 	};
 	
-	
 	var move = function(){
 		Game.moveParticles();
 		BubblePopper.update();
@@ -35,8 +34,7 @@ var VictoryScreen = function(){
 			firstRun = true;
 			Game.restart();
 		}
-		
-	}
+	};
 	
 	return{
 		draw: draw,
