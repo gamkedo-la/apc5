@@ -1,7 +1,7 @@
 var Bubble = function(_c, _r, _v){
 	var col = _c;
 	var row = _r;
-	var value = _v ? _v : randomColor();
+	var value = _v ? _v : randomColor(true);
 	var connected = true;
 	
 	var explode = function(){
