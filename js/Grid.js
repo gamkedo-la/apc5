@@ -229,7 +229,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			hexPoints[i] = hexCorner(hexCenter, i);
 		}
 		
-		drawLines(canvasContext, hexPoints);
+		drawLines(gameContext, hexPoints);
 	};
 	
 	//Take hex coordinates and return center in pixel coordinates
@@ -259,20 +259,20 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	//Generate 4 color map of hex grid
 	var debugScreen = function(){
 		var curHex = new Point(0, 0);
-		for(var i = 0; i < canvas.width; i++){
-			for(var j = 0; j < canvas.height; j++){
+		for(var i = 0; i < gameCanvas.width; i++){
+			for(var j = 0; j < gameCanvas.height; j++){
 				curHex = screenCoordsToGrid(i, j);
 				if(Math.round(curHex.x) % 2 === 0){
 					if(Math.round(curHex.y) % 2 === 0){
-						drawPixel(canvasContext, i, j, "red");
+						drawPixel(gameContext, i, j, "red");
 					} else {
-						drawPixel(canvasContext, i, j, "green");
+						drawPixel(gameContext, i, j, "green");
 					}
 				} else {
 					if(Math.round(curHex.y) % 2 === 0){
-						drawPixel(canvasContext, i, j, "blue");
+						drawPixel(gameContext, i, j, "blue");
 					} else {
-						drawPixel(canvasContext, i, j, "yellow");
+						drawPixel(gameContext, i, j, "yellow");
 					}
 				}
 			}

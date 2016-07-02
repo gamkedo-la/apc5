@@ -6,7 +6,7 @@ var Particle = function(start_x,start_y, start_color){
 	var vy = 5 - Math.random()*8;
 	var size = bubbleSize / 2;
 	var leftBound = size;
-	var rightBound = canvas.width - size;
+	var rightBound = gameCanvas.width - size;
 	var cyclesLeft = 80 + Math.floor(Math.random() * 20);
 	var readyToRemove = false;
 	var gravity = 0.1;
@@ -20,7 +20,7 @@ var Particle = function(start_x,start_y, start_color){
 		size = bubbleSize * cyclesLeft / 100;
 
 		leftBound = size;
-		rightBound = canvas.width - size;
+		rightBound = gameCanvas.width - size;
 
 		// Make the particle slowly fall downward!
 		vy += gravity;
@@ -38,13 +38,13 @@ var Particle = function(start_x,start_y, start_color){
 			x += (rightBound - x) * 2;
 		}
 
-		if (y > canvas.height || y < 0) {
+		if (y > gameCanvas.height || y < 0) {
 			readyToRemove = true;
 		}
 	};
 
 	var draw = function() {
-		drawCircleFill(canvasContext, x, y, size, color, 1);
+		drawCircleFill(gameContext, x, y, size, color, 1);
 	};
 
 	var isReadyToRemove = function() {

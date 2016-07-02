@@ -1,6 +1,6 @@
 var Game = function(){
-	var numBubbleCols = 10;
-	var numBubbleRows = 11;
+	var numBubbleCols = 16;
+	var numBubbleRows = 14;
 	var startingRows = 8;
 	
 	var bubblesPopped = 0;
@@ -48,9 +48,9 @@ var Game = function(){
 			
 			debugCanvas = document.createElement('canvas');
 			debugContext = debugCanvas.getContext('2d');
-			debugCanvas.width = canvas.width;
-			debugCanvas.height = canvas.height;
-			debugContext.drawImage(canvas, 0, 0);
+			debugCanvas.width = gameCanvas.width;
+			debugCanvas.height = gameCanvas.height;
+			debugContext.drawImage(gameCanvas, 0, 0);
 		}
 	};
 	
@@ -60,16 +60,16 @@ var Game = function(){
 		grid.drawAllBubbles();
 		bubblePopper.draw();
 		cannon.draw();
-	
+		
 		for (var i = 0; i < particleList.length; i++) {
 			particleList[i].draw();
 		}
-	
+		
 		// For now, only draw the name in the scores context.
 		drawText(scoresContext, 25, 20, "#000000", "APC5");
 		drawText(scoresContext, 25, 20 + textHeight, "#000000", "Score:");
 		drawText(scoresContext, 25, 20 + textHeight * 2, "#000000", bubblesPopped);
-	
+		
 		//Debug code to output coordinates of hex containing mouse
 		if(hexDebug){
 			var mouseHex = grid.screenCoordsToGrid(mouse.x, mouse.y);

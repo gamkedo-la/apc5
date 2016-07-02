@@ -34,7 +34,6 @@ function concatUnique(array1, array2){
 }
 
 function randomColor(useWhite){
-	//return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 1)) + 1];
 	if(useWhite){
 		return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 1)) + 1];
 	}else{

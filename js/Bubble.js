@@ -16,7 +16,7 @@ var Bubble = function(_c, _r, _v){
 	
 	var draw = function(){
 		var center = grid.gridCoordsToScreen(col, row);
-		drawCircleFill(canvasContext, center.x, center.y, bubbleSize, value, 1);
+		drawCircleFill(gameContext, center.x, center.y, bubbleSize, value, 1);
 	};
 
 	var getCombinedColorIndex = function(_valIndex){

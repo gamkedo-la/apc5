@@ -1,6 +1,6 @@
 var Cannon = function () {
-	var x = canvas.width / 2;
-	var y = canvas.height;
+	var x = gameCanvas.width / 2;;
+	var y = gameCanvas.height;
 	var rotation = 90;
 	var width = 75;
 	var height = 10;
@@ -11,22 +11,23 @@ var Cannon = function () {
 	var nextValue = randomColor();
 	var previewBubble = new PreviewBubble(value);
 	var nextPowerup;
+	var maxRotation = Math.PI/16;
 
 	const CANNONBALL = 1;
 
 	var calculateRotation = function(){
 		var yDiff = y - mouse.y;
-		var xDiff = x - mouse.x;
+		var xDiff = x - mouse.x / 0.75;
 		if(xDiff < 0){
 			rotation = Math.atan(yDiff/xDiff);
 		} else {
 			rotation = Math.atan(yDiff/xDiff) - Math.PI;
 		}
 
-		if(rotation > -Math.PI/8){
-			rotation = -Math.PI/8;
-		} else if(rotation < -Math.PI + Math.PI/8){
-			rotation = -Math.PI + Math.PI/8;
+		if(rotation > -maxRotation){
+			rotation = -maxRotation;
+		} else if(rotation < -Math.PI + maxRotation){
+			rotation = -Math.PI + maxRotation;
 		}
 	};
 
@@ -38,15 +39,15 @@ var Cannon = function () {
 	};
 
 	var draw = function(){
-		colorRect(canvasContext, x,y+10, width+10,height, color, rotation, 0, -height/2);
+		colorRect(gameContext, x,y+10, width+10,height, color, rotation, 0, -height/2);
 
 		switch (nextPowerup) {
 			case CANNONBALL:
-				drawCircleFill(canvasContext, x, y, bubbleSize, 'black', 1);
+				drawCircleFill(gameContext, x, y, bubbleSize, 'black', 1);
 				break;
 			default:
-				drawCircleFill(canvasContext, x, y, bubbleSize, value, 1);
-				drawCircleFill(canvasContext, x, y, bubbleSize/2, nextValue, 1);
+				drawCircleFill(gameContext, x, y, bubbleSize, value, 1);
+				drawCircleFill(gameContext, x, y, bubbleSize/2, nextValue, 1);
 				break;
 		}
 

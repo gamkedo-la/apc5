@@ -6,7 +6,7 @@ var PreviewBubble = function(_v) {
 	var previewSize = minSize;
 
 	var draw = function() {
-		var bubble = grid.findBubbleHere(mouse.x,mouse.y);
+		var bubble = grid.findBubbleHere(mouse.x/0.75,mouse.y);
 		if (bubble) {
 			var combinedIndex = bubble.getCombinedIndex(value);
 			if (combinedIndex) {
@@ -16,7 +16,7 @@ var PreviewBubble = function(_v) {
 				previewSize += vSize;
 
 				var center = grid.gridCoordsToScreen(bubble.getPos().c, bubble.getPos().r);
-				drawCircleFill(canvasContext, center.x, center.y, previewSize, bubbleColors[combinedIndex], 1);
+				drawCircleFill(gameContext, center.x, center.y, previewSize, bubbleColors[combinedIndex], 1);
 			}
 		}
 	};

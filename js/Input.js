@@ -1,9 +1,9 @@
 function setupInput() {
-	canvas.addEventListener('mousemove', updateMousePos);
-	canvas.addEventListener('mousedown', mousePressed);
-	canvas.addEventListener('mouseup', mouseReleased);
-
-	canvas.addEventListener('contextmenu', function(e) {
+	drawingCanvas.addEventListener('mousemove', updateMousePos);
+	drawingCanvas.addEventListener('mousedown', mousePressed);
+	drawingCanvas.addEventListener('mouseup', mouseReleased);
+	
+	drawingCanvas.addEventListener('contextmenu', function(e) {
 	      if (e.button === 2) { // block right click menu
 	       e.preventDefault();
 	        return false;
@@ -29,7 +29,7 @@ function mousePressed(evt) {
 		case 2:
 			if(debug){console.log("Mouse 2");cannon.swapValues();} //debug
 			mouse.right = true;
-			var bubble = grid.findBubbleHere(mouse.x,mouse.y);
+			var bubble = grid.findBubbleHere(mouse.x/0.75,mouse.y);
 			if (bubble) {
 				console.log('Explode', grid.screenCoordsToGrid(mouse.x,mouse.y));
 				bubblePopper.push(bubble);
@@ -57,11 +57,11 @@ function mouseReleased(evt) {
 }
 
 function updateMousePos(evt) {
-	var rect = canvas.getBoundingClientRect();
+	var rect = drawingCanvas.getBoundingClientRect();
 	//var root = document.documentElement;
 	
-	mouse.x = evt.clientX - rect.left;// - root.scrollLeft;
-  	mouse.y = evt.clientY - rect.top;// - root.scrollTop;
+	mouse.x = (evt.clientX - rect.left)/gameScaleX;// - root.scrollLeft;
+	mouse.y = (evt.clientY - rect.top)/gameScaleY;// - root.scrollTop;
 }
 
 //mouse object stores mouse information
