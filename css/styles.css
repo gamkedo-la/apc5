@@ -36,8 +36,8 @@ body {
 }
 
 #scoresCanvas {
-    position: relative;
-    margin: 20px 0 0 4px;
+		position:absolute;
+		display:inline;
 }
 
 #drawingCanvas {

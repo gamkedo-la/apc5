@@ -1,6 +1,6 @@
 var Game = function(){
 	var numBubbleCols = 16;
-	var numBubbleRows = 14;
+	var numBubbleRows = 13;
 	var startingRows = 8;
 	
 	var bubblesPopped = 0;

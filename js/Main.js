@@ -46,9 +46,11 @@ window.onload = function() {
 	colorRect(gameContext, 0,0, gameCanvas.width,gameCanvas.height, canvasColor);
 	colorRect(scoresContext, 0,0, scoresCanvas.width,scoresCanvas.height, gameBoardColor);
 	
-	gameCanvas.width = (Game.getCs() * bubbleSize * 2 + bubbleSize / HEX_TO_CIRCLE_RATIO * 2 - bubbleSize);
+	gameCanvas.width = ((Game.getCs() - 0.5) * bubbleSize + bubbleSize / HEX_TO_CIRCLE_RATIO) * 2;
 	gameCanvas.height = gameCanvas.width * 9/12;
 	
+	scoresCanvas.width = gameCanvas.width * 0.75;
+	scoresCanvas.height = gameCanvas.height;
 	
 	prevTime = Date.now();
 	resizeWindow();
@@ -99,10 +101,13 @@ function drawAll(){
 //	canvasContext.rotate(rotation);
 		drawingContext.drawImage(gameCanvas, 0, 0);
 		drawingContext.restore();
-
 		
-		
-		
+		drawingContext.save();
+		drawingContext.translate(gameCanvas.width * gameScaleX * 0.75, 0);
+		drawingContext.scale(gameScaleX, gameScaleY);
+		drawingContext.drawImage(scoresCanvas, 0, 0);
+		drawingContext.restore();
+//		colorRect(drawingContext, gameCanvas.width * gameScaleX * 0.75,0, scoresCanvas.width,30, "black");
 }
 
 //Might redo how the background code works
@@ -124,7 +129,6 @@ var background = (function(){
 })();
 
 function resizeWindow(){
-	scoresCanvas.height = 1;
 	gameBoard.height = window.innerHeight;
 	gameBoard.width = window.innerWidth;
 	
