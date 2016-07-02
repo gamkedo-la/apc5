@@ -58,6 +58,7 @@ window.onload = function() {
 	mainGameLoop = setInterval(updateAll, 1000/framesPerSecond);
 };
 
+//TODO fix this. Pref using canvas instead of html
 //Code to run every time the main game is started (past the main menu)
 function startGame(){
 //	document.getElementById('powerUps').style.display = 'block';
@@ -94,20 +95,18 @@ function updateAll() {
 }
 
 function drawAll(){
-		Game.draw();
-		drawingContext.save();
-		drawingContext.scale(gameScaleX * 0.75, gameScaleY);
-//		canvasContext.translate(topLeftX, topLeftY);
-//	canvasContext.rotate(rotation);
-		drawingContext.drawImage(gameCanvas, 0, 0);
-		drawingContext.restore();
-		
-		drawingContext.save();
-		drawingContext.translate(gameCanvas.width * gameScaleX * 0.75, 0);
-		drawingContext.scale(gameScaleX, gameScaleY);
-		drawingContext.drawImage(scoresCanvas, 0, 0);
-		drawingContext.restore();
-//		colorRect(drawingContext, gameCanvas.width * gameScaleX * 0.75,0, scoresCanvas.width,30, "black");
+	Game.draw();
+	
+	drawingContext.save();
+	drawingContext.scale(gameScaleX * 0.75, gameScaleY);
+	drawingContext.drawImage(gameCanvas, 0, 0);
+	drawingContext.restore();
+	
+	drawingContext.save();
+	drawingContext.translate(gameCanvas.width * gameScaleX * 0.75, 0);
+	drawingContext.scale(gameScaleX, gameScaleY);
+	drawingContext.drawImage(scoresCanvas, 0, 0);
+	drawingContext.restore();
 }
 
 //Might redo how the background code works
@@ -143,5 +142,4 @@ function resizeWindow(){
 	drawingCanvas.style.top = (window.innerHeight/2 - drawingCanvas.height/2) + "px";
 	drawingCanvas.style.left = (window.innerWidth/2 - drawingCanvas.width/2) + "px";
 	colorRect(drawingContext, 0,0, drawingCanvas.width,drawingCanvas.height, "white");
-//	drawingCanvas.color = "white";
 }
