@@ -158,6 +158,9 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		if (combo.length >= minCombo) {
 			bubblePopper.push(combo);
 			checkStrayBubbles();
+			Game.setLastShotPop(true);
+		}else{
+			Game.setLastShotPop(false);
 		}
 	};
 

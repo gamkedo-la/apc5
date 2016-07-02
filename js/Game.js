@@ -6,8 +6,10 @@ var Game = function(){
 	var bubblesPopped = 0;
 	var popTotalToWin = 100;
 	
+	var lastShotPop = false;
+	
 	var checkWin = function(){
-		if(bubblesPopped >= popTotalToWin){
+		if(bubblesPopped >= popTotalToWin && !lastShotPop){
 			return true;
 		}
 		return false;
@@ -93,6 +95,14 @@ var Game = function(){
 		}
 	};
 	
+	var setLastShotPop = function(val){
+		lastShotPop = val;
+	};
+	
+	var getLastShotPop = function(){
+		return lastShotPop;
+	};
+	
 	return{
 		getCs: getCols,
 		getRs: getRows,
@@ -103,6 +113,8 @@ var Game = function(){
 		draw: draw,
 		moveAll: moveAll,
 		moveParticles: moveParticles,
+		getLastShotPop: getLastShotPop,
+		setLastShotPop: setLastShotPop,
 	};
 }();
 
