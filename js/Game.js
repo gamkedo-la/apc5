@@ -4,7 +4,7 @@ var Game = function(){
 	var startingRows = 8;
 	
 	var bubblesPopped = 0;
-	var popTotalToWin = 10;
+	var popTotalToWin = 100;
 	
 	var lastShotPop = false;
 	
