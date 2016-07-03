@@ -90,12 +90,12 @@ function updateAll() {
 		VictoryScreen.draw();
 	} else {
 		Game.moveAll();
-		drawAll();
+		Game.draw();
 	}
+	drawAll();
 }
 
 function drawAll(){
-	Game.draw();
 	
 	drawingContext.save();
 	drawingContext.scale(gameScaleX * 0.75, gameScaleY);
