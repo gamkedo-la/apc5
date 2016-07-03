@@ -12,6 +12,16 @@ var bubbleColors;
 var rgbColorList = ["gap", "blue","green","red", "cyan","magenta","yellow", "white"];
 var cmykColorList = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"]; 
 var textHeight = 16;
+var inMenu = true;
+var menuBackgroundHeight = 150;
+var menuBackgroundWidth = 300;
+var menuBackgroundX = 100;
+var menuBackgroundY = 100;
+var normalModeButtonX = menuBackgroundX + 25;
+var normalModeButtonY = menuBackgroundY + 50;
+var unlimitedModeButtonX = menuBackgroundX + 25;
+var unlimitedModeButtonY = menuBackgroundY + 110;
+var menuBackgroundColor = "white";
 
 //Global debug variables
 var hexDebug = false, debug = true, debugCanvas, debugContext, mainGameLoop;
@@ -54,8 +64,13 @@ window.onload = function() {
 	
 	prevTime = Date.now();
 	resizeWindow();
-	startGame();
 	mainGameLoop = setInterval(updateAll, 1000/framesPerSecond);
+	if(inMenu){
+		showMainMenu();
+		return
+	} else {
+		startGame();
+	}
 };
 
 //TODO fix this. Pref using canvas instead of html
@@ -142,4 +157,12 @@ function resizeWindow(){
 	drawingCanvas.style.top = (window.innerHeight/2 - drawingCanvas.height/2) + "px";
 	drawingCanvas.style.left = (window.innerWidth/2 - drawingCanvas.width/2) + "px";
 	colorRect(drawingContext, 0,0, drawingCanvas.width,drawingCanvas.height, "white");
+}
+
+function showMainMenu(){
+	colorRect(drawingContext, menuBackgroundX, menuBackgroundY, menuBackgroundWidth, menuBackgroundHeight, menuBackgroundColor);
+	drawingContext.font = "bold 26pt Arial";
+	drawingContext.fillStyle = "black";
+	drawingContext.fillText("Normal Mode", normalModeButtonX, normalModeButtonY);
+	drawingContext.fillText("Unlimited Mode", unlimitedModeButtonX, unlimitedModeButtonY);
 }
