@@ -55,6 +55,9 @@ var Game = function(){
 	};
 	
 	var draw = function(){
+		if (inMenu) {
+			return;
+		}
 		background.clear();
 		
 		grid.drawAllBubbles();
@@ -78,6 +81,9 @@ var Game = function(){
 	};
 	
 	var moveAll = function(){
+		if (inMenu) {
+			return;
+		}
 		cannon.move();
 		moveParticles();
 		bubblePopper.update();

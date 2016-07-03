@@ -28,7 +28,7 @@ function mousePressed(evt) {
 				startGame();
 				break;
 			}
-			if(!cannon.projectile){
+			if(!inMenu && !cannon.projectile){
 				cannon.fire();
 			}
 			mouse.left = true;
