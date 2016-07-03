@@ -14,6 +14,7 @@ function setupInput() {
 function mousePressed(evt) {
 	switch(evt.button){
 		case 0:
+			mouse.left = true;
 			if(debug){console.log("Mouse 0");} //debug
 			if(inMenu && mouse.x > menuBackgroundX && mouse.x < menuBackgroundX + menuBackgroundWidth &&
 			mouse.y > menuBackgroundY && mouse.y < menuBackgroundY + menuBackgroundWidth / 2){
@@ -31,21 +32,23 @@ function mousePressed(evt) {
 			if(!inMenu && !cannon.projectile){
 				cannon.fire();
 			}
-			mouse.left = true;
-			grid.findBubbleHere(mouse.x,mouse.y);
 			break;
 		case 1:
-			if(debug){console.log("Mouse 1", grid.findBubbleHere(mouse.x, mouse.y));}// grid.dropDown();} //debug
-			evt.preventDefault();
 			mouse.middle = true;
+			if(debug){console.log("Mouse 1");} //debug
+			if(debug && !inMenu){console.log("bubble", grid.findBubbleHere(mouse.x, mouse.y));}// grid.dropDown();} //debug
+			evt.preventDefault();
 			break;
 		case 2:
-			if(debug){console.log("Mouse 2");cannon.swapValues();} //debug
 			mouse.right = true;
-			var bubble = grid.findBubbleHere(mouse.x/0.75,mouse.y);
-			if (bubble) {
-				console.log('Explode', grid.screenCoordsToGrid(mouse.x,mouse.y));
-				bubblePopper.push(bubble);
+			if(debug){console.log("Mouse 2");} //debug
+			if(debug && !inMenu){cannon.swapValues();} //debug
+			if (!inMenu) {
+				var bubble = grid.findBubbleHere(mouse.x / 0.75, mouse.y);
+				if (bubble) {
+					console.log('Explode', grid.screenCoordsToGrid(mouse.x, mouse.y));
+					bubblePopper.push(bubble);
+				}
 			}
 			break;
 	}
@@ -54,16 +57,16 @@ function mousePressed(evt) {
 function mouseReleased(evt) {
 	switch(evt.button){
 		case 0:
-			if(debug){console.log("Mouse 0 up", grid.screenCoordsToGrid(mouse.x,mouse.y));} //debug
+			if(debug && !inMenu){console.log("Mouse 0 up", grid.screenCoordsToGrid(mouse.x,mouse.y));} //debug
 			mouse.left = false;
 			break;
 		case 1:
-			if(debug){console.log("Mouse 1 up", grid.screenCoordsToGrid(mouse.x,mouse.y));} //debug
+			if(debug && !inMenu){console.log("Mouse 1 up", grid.screenCoordsToGrid(mouse.x,mouse.y));} //debug
 			evt.preventDefault();
 			mouse.middle = false;
 			break;
 		case 2:
-			if(debug){console.log("Mouse 2 up", grid.screenCoordsToGrid(mouse.x,mouse.y));} //debug
+			if(debug && !inMenu){console.log("Mouse 2 up", grid.screenCoordsToGrid(mouse.x,mouse.y));} //debug
 			mouse.right = false;
 			break;
 	}
