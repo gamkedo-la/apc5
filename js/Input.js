@@ -15,14 +15,14 @@ function mousePressed(evt) {
 	switch(evt.button){
 		case 0:
 			if(debug){console.log("Mouse 0");} //debug
-			if(inMenu && mouse.x > normalModeButtonX && mouse.x < normalModeButtonX + menuBackgroundWidth &&
-			mouse.y > normalModeButtonY && mouse.y < normalModeButtonY + menuBackgroundWidth / 2){
+			if(inMenu && mouse.x > menuBackgroundX && mouse.x < menuBackgroundX + menuBackgroundWidth &&
+			mouse.y > menuBackgroundY && mouse.y < menuBackgroundY + menuBackgroundWidth / 2){
 				console.log("Start normal game!");
 				inMenu = false;
 				startGame();
 				break;
 			} else if (inMenu && mouse.x > unlimitedModeButtonX && mouse.x < unlimitedModeButtonX + menuBackgroundWidth &&
-			mouse.y > unlimitedModeButtonY && mouse.y < unlimitedModeButtonY + menuBackgroundWidth){
+			mouse.y > menuBackgroundY + menuBackgroundWidth / 2  && mouse.y < menuBackgroundY + menuBackgroundWidth){
 				console.log("Start unlimited game!");
 				inMenu = false;
 				startGame();

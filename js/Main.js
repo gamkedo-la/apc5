@@ -12,7 +12,7 @@ var bubbleColors;
 var rgbColorList = ["gap", "blue","green","red", "cyan","magenta","yellow", "white"];
 var cmykColorList = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"]; 
 var textHeight = 16;
-var inMenu = false;
+var inMenu = true;
 var menuBackgroundHeight = 150;
 var menuBackgroundWidth = 300;
 var menuBackgroundX = 100;
