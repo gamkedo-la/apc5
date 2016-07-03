@@ -68,6 +68,8 @@ window.onload = function() {
 	if(inMenu){
 		showMainMenu();
 		return
+	} else {
+		startGame();
 	}
 };
 
