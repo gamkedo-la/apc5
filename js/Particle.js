@@ -1,3 +1,11 @@
+function createParticles(min, max, start_x,start_y, start_color) {
+	var numParticles = min + Math.floor(Math.random() * (max-min));
+	for (var i = 0; i < numParticles; i++) {
+		var tempParticle = new Particle(start_x,start_y, start_color);
+		particleList.push(tempParticle);
+	}
+}
+
 var Particle = function(start_x,start_y, start_color){
 	var x = start_x;
 	var y = start_y;

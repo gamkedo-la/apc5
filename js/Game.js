@@ -55,11 +55,10 @@ var Game = function(){
 	};
 	
 	var draw = function(){
-		if (inMenu) {
+		if (Menu.isActive()) {
 			return;
 		}
-		background.clear();
-		
+
 		grid.drawAllBubbles();
 		bubblePopper.draw();
 		cannon.draw();
@@ -69,9 +68,9 @@ var Game = function(){
 		}
 		
 		// For now, only draw the name in the scores context.
-		drawText(scoresContext, 25, 20, "#000000", "APC5");
-		drawText(scoresContext, 25, 20 + textHeight, "#000000", "Score:");
-		drawText(scoresContext, 25, 20 + textHeight * 2, "#000000", bubblesPopped);
+		drawText(scoresContext, 25, 50, fontColor, "APC5");
+		drawText(scoresContext, 25, 50 + textHeight, fontColor, "Score:");
+		drawText(scoresContext, 25, 50 + textHeight * 2, fontColor, bubblesPopped);
 		
 		//Debug code to output coordinates of hex containing mouse
 		if(hexDebug){
@@ -81,7 +80,7 @@ var Game = function(){
 	};
 	
 	var moveAll = function(){
-		if (inMenu) {
+		if (Menu.isActive()) {
 			return;
 		}
 		cannon.move();

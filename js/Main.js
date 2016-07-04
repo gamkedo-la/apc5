@@ -5,23 +5,14 @@ var gameCanvas, gameContext;
 var scoresCanvas, scoresContext;
 var grid, cannon, bubblePopper, deltaTime, prevTime, gameBoard;
 var framesPerSecond = 60;
-var canvasColor = "#935636", gameBoardColor = "#20AF6F";
+var gameFont = "bold 20pt Arial";
+var canvasColor = "#935636", gameBoardColor = "#20AF6F", fontColor = '#000000', fontColorHighlight = '#aaf8d4';
 var bubbleSize = 30, HEX_TO_CIRCLE_RATIO = Math.sqrt(3)/2;
 var minCombo = 3;
 var bubbleColors;
 var rgbColorList = ["gap", "blue","green","red", "cyan","magenta","yellow", "white"];
-var cmykColorList = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"]; 
-var textHeight = 16;
-var inMenu = true;
-var menuBackgroundHeight = 150;
-var menuBackgroundWidth = 300;
-var menuBackgroundX = 100;
-var menuBackgroundY = 100;
-var normalModeButtonX = menuBackgroundX + 25;
-var normalModeButtonY = menuBackgroundY + 50;
-var unlimitedModeButtonX = menuBackgroundX + 25;
-var unlimitedModeButtonY = menuBackgroundY + 110;
-var menuBackgroundColor = "white";
+var cmykColorList = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"];
+var textHeight = 30;
 
 //Global debug variables
 var hexDebug = false, debug = true, debugCanvas, debugContext, mainGameLoop;
@@ -65,12 +56,7 @@ window.onload = function() {
 	prevTime = Date.now();
 	resizeWindow();
 	mainGameLoop = setInterval(updateAll, 1000/framesPerSecond);
-	if(inMenu){
-		showMainMenu();
-		return
-	} else {
-		startGame();
-	}
+	startGame();
 };
 
 //TODO fix this. Pref using canvas instead of html
@@ -81,6 +67,7 @@ function startGame(){
 //		cannon.setCannonball();
 //		event.preventDefault();
 //	};
+	Menu.initialize();
 	Game.restart();
 }
 
@@ -93,25 +80,24 @@ function makeGrid() {
 }
 
 function updateAll() {
-	gameScaleX = drawingCanvas.width/gameCanvas.width;
-	gameScaleY = drawingCanvas.height/gameCanvas.height;
-	
 	var now = Date.now();
 	deltaTime = now - prevTime;
 	prevTime = now;
-	
-	if(Game.checkWin()){
+
+	background.clear();
+
+	if (Menu.isActive()) {
+		Menu.update();
+		Menu.draw();
+	}
+	if (Menu.isActive() || Game.checkWin()){
 		VictoryScreen.move();
 		VictoryScreen.draw();
 	} else {
 		Game.moveAll();
 		Game.draw();
 	}
-	drawAll();
-}
 
-function drawAll(){
-	
 	drawingContext.save();
 	drawingContext.scale(gameScaleX * 0.75, gameScaleY);
 	drawingContext.drawImage(gameCanvas, 0, 0);
@@ -145,7 +131,7 @@ var background = (function(){
 function resizeWindow(){
 	gameBoard.height = window.innerHeight;
 	gameBoard.width = window.innerWidth;
-	
+
 	if(window.innerHeight / 9 > window.innerWidth / 16){
 		drawingCanvas.width = window.innerWidth;
 		drawingCanvas.height = window.innerWidth * 9/16;
@@ -153,16 +139,11 @@ function resizeWindow(){
 		drawingCanvas.height = window.innerHeight;
 		drawingCanvas.width = window.innerHeight * 16/9;
 	}
-	
+
 	drawingCanvas.style.top = (window.innerHeight/2 - drawingCanvas.height/2) + "px";
 	drawingCanvas.style.left = (window.innerWidth/2 - drawingCanvas.width/2) + "px";
 	colorRect(drawingContext, 0,0, drawingCanvas.width,drawingCanvas.height, "white");
-}
 
-function showMainMenu(){
-	colorRect(drawingContext, menuBackgroundX, menuBackgroundY, menuBackgroundWidth, menuBackgroundHeight, menuBackgroundColor);
-	drawingContext.font = "bold 26pt Arial";
-	drawingContext.fillStyle = "black";
-	drawingContext.fillText("Normal Mode", normalModeButtonX, normalModeButtonY);
-	drawingContext.fillText("Unlimited Mode", unlimitedModeButtonX, unlimitedModeButtonY);
+	gameScaleX = drawingCanvas.width/gameCanvas.width;
+	gameScaleY = drawingCanvas.height/gameCanvas.height;
 }

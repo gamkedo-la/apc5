@@ -7,11 +7,7 @@ var Bubble = function(_c, _r, _v){
 	var explode = function(){
 		// spawn particles!
 		var hexCenter = grid.gridCoordsToScreen(col, row);
-		var numParticles = 4 + Math.floor(Math.random() * 8);
-		for (var i = 0; i < numParticles; i++) {
-			var tempParticle = new Particle(hexCenter.x, hexCenter.y, value);
-			particleList.push(tempParticle);
-		}
+		createParticles(4, 12, hexCenter.x, hexCenter.y, value);
 	};
 	
 	var draw = function(){

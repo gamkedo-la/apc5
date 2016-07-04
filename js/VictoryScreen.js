@@ -5,7 +5,8 @@ var VictoryScreen = function(){
 	var firstRun = true;
 	
 	var draw = function(){
-		Game.draw();
+		grid.drawAllBubbles();
+		bubblePopper.draw();
 	};
 	
 	var move = function(){

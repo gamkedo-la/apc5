@@ -17,6 +17,8 @@ var CannonBall = function(_x, _y, _angle) {
 			grid.checkStrayBubbles();
 
 			cannon.clearProjectile();
+
+			createParticles(12, 20, coords.x, coords.y, 'black');
 		}
 
 		customPopper.update();
@@ -24,7 +26,7 @@ var CannonBall = function(_x, _y, _angle) {
 
 	var draw = function() {
 		var coords = ballMover.coords();
-		drawCircleFill(canvasContext, coords.x, coords.y, bubbleSize, 'black', 1);
+		drawCircleFill(gameContext, coords.x, coords.y, bubbleSize, 'black', 1);
 
 		customPopper.draw();
 	};

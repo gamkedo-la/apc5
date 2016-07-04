@@ -57,7 +57,7 @@ function drawCircleFill(canvasContext, centerX, centerY, size, color, alpha) {
 }
 
 function drawText(canvasContext, topLeftX,topLeftY, fillColor, text) {
-	canvasContext.font = "bold 16pt Arial";
+	canvasContext.font = gameFont;
 	canvasContext.fillStyle = fillColor;
 	canvasContext.fillText(text, topLeftX,topLeftY);
 }
