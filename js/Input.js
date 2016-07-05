@@ -31,7 +31,7 @@ function mousePressed(evt) {
 			if(debug){console.log("Mouse 2");} //debug
 			if(debug && !Menu.isActive()){cannon.swapValues();} //debug
 			if (!Menu.isActive()) {
-				var bubble = grid.findBubbleHere(mouse.x / 0.75, mouse.y);
+				var bubble = grid.findBubbleHere(mouse.x / gameWidth, mouse.y);
 				if (bubble) {
 					console.log('Explode', grid.screenCoordsToGrid(mouse.x, mouse.y));
 					bubblePopper.push(bubble);
@@ -62,8 +62,8 @@ function mouseReleased(evt) {
 function updateMousePos(evt) {
 	var rect = drawingCanvas.getBoundingClientRect();
 
-	mouse.x = Math.round((evt.clientX - rect.left)/gameScaleX);
-	mouse.y = Math.round((evt.clientY - rect.top)/gameScaleY);
+	mouse.x = Math.round((evt.clientX - rect.left)/drawScaleX);
+	mouse.y = Math.round((evt.clientY - rect.top)/drawScaleY);
 }
 
 //mouse object stores mouse information

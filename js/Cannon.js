@@ -17,7 +17,7 @@ var Cannon = function () {
 
 	var calculateRotation = function(){
 		var yDiff = y - mouse.y;
-		var xDiff = x - mouse.x / 0.75;
+		var xDiff = x - mouse.x / gameWidth;
 		if(xDiff < 0){
 			rotation = Math.atan(yDiff/xDiff);
 		} else {

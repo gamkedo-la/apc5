@@ -6,7 +6,7 @@ var PreviewBubble = function(_v) {
 	var previewSize = minSize;
 
 	var draw = function() {
-		var bubble = grid.findBubbleHere(mouse.x/0.75,mouse.y);
+		var bubble = grid.findBubbleHere(mouse.x/gameWidth,mouse.y);
 		if (bubble) {
 			var combinedIndex = bubble.getCombinedIndex(value);
 			if (combinedIndex) {

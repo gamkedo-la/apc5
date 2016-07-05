@@ -1,7 +1,7 @@
 //Global variables
-var gameScaleX, gameScaleY;
+var drawScaleX, drawScaleY;
 var drawingCanvas, drawingContext;
-var gameCanvas, gameContext;
+var gameCanvas, gameContext, gameWidth = 0.75;
 var scoresCanvas, scoresContext;
 var grid, cannon, bubblePopper, deltaTime, prevTime, gameBoard;
 var framesPerSecond = 60;
@@ -50,7 +50,7 @@ window.onload = function() {
 	gameCanvas.width = ((Game.getCs() - 0.5) * bubbleSize + bubbleSize / HEX_TO_CIRCLE_RATIO) * 2;
 	gameCanvas.height = gameCanvas.width * 9/12;
 	
-	scoresCanvas.width = gameCanvas.width * 0.75;
+	scoresCanvas.width = gameCanvas.width * gameWidth;
 	scoresCanvas.height = gameCanvas.height;
 	
 	prevTime = Date.now();
@@ -99,13 +99,13 @@ function updateAll() {
 	}
 
 	drawingContext.save();
-	drawingContext.scale(gameScaleX * 0.75, gameScaleY);
+	drawingContext.scale(drawScaleX * gameWidth, drawScaleY);
 	drawingContext.drawImage(gameCanvas, 0, 0);
 	drawingContext.restore();
 	
 	drawingContext.save();
-	drawingContext.translate(gameCanvas.width * gameScaleX * 0.75, 0);
-	drawingContext.scale(gameScaleX, gameScaleY);
+	drawingContext.translate(gameCanvas.width * drawScaleX * gameWidth, 0);
+	drawingContext.scale(drawScaleX, drawScaleY);
 	drawingContext.drawImage(scoresCanvas, 0, 0);
 	drawingContext.restore();
 }
@@ -144,6 +144,6 @@ function resizeWindow(){
 	drawingCanvas.style.left = (window.innerWidth/2 - drawingCanvas.width/2) + "px";
 	colorRect(drawingContext, 0,0, drawingCanvas.width,drawingCanvas.height, "white");
 
-	gameScaleX = drawingCanvas.width/gameCanvas.width;
-	gameScaleY = drawingCanvas.height/gameCanvas.height;
+	drawScaleX = drawingCanvas.width/gameCanvas.width;
+	drawScaleY = drawingCanvas.height/gameCanvas.height;
 }

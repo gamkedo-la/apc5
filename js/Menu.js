@@ -40,7 +40,7 @@ var Menu = function () {
 	var MenuButton = function(_t, _index, _callback) {
 		scoresContext.font = gameFont;
 
-		var offsetX = (gameCanvas.width * gameScaleX * 0.75) / gameScaleX;
+		var offsetX = (gameCanvas.width * drawScaleX * gameWidth) / drawScaleX;
 		var width = scoresContext.measureText(_t).width;
 		var height = 30;
 		var heightOffset = 5;
