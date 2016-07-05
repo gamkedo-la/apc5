@@ -3,10 +3,12 @@ var Menu = function () {
 	var buttons = [];
 
 	var normalGame = function() {
+		Game.restart();
 		inMenu = false;
 	};
 
 	var unlimitedGame = function() {
+		Game.restart();
 		inMenu = false;
 	};
 
@@ -30,6 +32,11 @@ var Menu = function () {
 				buttons[i].draw();
 			}
 		}
+	};
+
+	var activate = function() {
+		Game.restart();
+		inMenu = true;
 	};
 
 	var isActive = function() {
@@ -81,6 +88,7 @@ var Menu = function () {
 		initialize: initialize,
 		draw: draw,
 		update: update,
-		isActive: isActive
+		isActive: isActive,
+		activate: activate
 	};
 }();

@@ -10,6 +10,9 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	var spacingY = hexHeight * 3/4;
 	var leftBound = offsetX;
 	var rightBound = offsetX + bubbleSize * cols * 2 - bubbleSize;
+
+	var maxNonComboShotsBeforeGridDropDown = 3;
+	var numNonComboShots = maxNonComboShotsBeforeGridDropDown;
 	
 	const BUBBLE_NONE = 0;
 	const BUBBLE_RED = 1;
@@ -160,7 +163,13 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			checkStrayBubbles();
 			Game.setLastShotPop(true);
 		}else{
+			numNonComboShots--;
 			Game.setLastShotPop(false);
+		}
+
+		if (numNonComboShots <= 0) {
+			dropDown();
+			numNonComboShots = maxNonComboShotsBeforeGridDropDown;
 		}
 	};
 
@@ -188,6 +197,20 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 
 	var drawAllBubbles = function(){
 		runOnAllBubbles(function(b){b.draw();});
+	};
+
+	var draw = function(){
+		drawAllBubbles();
+
+		// Draw remaining number of non-combo shots
+		var y = 50 + textHeight * 5;
+		var color = fontColor;
+		for (i = 0; i < maxNonComboShotsBeforeGridDropDown; i++) {
+			if (i >= numNonComboShots) {
+				color = fontColorHighlight;
+			}
+			drawCircleFill(scoresContext, 35 + i * 30, y, 10, color, 1);
+		}
 	};
 	
 	var genStartBubbles = function(){
@@ -302,8 +325,8 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	var attachBubble = function(c, r, v) {
 		if(r >= rows){
 			console.log("GAME OVER");
-			startGame();
 			cannon.clearProjectile();
+			Menu.activate();
 			return;
 		}else	if(c < cols && c >= 0 && r >= 0){
 			bubbleArray[c][r] = new Bubble(c, r, v);
@@ -346,6 +369,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	return {
 		screenCoordsToGrid: screenCoordsToGrid,
 		findBubbleHere: findBubbleHere,
+		draw: draw,
 		drawAllBubbles: drawAllBubbles,
 		handleCombo: handleCombo,
 		checkStrayBubbles: checkStrayBubbles,

@@ -59,7 +59,7 @@ var Game = function(){
 			return;
 		}
 
-		grid.drawAllBubbles();
+		grid.draw();
 		bubblePopper.draw();
 		cannon.draw();
 		
@@ -71,7 +71,8 @@ var Game = function(){
 		drawText(scoresContext, 25, 50, fontColor, "APC5");
 		drawText(scoresContext, 25, 50 + textHeight, fontColor, "Score:");
 		drawText(scoresContext, 25, 50 + textHeight * 2, fontColor, bubblesPopped);
-		
+		drawText(scoresContext, 25, 50 + textHeight * 4, fontColor, "Shots:");
+
 		//Debug code to output coordinates of hex containing mouse
 		if(hexDebug){
 			var mouseHex = grid.screenCoordsToGrid(mouse.x, mouse.y);
