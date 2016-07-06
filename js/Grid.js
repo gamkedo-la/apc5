@@ -209,7 +209,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			if (i >= numNonComboShots) {
 				color = fontColorHighlight;
 			}
-			drawCircleFill(scoresContext, 35 + i * 30, y, 10, color, 1);
+			drawBubble(scoresContext, 40 + i * 35, y, color, 15);
 		}
 	};
 	

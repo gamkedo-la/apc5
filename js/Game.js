@@ -7,7 +7,8 @@ var Game = function(){
 	var popTotalToWin = 100;
 	
 	var lastShotPop = false;
-	
+	var powerUps = [];
+
 	var checkWin = function(){
 		if(bubblesPopped >= popTotalToWin && !lastShotPop){
 			return true;
@@ -17,6 +18,10 @@ var Game = function(){
 	
 	var addPop = function(n){
 		bubblesPopped += n;
+
+		for(var p = 0; p < powerUps.length; p++) {
+			powerUps[p].checkActivate(bubblesPopped);
+		}
 	};
 	
 	var getCols = function(){
@@ -37,11 +42,18 @@ var Game = function(){
 		}else{
 			bubbleColors = cmykColorList;
 		}
+
+		// Reset powerUps
+		powerUps = [];
+		var x = 40, y = (50 + textHeight * 8);
+		powerUps.push(new PowerupButton(CANNONBALL, 10, x, y, powerUps.length, '#000', '#777', '#700'));
+		powerUps.push(new PowerupButton(CANNONBALL, 20, x, y, powerUps.length, '#000', '#777', '#700'));
+
 		makeGrid();
 		cannon = new Cannon();
 		bubblesPopped = 0;
 		bubblePopper = new BubblePopper(3);
-		
+
 		//Debug code that creates and caches a 4 color map of all hexes
 		if(hexDebug){
 			grid.debugScreen(); //VERY intensive call.
@@ -72,6 +84,11 @@ var Game = function(){
 		drawText(scoresContext, 25, 50 + textHeight, fontColor, "Score:");
 		drawText(scoresContext, 25, 50 + textHeight * 2, fontColor, bubblesPopped);
 		drawText(scoresContext, 25, 50 + textHeight * 4, fontColor, "Shots:");
+		drawText(scoresContext, 25, 50 + textHeight * 7, fontColor, "Power ups:");
+
+		for(var p = 0; p < powerUps.length; p++) {
+			powerUps[p].draw();
+		}
 
 		//Debug code to output coordinates of hex containing mouse
 		if(hexDebug){
@@ -79,12 +96,28 @@ var Game = function(){
 			//console.log(mouseHex.x, mouseHex.y);
 		}
 	};
-	
+
+	var powerUpsCheckClick = function() {
+		for(var p = 0; p < powerUps.length; p++) {
+			if (powerUps[p].checkClick()) {
+				return true;
+			}
+		}
+		return false;
+	};
+
 	var moveAll = function(){
 		if (Menu.isActive()) {
 			return;
 		}
 		cannon.move();
+
+		if (mouse.left) {
+			if (!powerUpsCheckClick() && !cannon.getProjectile()) {
+				cannon.fire();
+			}
+		}
+
 		moveParticles();
 		bubblePopper.update();
 	};

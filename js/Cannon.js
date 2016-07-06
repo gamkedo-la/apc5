@@ -6,15 +6,13 @@ var Cannon = function () {
 	var height = 10;
 	var color = "#AAAAAA";
 	var nozzle = width + (bubbleSize - 2);
-	var shouldFire = false;
 	var projectile;
 	var value = randomColor();
 	var nextValue = randomColor();
 	var previewBubble = new PreviewBubble(value);
 	var nextPowerup;
+	var powerupButton;
 	var maxRotation = Math.PI/16;
-
-	const CANNONBALL = 1;
 
 	var calculateRotation = function(){
 		var yDiff = y - mouse.y;
@@ -34,13 +32,6 @@ var Cannon = function () {
 
 	var move = function(){
 		calculateRotation();
-		if (mouse.left && !Menu.isActive() && !projectile) {
-			shouldFire = true;
-		}
-		if (!mouse.left && shouldFire) {
-			shouldFire = false;
-			fire();
-		}
 		if(projectile){
 			projectile.move();
 		}
@@ -105,14 +96,18 @@ var Cannon = function () {
 	
 	function clearProjectile(){
 		projectile = undefined;
+		if (powerupButton) {
+			powerupButton.deactivate();
+		}
 	}
 	
 	function getNozzle(){
 		return nozzle;
 	}
 
-	function setCannonball() {
-		nextPowerup = CANNONBALL;
+	function togglePowerUp(_type, _button) {
+		powerupButton = nextPowerup ? undefined : _button;
+		nextPowerup = nextPowerup ? undefined : _type;
 	}
 	
 	return {
@@ -125,8 +120,6 @@ var Cannon = function () {
 		clearProjectile: clearProjectile,
 		getNozzle: getNozzle,
 		swapValues: swapValues,
-
-		// Powerups
-		setCannonball: setCannonball
+		togglePowerUp: togglePowerUp
 	};
 };
