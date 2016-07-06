@@ -52,7 +52,7 @@ var Particle = function(start_x,start_y, start_color){
 	};
 
 	var draw = function() {
-		drawCircleFill(gameContext, x, y, size, color, 1);
+		drawBubble(gameContext, x, y, color, size);
 	};
 
 	var isReadyToRemove = function() {

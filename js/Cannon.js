@@ -51,11 +51,11 @@ var Cannon = function () {
 
 		switch (nextPowerup) {
 			case CANNONBALL:
-				drawCircleFill(gameContext, x, y, bubbleSize, 'black', 1);
+				drawBubble(gameContext, x, y, 'black', bubbleSize);
 				break;
 			default:
-				drawCircleFill(gameContext, x, y, bubbleSize, value, 1);
-				drawCircleFill(gameContext, x, y, bubbleSize/2, nextValue, 1);
+				drawBubble(gameContext, x, y, value, bubbleSize);
+				drawBubble(gameContext, x, y, nextValue, bubbleSize/2);
 				break;
 		}
 

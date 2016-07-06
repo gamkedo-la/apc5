@@ -1,3 +1,17 @@
+function drawBubble(canvasContext, cx, cy, color, size) {
+	drawCircleFill(canvasContext, cx, cy, size, color, 1);
+
+	var w = imgBubbleMask.width;
+	var h = imgBubbleMask.height;
+	if (size != bubbleSize) {
+		var ratio = size/bubbleSize;
+		w *= ratio;
+		h *= ratio;
+	}
+
+	canvasContext.drawImage(imgBubbleMask, cx-w/2, cy-h/2, w, h);
+}
+
 function drawCenteredImage(canvasContext, imageVar, cx, cy) {
 	canvasContext.drawImage(imageVar,
 		cx-imageVar.width/2, cy-imageVar.height/2);

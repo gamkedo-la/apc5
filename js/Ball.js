@@ -80,7 +80,7 @@ var Ball = function (_x, _y, _angle, _v) {
 	
 	var draw = function(){
 		var coords = ballMover.coords();
-		drawCircleFill(gameContext, coords.x, coords.y, bubbleSize, value, 1);
+		drawBubble(gameContext, coords.x, coords.y, value, bubbleSize);
 	};
 	
 	var testCurrentHex = function(){
