@@ -21,7 +21,6 @@ var VictoryScreen = function(){
 				grid.removeBottomRow();
 				grid.dropDown();
 			}
-			cannon = new Cannon();
 			frameCount = framesBetweenSwap;
 		}
 		frameCount--;
