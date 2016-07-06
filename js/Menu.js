@@ -73,6 +73,7 @@ var Menu = function () {
 
 		var checkClick = function() {
 			if (mouse.left && hover()) {
+				mouse.left = false;
 				callback();
 			}
 		};

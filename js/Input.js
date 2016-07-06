@@ -16,9 +16,6 @@ function mousePressed(evt) {
 		case 0:
 			mouse.left = true;
 			if(debug){console.log("Mouse 0");} //debug
-			if(!Menu.isActive() && !cannon.projectile){
-				cannon.fire();
-			}
 			break;
 		case 1:
 			mouse.middle = true;
@@ -30,7 +27,7 @@ function mousePressed(evt) {
 			mouse.right = true;
 			if(debug){console.log("Mouse 2");} //debug
 			if(debug && !Menu.isActive()){cannon.swapValues();} //debug
-			if (!Menu.isActive()) {
+			if (debug && !Menu.isActive()) {
 				var bubble = grid.findBubbleHere(mouse.x / gameWidth, mouse.y);
 				if (bubble) {
 					console.log('Explode', grid.screenCoordsToGrid(mouse.x, mouse.y));

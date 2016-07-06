@@ -6,6 +6,7 @@ var Cannon = function () {
 	var height = 10;
 	var color = "#AAAAAA";
 	var nozzle = width + (bubbleSize - 2);
+	var shouldFire = false;
 	var projectile;
 	var value = randomColor();
 	var nextValue = randomColor();
@@ -33,6 +34,13 @@ var Cannon = function () {
 
 	var move = function(){
 		calculateRotation();
+		if (mouse.left && !Menu.isActive() && !projectile) {
+			shouldFire = true;
+		}
+		if (!mouse.left && shouldFire) {
+			shouldFire = false;
+			fire();
+		}
 		if(projectile){
 			projectile.move();
 		}
