@@ -52,6 +52,7 @@ var Cannon = function () {
 		switch (nextPowerup) {
 			case CANNONBALL:
 				drawBubble(gameContext, x, y, 'black', bubbleSize);
+				Game.setLastShotPop(true);
 				break;
 			default:
 				drawBubble(gameContext, x, y, value, bubbleSize);

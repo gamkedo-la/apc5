@@ -90,7 +90,10 @@ function updateAll() {
 		Menu.update();
 		Menu.draw();
 	}
-	if (Menu.isActive() || Game.checkWin()){
+	if (!Menu.isActive() && Game.checkWin()){
+		Menu.activate();
+	}
+	else if (Menu.isActive() || Game.checkWin()){
 		VictoryScreen.move();
 		VictoryScreen.draw();
 	} else {

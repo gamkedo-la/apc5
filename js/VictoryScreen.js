@@ -32,6 +32,7 @@ var VictoryScreen = function(){
 		if(readyToRestart && mouse.left){
 			readyToRestart = false;
 			firstRun = true;
+			mouse.left = false;
 			Game.restart();
 		}
 	};
