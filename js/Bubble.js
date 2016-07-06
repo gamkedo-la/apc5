@@ -138,11 +138,16 @@ var BubblePopper = function(_interval){
 		explodeDelay = 0;
 	};
 
+	var numRemainingBubbles = function() {
+		return explodingBubbles.length;
+	};
+
 	return {
 		draw: draw,
 		push: push,
 		update: update,
 		restart: restart,
+		numRemainingBubbles: numRemainingBubbles
 		//getNumPopped: getNumPopped,
 	};
 };

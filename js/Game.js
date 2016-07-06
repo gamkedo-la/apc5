@@ -1,7 +1,12 @@
+const GAME_NORMAL = 1;
+const GAME_UNLIMITED = 2;
+
 var Game = function(){
 	var numBubbleCols = 16;
 	var numBubbleRows = 13;
 	var startingRows = 8;
+
+	var gameType;
 	
 	var bubblesPopped = 0;
 	var popTotalToWin = 100;
@@ -10,7 +15,17 @@ var Game = function(){
 	var powerUps = [];
 
 	var checkWin = function(){
-		if(bubblesPopped >= popTotalToWin && !lastShotPop){
+		// Never 'win' the game when there are still bubbles to pop and particles to render!
+		var hasRemainingBubblesToPop = bubblePopper.numRemainingBubbles() > 0;
+		var hasRemainingParticles = particleList.length > 0;
+		if (hasRemainingBubblesToPop || hasRemainingParticles) {
+			return false;
+		}
+
+		if (gameType == GAME_NORMAL && bubblesPopped >= popTotalToWin && !lastShotPop){
+			return true;
+		}
+		if (gameType == GAME_UNLIMITED && grid.numRemainingBubbles() == 0) {
 			return true;
 		}
 		return false;
@@ -36,7 +51,11 @@ var Game = function(){
 		return startingRows;
 	};
 	
-	var restart = function(){
+	var restart = function(_type){
+		gameType = GAME_NORMAL;
+		if (_type) {
+			gameType = _type;
+		}
 		if(rgbMode){
 			bubbleColors = rgbColorList;
 		}else{

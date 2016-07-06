@@ -3,18 +3,19 @@ var Menu = function () {
 	var buttons = [];
 
 	var normalGame = function() {
-		Game.restart();
+		Game.restart(GAME_NORMAL);
 		inMenu = false;
 	};
 
 	var unlimitedGame = function() {
-		Game.restart();
+		Game.restart(GAME_UNLIMITED);
 		inMenu = false;
 	};
 
 	var initialize = function() {
-		buttons[0] = new MenuButton('Normal Mode', 0, normalGame);
-		buttons[1] = new MenuButton('Unlimited Mode', 1, unlimitedGame);
+		Game.restart();
+		buttons.push(new MenuButton('Normal Mode', 0, normalGame));
+		buttons.push(new MenuButton('Unlimited Mode', 1, unlimitedGame));
 	};
 
 	var update = function(){

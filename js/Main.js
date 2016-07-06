@@ -16,7 +16,6 @@ var textHeight = 30;
 
 //Global debug variables
 var hexDebug = false, debug = true, debugCanvas, debugContext, mainGameLoop;
-var useCardSuits = true; // turning to false goes back to color circles
 var particleList = [];
 var rgbMode = true;
 
@@ -56,20 +55,8 @@ window.onload = function() {
 	prevTime = Date.now();
 	resizeWindow();
 	mainGameLoop = setInterval(updateAll, 1000/framesPerSecond);
-	startGame();
-};
-
-//TODO fix this. Pref using canvas instead of html
-//Code to run every time the main game is started (past the main menu)
-function startGame(){
-//	document.getElementById('powerUps').style.display = 'block';
-//	document.getElementById('cannonBall').onclick = function(event){
-//		cannon.setCannonball();
-//		event.preventDefault();
-//	};
 	Menu.initialize();
-	Game.restart();
-}
+};
 
 function makeGrid() {
 	//Next line is temp code to center the hex grid in the middle of the canvas

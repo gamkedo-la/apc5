@@ -27,6 +27,19 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	for(var i = 0; i < cols; i++){
 		bubbleArray[i] = [];
 	}
+
+	var numRemainingBubbles = function() {
+		var count = 0;
+		for(var r = 0; r < rows; r++){
+			for(var c = 0; c < cols; c++){
+				if(bubbleArray[c][r]){
+					count++;
+				}
+			}
+		}
+
+		return count;
+	};
 	
 	//Runs func on all bubbles and returns the results in
 	//a 2D array corresponding with the bubble's position
@@ -380,7 +393,8 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 		removeBubble: removeBubble,
 		gridCoordsToScreen: gridCoordsToScreen,
 		removeBottomRow: removeBottomRow,
-		
+		numRemainingBubbles: numRemainingBubbles,
+
 		//Debug use only
 		bubbleArray: bubbleArray,
 		debugScreen: debugScreen,
