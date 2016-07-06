@@ -116,7 +116,8 @@ function updateAll() {
 //Might redo how the background code works
 var background = (function(){
 	clear = function(){
-		colorRect(gameContext, 0,0, gameCanvas.width,gameCanvas.height, canvasColor);
+		gameContext.drawImage(imgBg, 0, 0, gameCanvas.width, gameCanvas.height);
+		// colorRect(gameContext, 0,0, gameCanvas.width,gameCanvas.height, canvasColor);
 		colorRect(scoresContext, 0,0, scoresCanvas.width,scoresCanvas.height, gameBoardColor);
 		
 		//Debug code to draw a representation of the hex on screen
