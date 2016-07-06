@@ -224,7 +224,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			}
 		}
 	};
-	genStartBubbles(); // NOTE: immediatly calling this function ^
+	genStartBubbles(); // NOTE: immediately calling this function ^
 	
 	//Find corner i of hex at Point "center"
 	var hexCorner = function(center, i){
@@ -344,6 +344,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			}
 			bubbleArray[c][0] = new Bubble(c, r);
 		}
+		checkStrayBubbles();
 	};
 	
 	var removeBubble = function(pos){
@@ -360,7 +361,6 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	var removeBottomRow = function(){
 		runOnAllBubbles(function(b){
 			if(!bubbleArray[b.getPos().c][b.getPos().r+1]){
-				//bubblePopper.push(b);
 				bubbleArray[b.getPos().c][b.getPos().r] = 0;
 			}
 		});
