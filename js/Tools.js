@@ -37,7 +37,7 @@ function randomColor(useWhite){
 	if(useWhite){
 		return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 1)) + 1];
 	}else{
-		return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 2)) + 1];
+		return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 3)) + 1];
 	}
 }
 

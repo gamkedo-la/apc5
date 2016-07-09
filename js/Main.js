@@ -10,7 +10,7 @@ var canvasColor = "#935636", gameBoardColor = "#20AF6F", fontColor = '#000000', 
 var bubbleSize = 30, HEX_TO_CIRCLE_RATIO = Math.sqrt(3)/2;
 var minCombo = 3;
 var bubbleColors;
-var rgbColorList = ["gap", "blue","green","red", "cyan","magenta","yellow", "white"];
+var rgbColorList = ["gap", "blue","green","red", "cyan","magenta","yellow", "white", "black"];
 var cmykColorList = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"];
 var textHeight = 30;
 
