@@ -47,8 +47,10 @@ var PowerupButton = function(_type, _activeAfterNumPopped, _x, _y, _index, _acti
 
 	var checkClick = function() {
 		if (mouse.left && hover()) {
-			cannon.togglePowerUp(_type, this);
-			isArmed = !isArmed;
+			if (isActive) {
+				cannon.togglePowerUp(_type, this);
+				isArmed = !isArmed;
+			}
 			mouse.left = false;
 			return true;
 		}
