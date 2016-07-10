@@ -5,8 +5,9 @@ var Game = function(){
 	var numBubbleCols = 16;
 	var numBubbleRows = 13;
 	var startingRows = 8;
-
+	
 	var gameType;
+	var popping = false, dropping = false;
 	
 	var bubblesPopped = 0;
 	var popTotalToWin = 100;
@@ -161,6 +162,30 @@ var Game = function(){
 		return lastShotPop;
 	};
 	
+	var isPopping = function(){
+		return popping;
+	};
+	
+	var isDropping = function(){
+		return dropping;
+	};
+	
+	var startPopping = function(){
+		popping = true;
+	};
+	
+	var stopPopping = function(){
+		popping = false;
+	};
+	
+	var startDropping = function(){
+		dropping = true;
+	};
+	
+	var stopDropping = function(){
+		dropping = false;
+	};
+	
 	return{
 		getCs: getCols,
 		getRs: getRows,
@@ -173,6 +198,13 @@ var Game = function(){
 		moveParticles: moveParticles,
 		getLastShotPop: getLastShotPop,
 		setLastShotPop: setLastShotPop,
+		
+		isPopping: isPopping,
+		isDropping: isDropping,
+		startPopping: startPopping,
+		stopPopping: stopPopping,
+		startDropping: startDropping,
+		stopDropping: stopDropping,
 	};
 }();
 

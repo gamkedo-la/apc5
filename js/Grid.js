@@ -348,16 +348,21 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	};
 	
 	var dropDown = function(){
+		Game.startDropping();
+		if(Game.isPopping()){
+			return;
+		}
 		for(var c = 0; c < cols; c++){
 			for(var r = rows; r > 0; r--){
-						bubbleArray[c][r] = bubbleArray[c][r-1];
-						if(bubbleArray[c][r]){
-							bubbleArray[c][r].shiftDown();
-						}
+				bubbleArray[c][r] = bubbleArray[c][r-1];
+				if(bubbleArray[c][r]){
+					bubbleArray[c][r].shiftDown();
+				}
 			}
 			bubbleArray[c][0] = new Bubble(c, r);
 		}
 		checkStrayBubbles();
+		Game.stopDropping();
 	};
 	
 	var removeBubble = function(pos){

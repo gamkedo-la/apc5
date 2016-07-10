@@ -100,6 +100,7 @@ var BubblePopper = function(_interval){
 	};
 	
 	var push = function(bubblesIn){
+		Game.startPopping();
 		if(explodeDelay <= 0){
 			explodeDelay = explodeInterval;
 		}
@@ -124,6 +125,8 @@ var BubblePopper = function(_interval){
 				explodeDelay = explodeInterval;
 			}
 			explodeDelay--;
+		}else{
+			Game.stopPopping();
 		}
 	};
 	

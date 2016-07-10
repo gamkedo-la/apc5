@@ -65,6 +65,10 @@ var Cannon = function () {
 	
 	//This should take the object to fire once we get multiple things to shoot
 	var fire = function(){
+		if(Game.isPopping() || Game.isDropping()){
+			return;
+		}
+		
 		switch (nextPowerup) {
 			case CANNONBALL:
 				projectile = new CannonBall(x, y, rotation);
