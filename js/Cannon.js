@@ -98,6 +98,7 @@ var Cannon = function () {
 		projectile = undefined;
 		if (powerupButton) {
 			powerupButton.deactivate();
+			powerupButton = undefined;
 		}
 	}
 	
