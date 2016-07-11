@@ -40,7 +40,3 @@ function randomColor(useWhite){
 		return bubbleColors[Math.floor(Math.random()*(bubbleColors.length - 3)) + 1];
 	}
 }
-
-function inheritsFrom(child, parent) {
-	child.prototype = Object.create(parent.prototype);
-}

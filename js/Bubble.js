@@ -8,6 +8,7 @@ var Bubble = function(_c, _r, _v){
 		// spawn particles!
 		var hexCenter = grid.gridCoordsToScreen(col, row);
 		createParticles(4, 12, hexCenter.x, hexCenter.y, value);
+		plop.play();
 	};
 	
 	var draw = function(){
