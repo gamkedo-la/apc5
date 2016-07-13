@@ -54,8 +54,10 @@ window.onload = function() {
 	
 	prevTime = Date.now();
 	resizeWindow();
+	SoundButtons.initialize();
 	mainGameLoop = setInterval(updateAll, 1000/framesPerSecond);
 	Menu.initialize();
+	music.play();
 };
 
 function makeGrid() {
@@ -73,6 +75,8 @@ function updateAll() {
 
 	background.clear();
 
+	SoundButtons.update();
+
 	if (Menu.isActive()) {
 		Menu.update();
 		Menu.draw();
@@ -87,6 +91,8 @@ function updateAll() {
 		Game.moveAll();
 		Game.draw();
 	}
+
+	SoundButtons.draw();
 
 	drawingContext.save();
 	drawingContext.scale(drawScaleX * gameWidth, drawScaleY);
