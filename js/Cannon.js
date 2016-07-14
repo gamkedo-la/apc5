@@ -138,9 +138,18 @@ var Cannon = function () {
 		return nozzle;
 	}
 
-	function togglePowerUp(_type, _button) {
-		powerupButton = nextPowerup ? undefined : _button;
-		nextPowerup = nextPowerup ? undefined : _type;
+	function togglePowerUp(arm, _type, _button) {
+		if (powerupButton) {
+			console.log('unarm', nextPowerup, powerupButton);
+			powerupButton.unarm();
+			powerupButton = undefined;
+			nextPowerup = undefined;
+		}
+		if (arm) {
+			powerupButton = _button;
+			nextPowerup = _type;
+			console.log('arm', nextPowerup, powerupButton);
+		}
 	}
 	
 	return {

@@ -20,6 +20,10 @@ var PowerupButton = function(_type, _activeAfterNumPopped, _x, _y, _index, _acti
 		isArmed = false;
 	};
 
+	var unarm = function() {
+		isArmed = false;
+	};
+
 	var draw = function() {
 		var color = isActive ? _activeColor : _inactiveColor;
 
@@ -48,8 +52,8 @@ var PowerupButton = function(_type, _activeAfterNumPopped, _x, _y, _index, _acti
 	var checkClick = function() {
 		if (mouse.left && hover()) {
 			if (isActive) {
-				cannon.togglePowerUp(_type, this);
 				isArmed = !isArmed;
+				cannon.togglePowerUp(isArmed, _type, this);
 			}
 			mouse.left = false;
 			return true;
@@ -60,6 +64,7 @@ var PowerupButton = function(_type, _activeAfterNumPopped, _x, _y, _index, _acti
 	return {
 		activate: activate,
 		deactivate: deactivate,
+		unarm: unarm,
 		draw: draw,
 		hover: hover,
 		checkActivate: checkActivate,
