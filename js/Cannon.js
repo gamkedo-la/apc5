@@ -36,6 +36,34 @@ var Cannon = function () {
 			projectile.move();
 		}
 	};
+	
+	var drawDashed = function(){
+		var dashGapSize = width/8;
+		var maxDashes = 450; //*Note: try and compute rather than hard code
+		var xOffset = Math.cos(rotation) * dashGapSize;
+		var yOffset = Math.sin(rotation) * dashGapSize;
+		var drawX = x;
+		var drawY = y+10;
+		var dashedRotation = rotation;
+		var dashedLineW = dashGapSize/2;
+		var dashedLineH = height/8;
+		var dashColor = color;
+		
+		var bounds = grid.getBounds();
+		for(var i=0;i<maxDashes;i++){
+			if (drawX<bounds.left){
+				xOffset = -xOffset;	
+				dashedRotation = Math.atan2(yOffset,xOffset);	
+			}
+			if (drawX>bounds.right){
+				xOffset = -xOffset;
+				dashedRotation = Math.atan2(yOffset,xOffset);	
+			}
+			colorRect(gameContext, drawX,drawY, dashedLineW,dashedLineH, dashColor, dashedRotation, 0, -dashedLineH/2);
+			drawX += xOffset;
+			drawY += yOffset;
+		}
+	}
 
 	var draw = function(){
 		colorRect(gameContext, x,y+10, width+10,height, color, rotation, 0, -height/2);
@@ -118,6 +146,7 @@ var Cannon = function () {
 	return {
 		move: move,
 		draw: draw,
+		drawDashed: drawDashed,
 		calculateRotation: calculateRotation,
 		getRotation: getRotation,
 		fire: fire,

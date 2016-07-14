@@ -90,7 +90,8 @@ var Game = function(){
 		if (Menu.isActive()) {
 			return;
 		}
-
+		
+		cannon.drawDashed();
 		grid.draw();
 		bubblePopper.draw();
 		cannon.draw();
