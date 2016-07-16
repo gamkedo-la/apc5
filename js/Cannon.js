@@ -49,8 +49,13 @@ var Cannon = function () {
 		var dashedLineH = height/8;
 		var dashColor = color;
 		
+		
+		var dashFindsBubble = grid.findBubbleHere;
 		var bounds = grid.getBounds();
 		for(var i=0;i<maxDashes;i++){
+			if (dashFindsBubble(drawX,drawY)){
+				maxDashes = false;
+			}
 			if (drawX<bounds.left){
 				xOffset = -xOffset;	
 				dashedRotation = Math.atan2(yOffset,xOffset);	
@@ -59,10 +64,13 @@ var Cannon = function () {
 				xOffset = -xOffset;
 				dashedRotation = Math.atan2(yOffset,xOffset);	
 			}
+			
 			colorRect(gameContext, drawX,drawY, dashedLineW,dashedLineH, dashColor, dashedRotation, 0, -dashedLineH/2);
 			drawX += xOffset;
 			drawY += yOffset;
 		}
+		
+			
 	}
 
 	var draw = function(){
