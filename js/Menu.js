@@ -1,5 +1,6 @@
 var Menu = function () {
 	var inMenu = true;
+	var showingCredits = false;
 	var buttons = [];
 
 	var normalGame = function() {
@@ -12,25 +13,108 @@ var Menu = function () {
 		inMenu = false;
 	};
 
+	var showCredits = function() {
+		showingCredits = true;
+	}
+
 	var initialize = function() {
 		Game.restart();
-		buttons.push(new MenuButton('Normal Mode', 0, normalGame));
-		buttons.push(new MenuButton('Unlimited Mode', 1, unlimitedGame));
+		buttons.push(new MenuButton('Normal Mode', 6, normalGame));
+		buttons.push(new MenuButton('Unlimited Mode', 8, unlimitedGame));
+		buttons.push(new MenuButton('Team Credits', 15, showCredits));
 	};
 
 	var update = function(){
 		if (inMenu) {
-			for (var i = 0; i < buttons.length; i++) {
-				buttons[i].checkClick();
+			if(showingCredits) {
+				if (mouse.left) {
+					mouse.left = false;
+					showingCredits = false;
+				}
+			} else {
+				for (var i = 0; i < buttons.length; i++) {
+					buttons[i].checkClick();
+				}
 			}
 		}
 	};
 
 	var draw = function(){
 		if (inMenu) {
-			drawText(scoresContext, 25, 50, fontColor, "APC5");
-			for (var i = 0; i < buttons.length; i++) {
-				buttons[i].draw();
+			if(showingCredits) {
+				var creditsTextX = 10;
+				var textLineY = 35;
+				var lineHeightWithOffset = 35;
+				drawText(scoresContext, creditsTextX, textLineY, fontColorHighlight,
+					"Nicholas Polchies");
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Team Lead");
+
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Core Game Code");
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Grid Logic");
+				textLineY+=lineHeightWithOffset;
+
+				drawText(scoresContext, creditsTextX, textLineY, fontColorHighlight,
+					"SpadXIII");
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Particle Effects");
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Cannon Powerup");
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Sound/BG Code");
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Code Cleanup");
+
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColorHighlight,
+					"c:games");
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Bubble, BG Art");
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Music");
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Color Mix Concept");
+
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColorHighlight,
+					"Chris Markle");
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Dashed Aimer");
+
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColorHighlight,
+					"Jeremy Kenyon");
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor,
+					"Menu Code");
+
+				textLineY+=lineHeightWithOffset;
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColorHighlight,
+					"by gamkedo.club");
+
+				
+				textLineY+=lineHeightWithOffset;
+				drawText(scoresContext, creditsTextX, textLineY, fontColor, "- Click to Return -");
+			} else {
+				drawText(scoresContext, 25, 50, fontColor, "APC5");
+
+				for (var i = 0; i < buttons.length; i++) {
+					buttons[i].draw();
+				}
 			}
 		}
 	};
