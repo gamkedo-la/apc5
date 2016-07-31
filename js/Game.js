@@ -141,6 +141,9 @@ var Game = function(){
 
 		moveParticles();
 		bubblePopper.update();
+		if(dropping){
+			grid.dropDown();
+		}
 	};
 	
 	var moveParticles = function(){
