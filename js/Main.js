@@ -15,7 +15,7 @@ var cmykColorList = ["gap", "cyan","magenta","yellow", "blue","green","red", "wh
 var textHeight = 30;
 
 //Global debug variables
-var hexDebug = false, debug = true, debugCanvas, debugContext, mainGameLoop;
+var hexDebug = false, debug = false, debugCanvas, debugContext, mainGameLoop;
 var particleList = [];
 var rgbMode = true;
 
