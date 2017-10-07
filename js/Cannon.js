@@ -7,9 +7,9 @@ var Cannon = function () {
 	var color = "#AAAAAA";
 	var nozzle = width + (bubbleSize - 2);
 	var projectile;
-	var value = randomColor();
-	var nextValue = randomColor();
-	var previewBubble = new PreviewBubble(value);
+	var value = bubbleColors.indexOf(randomColor());
+	var nextValue = bubbleColors.indexOf(randomColor());
+	var previewBubble = new PreviewBubble(bubbleColors[value]);
 	var nextPowerup;
 	var powerupButton;
 	var maxRotation = Math.PI/16;
@@ -79,8 +79,8 @@ var Cannon = function () {
 				Game.setLastShotPop(true);
 				break;
 			default:
-				drawBubble(gameContext, x, y, value, bubbleSize);
-				drawBubble(gameContext, x, y, nextValue, bubbleSize/2);
+				drawBubble(gameContext, x, y, bubbleColors[value], bubbleSize);
+				drawBubble(gameContext, x, y, bubbleColors[nextValue], bubbleSize/2);
 				break;
 		}
 
@@ -107,10 +107,10 @@ var Cannon = function () {
 				projectile = new CannonBall(x, y, rotation);
 				break;
 			default:
-				projectile = new Ball(x, y, rotation, value);
+				projectile = new Ball(x, y, rotation, bubbleColors[value]);
 				value = nextValue;
-				nextValue = randomColor();
-				previewBubble.setValue(value);
+				nextValue = bubbleColors.indexOf(randomColor());
+				previewBubble.setValue(bubbleColors[value]);
 				break;
 		}
 
@@ -124,7 +124,7 @@ var Cannon = function () {
 		value = nextValue;
 		nextValue = temp;
 
-		previewBubble.setValue(value);
+		previewBubble.setValue(bubbleColors[value]);
 	};
 	
 	function getProjectile(){

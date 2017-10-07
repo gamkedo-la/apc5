@@ -11,7 +11,7 @@ var bubbleSize = 30, HEX_TO_CIRCLE_RATIO = Math.sqrt(3)/2;
 var minCombo = 3;
 var bubbleColors;
 var rgbColorList = ["gap", "blue","green","red", "cyan","magenta","yellow", "white", "black"];
-var cmykColorList = ["gap", "cyan","magenta","yellow", "blue","green","red", "white"];
+var cmykColorList = ["gap", "cyan","magenta","yellow", "blue","green","red", "black", "white"];
 var textHeight = 30;
 
 //Global debug variables
@@ -77,10 +77,10 @@ function updateAll() {
 
 	SoundButtons.update();
 
-	if (Menu.isActive()) {
+	//if (Menu.isActive()) {
 		Menu.update();
 		Menu.draw();
-	}
+	//}
 	if (!Menu.isActive() && Game.checkWin()){
 		Menu.activate();
 	}

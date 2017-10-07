@@ -1,38 +1,37 @@
 var Bubble = function(_c, _r, _v){
 	var col = _c;
 	var row = _r;
-	var value = _v ? _v : randomColor(true);
+	var value = bubbleColors.indexOf(_v ? _v : randomColor(true));
 	var connected = true;
 	
 	var explode = function(){
 		// spawn particles!
 		var hexCenter = grid.gridCoordsToScreen(col, row);
-		createParticles(4, 12, hexCenter.x, hexCenter.y, value);
+		createParticles(4, 12, hexCenter.x, hexCenter.y, bubbleColors[value]);
 		plop.play();
 	};
 	
 	var draw = function(){
 		var center = grid.gridCoordsToScreen(col, row);
-		drawBubble(gameContext, center.x, center.y, value, bubbleSize);
+		drawBubble(gameContext, center.x, center.y, bubbleColors[value], bubbleSize);
 	};
 
 	var getCombinedColorIndex = function(_valIndex){
-		var valIndex = bubbleColors.indexOf(value);
-		var newVal = valIndex;
+		var newVal = value;
 
-		if(valIndex === _valIndex){
+		if(value === _valIndex){
 			return false;
 		}
 		//If both bubbles are primary colors, combine them
-		else if(valIndex <= 3 && _valIndex <= 3){
+		else if(value <= 3 && _valIndex <= 3){
 			newVal += ++_valIndex;
 		}
 		//If both colors add to black, combine them
-		else if(valIndex + _valIndex === 7){
+		else if(value + _valIndex === 7){
 			newVal = 7;
 		}
 
-		if(valIndex != newVal){
+		if(value != newVal){
 			return newVal;
 		}
 		return false;
@@ -41,7 +40,7 @@ var Bubble = function(_c, _r, _v){
 	var combineColors = function(_valIndex){
 		var combinedIndex = getCombinedColorIndex(_valIndex);
 		if (combinedIndex) {
-			value = bubbleColors[combinedIndex];
+			value = combinedIndex;
 			grid.handleCombo(this);
 			return true;
 		}
@@ -49,7 +48,7 @@ var Bubble = function(_c, _r, _v){
 	};
 	
 	var getValue = function(){
-		return value;
+		return bubbleColors[value];
 	};
 	
 	var getPos = function(){

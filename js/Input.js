@@ -26,7 +26,7 @@ function mousePressed(evt) {
 		case 2:
 			mouse.right = true;
 			if(debug){console.log("Mouse 2");} //debug
-			if(debug && !Menu.isActive()){cannon.swapValues();} //debug
+			if(!Menu.isActive()){cannon.swapValues();} //debug
 			if (debug && !Menu.isActive()) {
 				var bubble = grid.findBubbleHere(mouse.x / gameWidth, mouse.y);
 				if (bubble) {

@@ -2,6 +2,7 @@ var Menu = function () {
 	var inMenu = true;
 	var showingCredits = false;
 	var buttons = [];
+	var inGameButtons = [];
 
 	var normalGame = function() {
 		Game.restart(GAME_NORMAL);
@@ -15,13 +16,28 @@ var Menu = function () {
 
 	var showCredits = function() {
 		showingCredits = true;
-	}
+	};
 
+	var palletSwap = function() {
+		rgbMode = !rgbMode;
+		inGameButtons = [];
+		
+		if(rgbMode) {
+			bubbleColors = rgbColorList;
+			inGameButtons.push(new MenuButton("Colors: RGB", 12, palletSwap));
+		}
+		else {
+			bubbleColors = cmykColorList;
+			inGameButtons.push(new MenuButton("Colors: Paint", 12, palletSwap));
+		}
+	};
+	
 	var initialize = function() {
 		Game.restart();
 		buttons.push(new MenuButton('Normal Mode', 6, normalGame));
 		buttons.push(new MenuButton('Unlimited Mode', 8, unlimitedGame));
 		buttons.push(new MenuButton('Team Credits', 15, showCredits));
+		inGameButtons.push(new MenuButton("Colors: RGB", 12, palletSwap));
 	};
 
 	var update = function(){
@@ -35,6 +51,10 @@ var Menu = function () {
 				for (var i = 0; i < buttons.length; i++) {
 					buttons[i].checkClick();
 				}
+			}
+		} else {
+			for (var i = 0; i < inGameButtons.length; i++) {
+				inGameButtons[i].checkClick();
 			}
 		}
 	};
@@ -115,6 +135,10 @@ var Menu = function () {
 				for (var i = 0; i < buttons.length; i++) {
 					buttons[i].draw();
 				}
+			}
+		} else {
+			for (var i = 0; i < inGameButtons.length; i++) {
+				inGameButtons[i].draw();
 			}
 		}
 	};

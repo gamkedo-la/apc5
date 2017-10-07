@@ -122,7 +122,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	//Returns array with all that pass
 	var checkAllAdjacentBubbles = function(bubble, check){
 		var bubblesThatPass = [];
-		var inBoundsCol;
+		var inBounds;
 		var checkResult;
 		
 		var pos = bubble.getPos();
@@ -135,13 +135,18 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 				
 				//Don't check self
 				if(j === 0 && i + leftRow === 0){
-					inBoundsCol = bubbleArray[pos.c + i - (2*leftRow + 1)];
+					inBounds = bubbleArray[pos.c + i - (2*leftRow + 1)];
 				} else { //but check all other neighbors
-					inBoundsCol = bubbleArray[pos.c + i];
+					inBounds = bubbleArray[pos.c + i];
 				}
 				
-				if(!inBoundsCol){continue;} //Don't check out of col bounds
-				checkResult = check(inBoundsCol[pos.r + j], bubble);
+				//Don't check below bounds
+				if(pos.r + j >= rows){
+					inBounds = false;
+				}
+				
+				if(!inBounds){continue;} //Don't check out of col bounds
+				checkResult = check(inBounds[pos.r + j], bubble);
 				
 				//If the check passed, add it to the array
 				if(checkResult){
@@ -337,9 +342,7 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 	
 	var attachBubble = function(c, r, v) {
 		if(r >= rows){
-			console.log("GAME OVER");
-			cannon.clearProjectile();
-			Menu.activate();
+			Game.gameOver();
 			return;
 		}else	if(c < cols && c >= 0 && r >= 0){
 			bubbleArray[c][r] = new Bubble(c, r, v);
@@ -353,8 +356,16 @@ var Grid = function (_offsetX, _offsetY, _cols, _rows, initialRows, _size) {
 			return;
 		}
 		
+		//If bubbles drop below the screen, end the game
 		for(var c = 0; c < cols; c++){
-			for(var r = rows; r > 0; r--){
+			if(bubbleArray[c][rows - 1]){
+				Game.gameOver();
+				return;
+			}
+		}
+		
+		for(var c = 0; c < cols; c++){
+			for(var r = rows - 1; r > 0; r--){
 				bubbleArray[c][r] = bubbleArray[c][r-1];
 				if(bubbleArray[c][r]){
 					bubbleArray[c][r].shiftDown();

@@ -190,6 +190,12 @@ var Game = function(){
 		dropping = false;
 	};
 	
+	var gameOver = function(){
+		console.log("GAME OVER");
+		cannon.clearProjectile();
+		Menu.activate();
+	}
+	
 	return{
 		getCs: getCols,
 		getRs: getRows,
@@ -202,6 +208,7 @@ var Game = function(){
 		moveParticles: moveParticles,
 		getLastShotPop: getLastShotPop,
 		setLastShotPop: setLastShotPop,
+		gameOver: gameOver,
 		
 		isPopping: isPopping,
 		isDropping: isDropping,
